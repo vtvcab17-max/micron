@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Micron — Canvas AI mở</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg viewBox='0 0 64 64' width='64' height='64'%3E%3Cdefs%3E%3ClinearGradient id='mg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238B6BFF'/%3E%3Cstop offset='1' stop-color='%234F5BFF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23mg)'/%3E%3Cpath d='M19 44V28.5a6.5 6.5 0 0 1 13 0V44M32 28.5a6.5 6.5 0 0 1 13 0V44' fill='none' stroke='%23fff' stroke-width='5.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='19' cy='44' r='4.2' fill='%232FD4E8'/%3E%3Ccircle cx='32' cy='44' r='4.2' fill='%232FD4E8'/%3E%3Ccircle cx='45' cy='44' r='4.2' fill='%232FD4E8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1115;--panel:#171a21;--panel2:#1f232c;--line:#2a2f3a;--text:#e6e8ee;--mut:#8b93a5;--acc:#7c5cff;--accs:#6447f0;--sig:#2fd4e8;--acc2:#a48bff;--ok:#2ecc71;--err:#ff6b6b;--warn:#f5b942}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:14px/1.45 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button{font:inherit;color:inherit;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+button:hover{border-color:var(--acc)}
+button:disabled{opacity:.6;cursor:default}
+button.primary{background:var(--accs);border-color:var(--accs);color:#fff}
+button.ghost{background:transparent;border-color:transparent}
+button.danger:hover{border-color:var(--err);color:var(--err)}
+input,select,textarea{font:inherit;color:var(--text);background:#12151b;border:1px solid var(--line);border-radius:8px;padding:6px 8px;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc)}
+textarea{resize:vertical;min-height:70px}
+.mono{font-family:"JetBrains Mono",ui-monospace,Consolas,monospace;font-size:12px}
+label{display:block;font-size:12px;color:var(--mut);margin:8px 0 4px}
+a{color:var(--acc2)}
+.hidden{display:none!important}
+.sub{color:var(--mut);font-size:12px}
+.top{height:52px;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid var(--line);background:var(--panel)}
+.logo{display:flex;align-items:center;gap:9px;margin-right:8px;color:var(--text)}
+.spacer{flex:1}
+#pname{width:260px;background:transparent;border-color:transparent;font-weight:600}
+#pname:hover,#pname:focus{border-color:var(--line)}
+/* home */
+#home{height:calc(100% - 52px);overflow:auto;padding:24px}
+#home h1{font-size:20px;margin:0 0 4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-top:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
+.card:hover{border-color:var(--acc)}
+.thumb{height:130px;background:linear-gradient(135deg,#2a1f5c,#14303a) center/cover;display:flex;align-items:flex-end;padding:8px;color:#e8e3ff;font-size:12px}
+.thumb span{background:#0008;padding:2px 8px;border-radius:6px}
+.card .meta{padding:10px 12px}
+.card .name{font-weight:600}
+.card .acts{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 12px}
+.card .acts button{padding:3px 8px;font-size:12px}
+.newcard{border-style:dashed;align-items:center;justify-content:center;min-height:210px;color:var(--mut);font-size:15px}
+/* editor */
+#editor{position:relative;height:calc(100% - 52px);overflow:hidden;background-color:var(--bg);background-image:radial-gradient(#262b36 1.2px,transparent 1.2px);touch-action:none}
+#world{position:absolute;left:0;top:0;transform-origin:0 0}
+#edges{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+#edges path{fill:none;stroke:#7a68f0;stroke-width:2.5;pointer-events:stroke;cursor:pointer}
+#edges path:hover{stroke:var(--err);stroke-width:3.5}
+#edges path.temp{stroke-dasharray:6 4;pointer-events:none}
+.node{position:absolute;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 28px #0007}
+.node.sel{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc),0 8px 28px #0007}
+.nhead{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:grab;user-select:none}
+.nhead .t{flex:1;font-weight:600;font-size:13px}
+.nhead button{padding:3px 9px;font-size:12px}
+.nbody{padding:4px 10px 12px}
+.port{position:absolute;top:19px;width:15px;height:15px;border-radius:50%;background:var(--panel2);border:2px solid var(--acc2);cursor:crosshair}
+.port:hover{background:var(--sig);border-color:var(--sig)}
+.port.in{left:-8px}.port.out{right:-8px}
+.out{margin-top:8px;background:#12151b;border:1px solid var(--line);border-radius:8px;padding:8px;max-height:280px;overflow:auto;white-space:pre-wrap;font-size:13px;user-select:text}
+.out img,.out video{max-width:100%;border-radius:6px;display:block}
+.out audio{width:100%}
+.links{font-size:12px;margin-top:4px}
+.status{font-size:12px;color:var(--mut);margin-top:6px;white-space:pre-wrap}
+.status.err{color:var(--err)}.status.ok{color:var(--ok)}.status.run{color:var(--warn)}
+details summary{cursor:pointer;margin-top:8px}
+#addBtn{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:54px;height:54px;border-radius:50%;font-size:30px;line-height:1;padding:0;background:var(--accs);border:none;color:#fff;box-shadow:0 8px 24px #7c5cff66;z-index:5}
+#addMenu{position:absolute;left:50%;bottom:86px;transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px;width:280px;z-index:6;box-shadow:0 12px 32px #000a}
+#addMenu button{display:block;width:100%;text-align:left;border:none;background:transparent;padding:8px 10px;white-space:normal}
+#addMenu button:hover{background:var(--panel2)}
+#addMenu small{display:block;color:var(--mut)}
+#addMenu hr{border:none;border-top:1px solid var(--line);margin:4px 0}
+#zoomInfo{position:absolute;right:14px;bottom:14px;color:var(--mut);font-size:12px;background:var(--panel);padding:4px 8px;border-radius:6px;border:1px solid var(--line)}
+#empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--mut);pointer-events:none;text-align:center;padding:20px}
+/* modal */
+.modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;z-index:50;padding:12px}
+.dlg{background:var(--panel);border:1px solid var(--line);border-radius:14px;width:min(760px,100%);max-height:92vh;overflow:auto;padding:18px 20px}
+.dlg h2{margin:0;font-size:18px}
+.dhead{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.prov{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px}
+.prov .n{flex:1;min-width:0}
+.tag{font-size:11px;padding:2px 6px;border-radius:6px;background:var(--panel2);color:var(--acc2);margin-left:6px}
+.row{display:flex;gap:8px;align-items:flex-end}.row>*{flex:1;min-width:0}
+.row>.fit{flex:0 0 auto}
+.hint{font-size:12px;color:var(--mut);background:#12151b;border-left:3px solid var(--acc);padding:8px 10px;border-radius:6px;margin-top:10px}
+.hint code{color:var(--acc2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chips button{padding:2px 8px;font-size:12px}
+#pform:not(:empty){border-top:1px solid var(--line);margin-top:12px;padding-top:4px}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--panel2);border:1px solid var(--line);padding:10px 14px;border-radius:10px;z-index:60;max-width:420px}
+@media (max-width:640px){#pname{width:120px}.hide-sm{display:none}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="logo" title="Micron"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><defs><linearGradient id="mg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8B6BFF"/><stop offset="1" stop-color="#4F5BFF"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#mg)"/><path d="M19 44V28.5a6.5 6.5 0 0 1 13 0V44M32 28.5a6.5 6.5 0 0 1 13 0V44" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="19" cy="44" r="4.2" fill="#2FD4E8"/><circle cx="32" cy="44" r="4.2" fill="#2FD4E8"/><circle cx="45" cy="44" r="4.2" fill="#2FD4E8"/></svg><svg viewBox="-2 5 171 46" height="19" aria-label="micron"><path d="M2.5 46V27a7 7 0 0 1 14 0v19M16.5 27a7 7 0 0 1 14 0v19M41.5 25v21M78.8 26.5a13 13 0 1 0 0 13M89.5 46V27a7 7 0 0 1 7-7h3.5M150 46V27a7 7 0 0 1 14 0v19" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="124" cy="33" r="13" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="41.5" cy="12" r="3.8" fill="#2FD4E8"/></svg></div>
+  <div id="homeTools" style="display:contents">
+    <span class="spacer"></span>
+    <button id="btnImport">Nhập dự án</button>
+    <button id="btnProvHome">⚙ AI của tôi <span id="provCount"></span></button>
+  </div>
+  <div id="projTools" class="hidden" style="display:contents">
+    <button id="btnBack">← Dự án</button>
+    <input id="pname">
+    <span class="spacer"></span>
+    <button id="btnRunAll" class="primary">▶ Chạy tất cả</button>
+    <button id="btnProv">⚙ AI của tôi</button>
+    <button id="btnExport" class="hide-sm">Xuất</button>
+  </div>
+</div>
+
+<div id="home">
+  <h1>Dự án của bạn</h1>
+  <div class="sub">Mọi dự án và API key chỉ lưu trong trình duyệt này. Ứng dụng không cài sẵn AI nào — bạn tự thêm ở mục “AI của tôi”.</div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<div id="editor" class="hidden">
+  <div id="world"><svg id="edges" width="1" height="1"></svg></div>
+  <div id="empty">Bấm ＋ để thêm ô đầu tiên.<br>Kéo nền để di chuyển · cuộn chuột để phóng to/thu nhỏ · kéo từ chấm ● bên phải một ô sang ô AI khác để nối.</div>
+  <div id="addMenu" class="hidden"></div>
+  <button id="addBtn" title="Thêm ô">＋</button>
+  <div id="zoomInfo">100%</div>
+</div>
+
+<div id="provModal" class="modal hidden">
+  <div class="dlg">
+    <div class="dhead"><h2>AI của tôi</h2><span class="spacer"></span><button id="provAdd" class="primary">＋ Thêm AI</button><button id="provClose">Đóng</button></div>
+    <div id="provList"></div>
+    <div id="pform"></div>
+  </div>
+</div>
+
+<input type="file" id="importFile" accept=".json,application/json" class="hidden">
+
+<script>
+/* ---------- tiện ích ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const uid=()=>Math.random().toString(36).slice(2,10);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const trimUrl=u=>(u||'').trim().replace(/\/+$/,'');
+function toast(m,ms=2800){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),ms)}
+const blobToDataURL=b=>new Promise((res,rej)=>{const f=new FileReader();f.onload=()=>res(f.result);f.onerror=rej;f.readAsDataURL(b)});
+const splitDataURL=d=>{const m=/^data:([^;,]+);base64,(.*)$/s.exec(d||'');return m?{mime:m[1],b64:m[2]}:null};
+async function asDataURL(u){if(!u||u.startsWith('data:'))return u;try{const r=await fetch(u);return await blobToDataURL(await r.blob())}catch{return u}}
+function hexToB64(h){h=h.replace(/\s/g,'');const n=h.length>>1,u=new Uint8Array(n);for(let i=0;i<n;i++)u[i]=parseInt(h.substr(i*2,2),16);let s='';for(let i=0;i<n;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)}
+const getPath=(o,p)=>p.split('.').filter(Boolean).reduce((a,k)=>a==null?a:a[/^\d+$/.test(k)?+k:k],o);
+function kindFromName(n){n=(n||'').toLowerCase();if(/\.(png|jpe?g|webp|gif|bmp)$/.test(n))return'image';if(/\.(mp3|wav|flac|ogg|m4a|opus|aac)$/.test(n))return'audio';if(/\.(mp4|webm|mov|mkv)$/.test(n))return'video';return'text'}
+function download(name,text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'application/json'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
+
+/* ---------- lưu trữ dự án (IndexedDB) ---------- */
+const DB={db:null,
+  open(){return new Promise((res,rej)=>{const r=indexedDB.open('ai-canvas-studio',1);r.onupgradeneeded=()=>r.result.createObjectStore('projects',{keyPath:'id'});r.onsuccess=()=>{this.db=r.result;res()};r.onerror=()=>rej(r.error)})},
+  st(m){return this.db.transaction('projects',m).objectStore('projects')},
+  q(r){return new Promise((res,rej)=>{r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})},
+  all(){return this.q(this.st('readonly').getAll())},
+  get(id){return this.q(this.st('readonly').get(id))},
+  put(p){return this.q(this.st('readwrite').put(p))},
+  del(id){return this.q(this.st('readwrite').delete(id))}};
+
+/* ---------- nhà cung cấp AI (do người dùng tự thêm) ---------- */
+const PTYPES={
+  openai:{label:'OpenAI-compatible (OpenAI, OpenRouter, Groq, DeepSeek, LM Studio, Ollama /v1…)',short:'OpenAI-compatible',caps:['text','image','audio'],fields:['baseUrl','apiKey','models']},
+  gemini:{label:'Google Gemini',short:'Gemini',caps:['text','image'],fields:['apiKey','models']},
+  anthropic:{label:'Anthropic Claude',short:'Claude',caps:['text'],fields:['apiKey','models']},
+  ollama:{label:'Ollama (chạy trên máy)',short:'Ollama',caps:['text'],fields:['baseUrl','models']},
+  comfyui:{label:'ComfyUI (workflow chạy trên máy)',short:'ComfyUI',caps:['image','audio','video'],fields:['baseUrl','workflow']},
+  custom:{label:'HTTP tuỳ chỉnh (API bất kỳ: nhạc, video, giọng nói…)',short:'HTTP tuỳ chỉnh',caps:null,fields:['apiKey','models','custom']}
+};
+const DEFAULT_URL={openai:'https://api.openai.com/v1',ollama:'http://localhost:11434',comfyui:'http://127.0.0.1:8188'};
+const PRESETS=[['OpenAI','https://api.openai.com/v1'],['OpenRouter','https://openrouter.ai/api/v1'],['Groq','https://api.groq.com/openai/v1'],['DeepSeek','https://api.deepseek.com/v1'],['LM Studio (máy)','http://localhost:1234/v1'],['Ollama (máy)','http://localhost:11434/v1']];
+const HINTS={
+  openai:'Dùng cho mọi dịch vụ có API kiểu OpenAI: văn bản (<code>/chat/completions</code>), ảnh (<code>/images/generations</code>), giọng đọc (<code>/audio/speech</code>). Một số dịch vụ chặn gọi trực tiếp từ trình duyệt (CORS). AI chạy trên máy: LM Studio → bật “Enable CORS”; Ollama → đặt biến môi trường <code>OLLAMA_ORIGINS=*</code> rồi khởi động lại.',
+  gemini:'Lấy API key tại Google AI Studio. Để tạo ảnh, chọn model Gemini có hỗ trợ xuất ảnh.',
+  anthropic:'Lấy API key tại console.anthropic.com. Chỉ hỗ trợ văn bản (có thể đọc ảnh đầu vào).',
+  ollama:'Cài Ollama, tải model (<code>ollama pull tên-model</code>), đặt biến môi trường <code>OLLAMA_ORIGINS=*</code> rồi khởi động lại Ollama để trình duyệt gọi được.',
+  comfyui:'Khởi động ComfyUI với cờ <code>--enable-cors-header "*"</code>. Trong ComfyUI: bật Dev mode → <b>Save (API Format)</b> để lấy JSON rồi dán vào đây. Thay nội dung prompt bằng <code>{{prompt}}</code> và giá trị seed bằng <code>"{{seed}}"</code>. Kết quả ảnh/video/nhạc được nhận diện tự động — dùng được với workflow MiniMax Music 3, ACE-Step, Flux, Wan…',
+  custom:'Gọi bất kỳ API nào. Biến dùng được trong URL/Headers/Body: <code>{{prompt}}</code>, <code>{{model}}</code>, <code>{{key}}</code>, <code>{{image}}</code> (ảnh đầu vào đầu tiên), <code>{{file}}</code> (tệp đầu vào đầu tiên). “Đường dẫn kết quả” chỉ vị trí trong JSON trả về, vd <code>data.audio</code> hay <code>data.0.url</code>. Nếu API trả thẳng tệp ảnh/âm thanh thì để trống.'
+};
+const CLAUDE_MODELS='claude-sonnet-5-5, claude-haiku-5-5, claude-opus-5-5, claude-fable-5-1';
+const KIND_LABEL={text:'Văn bản',image:'Ảnh',audio:'Âm thanh',video:'Video'};
+const TASK_ICON={text:'✨',image:'🖼️',audio:'🎵',video:'🎬'};
+let providers=[];try{providers=JSON.parse(localStorage.getItem('acs_providers')||'[]')}catch{}
+const saveProviders=()=>{try{localStorage.setItem('acs_providers',JSON.stringify(providers))}catch(e){toast('Không lưu được cài đặt AI: '+e.message)}};
+const capsOf=p=>p.type==='custom'?[p.custom?.outputKind||'text']:PTYPES[p.type].caps;
+const firstModel=p=>(p.models||'').split(',').map(s=>s.trim()).filter(Boolean)[0]||'';
+
+/* ---------- gọi AI ---------- */
+async function httpJson(url,opt={}){
+  const r=await fetch(url,opt);const t=await r.text();let j=null;try{j=JSON.parse(t)}catch{}
+  if(!r.ok){const m=j&&(typeof j.error==='string'?j.error:j.error?.message||j.message||j.detail);throw new Error(`HTTP ${r.status}: ${m||t.slice(0,300)}`)}
+  return j??t}
+function hdrBearer(p){const h={'content-type':'application/json'};if(p.apiKey)h.authorization='Bearer '+p.apiKey;return h}
+const anthHdr=p=>({'content-type':'application/json','x-api-key':p.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'});
+function gemini(p,model,prompt,images,extra={}){
+  const parts=[{text:prompt},...images.map(splitDataURL).filter(Boolean).map(s=>({inline_data:{mime_type:s.mime,data:s.b64}}))];
+  return httpJson(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{method:'POST',headers:{'content-type':'application/json','x-goog-api-key':p.apiKey},body:JSON.stringify({contents:[{role:'user',parts}],...extra})})}
+const geminiParts=j=>j?.candidates?.[0]?.content?.parts||[];
+
+async function aiText(p,model,prompt,images,extra){
+  if(p.type==='openai'){
+    const content=images.length?[{type:'text',text:prompt},...images.map(u=>({type:'image_url',image_url:{url:u}}))]:prompt;
+    const j=await httpJson(trimUrl(p.baseUrl)+'/chat/completions',{method:'POST',headers:hdrBearer(p),body:JSON.stringify({model,messages:[{role:'user',content}],...extra})});
+    return j.choices?.[0]?.message?.content??JSON.stringify(j,null,2)}
+  if(p.type==='anthropic'){
+    const content=[...images.map(splitDataURL).filter(Boolean).map(s=>({type:'image',source:{type:'base64',media_type:s.mime,data:s.b64}})),{type:'text',text:prompt}];
+    const j=await httpJson('https://api.anthropic.com/v1/messages',{method:'POST',headers:anthHdr(p),body:JSON.stringify({model,max_tokens:4096,messages:[{role:'user',content}],...extra})});
+    return (j.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('\n')}
+  if(p.type==='gemini'){const j=await gemini(p,model,prompt,images,extra);return geminiParts(j).filter(x=>x.text).map(x=>x.text).join('\n')}
+  if(p.type==='ollama'){
+    const msg={role:'user',content:prompt};const imgs=images.map(splitDataURL).filter(Boolean).map(s=>s.b64);if(imgs.length)msg.images=imgs;
+    const j=await httpJson(trimUrl(p.baseUrl)+'/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({model,messages:[msg],stream:false,...extra})});
+    return j.message?.content??''}
+  throw new Error('Loại AI này không tạo được văn bản')}
+
+async function aiImage(p,model,prompt,images,extra){
+  if(p.type==='openai'){
+    const j=await httpJson(trimUrl(p.baseUrl)+'/images/generations',{method:'POST',headers:hdrBearer(p),body:JSON.stringify({model,prompt,n:1,...extra})});
+    const d=j.data?.[0];if(!d)throw new Error('Không có ảnh trả về');
+    return d.b64_json?'data:image/png;base64,'+d.b64_json:d.url}
+  if(p.type==='gemini'){
+    const j=await gemini(p,model,prompt,images,{generationConfig:{responseModalities:['TEXT','IMAGE']},...extra});
+    const im=geminiParts(j).find(x=>x.inlineData||x.inline_data);
+    if(!im)throw new Error('Model không trả về ảnh — hãy chọn model Gemini có hỗ trợ tạo ảnh.');
+    const d=im.inlineData||im.inline_data;return `data:${d.mimeType||d.mime_type};base64,${d.data}`}
+  throw new Error('Loại AI này không tạo được ảnh')}
+
+async function aiAudio(p,model,prompt,extra){
+  if(p.type==='openai'){
+    const r=await fetch(trimUrl(p.baseUrl)+'/audio/speech',{method:'POST',headers:hdrBearer(p),body:JSON.stringify({model,input:prompt,voice:'alloy',...extra})});
+    if(!r.ok)throw new Error('HTTP '+r.status+': '+(await r.text()).slice(0,300));
+    return blobToDataURL(await r.blob())}
+  throw new Error('Loại AI này không tạo được âm thanh')}
+
+async function comfyRun(p,prompt){
+  if(!p.workflow?.trim())throw new Error('Chưa dán workflow API JSON cho ComfyUI (sửa trong “AI của tôi”).');
+  const base=trimUrl(p.baseUrl),seed=()=>String(Math.floor(Math.random()*1e15));
+  const txt=p.workflow.split('"{{seed}}"').join(seed()).split('{{seed}}').join(seed()).split('{{prompt}}').join(JSON.stringify(prompt).slice(1,-1));
+  let wf;try{wf=JSON.parse(txt)}catch(e){throw new Error('Workflow JSON không hợp lệ: '+e.message)}
+  const j=await httpJson(base+'/prompt',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({prompt:wf,client_id:'acs-'+uid()})});
+  const pid=j.prompt_id;if(!pid)throw new Error('ComfyUI không trả về prompt_id');
+  for(let i=0;i<2400;i++){
+    await sleep(1500);
+    const h=await httpJson(base+'/history/'+pid),e=h[pid];if(!e)continue;
+    if(e.status?.status_str==='error')throw new Error('ComfyUI báo lỗi khi chạy workflow — mở cửa sổ ComfyUI để xem chi tiết.');
+    const files=[];for(const o of Object.values(e.outputs||{}))for(const k of['images','gifs','videos','video','audio'])for(const f of(o[k]||[]))if(f?.filename)files.push(f);
+    if(!files.length){if(e.status?.completed)throw new Error('Workflow chạy xong nhưng không có tệp đầu ra (cần node Save Image / Save Audio / Save Video).');continue}
+    const f=files.find(f=>f.type==='output')||files[files.length-1];
+    return{kind:kindFromName(f.filename),value:`${base}/view?filename=${encodeURIComponent(f.filename)}&subfolder=${encodeURIComponent(f.subfolder||'')}&type=${encodeURIComponent(f.type||'output')}`,name:f.filename}}
+  throw new Error('Hết thời gian chờ ComfyUI (60 phút)')}
+
+async function customRun(p,model,prompt,images,files){
+  const c=p.custom||{};
+  const vars={prompt,model,key:p.apiKey||'',image:images[0]||'',file:files[0]||''};
+  const fill=(s,mode)=>s.replace(/\{\{(\w+)\}\}/g,(_,k)=>{const v=String(vars[k]??'');return mode==='json'?JSON.stringify(v).slice(1,-1):mode==='url'?encodeURIComponent(v):v});
+  if(!c.url)throw new Error('Chưa nhập URL cho API tuỳ chỉnh');
+  let headers={};if(c.headers?.trim()){try{headers=JSON.parse(fill(c.headers,'json'))}catch(e){throw new Error('Headers không phải JSON hợp lệ')}}
+  const opt={method:c.method||'POST',headers};if(opt.method!=='GET'&&c.body?.trim())opt.body=fill(c.body,'json');
+  const r=await fetch(fill(c.url,'url'),opt);
+  if(!r.ok)throw new Error('HTTP '+r.status+': '+(await r.text()).slice(0,300));
+  const ct=r.headers.get('content-type')||'',kind=c.outputKind||'text';
+  if(/^(image|audio|video)\//.test(ct))return{kind:ct.split('/')[0],value:await blobToDataURL(await r.blob())};
+  const raw=await r.text();let val=raw;
+  if(c.resultPath?.trim()){let j;try{j=JSON.parse(raw)}catch{throw new Error('Kết quả không phải JSON: '+raw.slice(0,200))}
+    val=getPath(j,c.resultPath.trim());if(val==null)throw new Error(`Không thấy “${c.resultPath}” trong kết quả: `+raw.slice(0,300))}
+  if(typeof val!=='string')val=JSON.stringify(val,null,2);
+  if(kind!=='text'){const mime=c.mime?.trim()||{image:'image/png',audio:'audio/mpeg',video:'video/mp4'}[kind];
+    if(c.resultFormat==='base64')val=`data:${mime};base64,${val}`;else if(c.resultFormat==='hex')val=`data:${mime};base64,${hexToB64(val)}`}
+  return{kind,value:val}}
+
+async function runAI(n,prompt,images,files){
+  const p=providers.find(x=>x.id===n.data.provider);
+  if(!p)throw new Error('Ô này chưa chọn AI. Chọn trong danh sách “AI” hoặc “＋ Thêm AI mới…”.');
+  let extra={};if(n.data.opts?.trim()){try{extra=JSON.parse(n.data.opts)}catch{throw new Error('Tuỳ chọn nâng cao không phải JSON hợp lệ')}}
+  if(p.type==='comfyui')return comfyRun(p,prompt);
+  const model=(n.data.model||'').trim();
+  if(p.type==='custom')return customRun(p,model,prompt,images,files);
+  if(!model)throw new Error('Chưa nhập tên model');
+  const t=n.data.task;
+  if(t==='text')return{kind:'text',value:await aiText(p,model,prompt,images,extra)};
+  if(t==='image')return{kind:'image',value:await aiImage(p,model,prompt,images,extra)};
+  if(t==='audio')return{kind:'audio',value:await aiAudio(p,model,prompt,extra)};
+  throw new Error(`${PTYPES[p.type].short} không hỗ trợ tạo ${KIND_LABEL[t]}`)}
+
+async function fetchModels(p){
+  if(p.type==='openai'){const j=await httpJson(trimUrl(p.baseUrl)+'/models',{headers:hdrBearer(p)});return(j.data||[]).map(m=>m.id)}
+  if(p.type==='ollama'){const j=await httpJson(trimUrl(p.baseUrl)+'/api/tags');return(j.models||[]).map(m=>m.name)}
+  if(p.type==='gemini'){const j=await httpJson('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200',{headers:{'x-goog-api-key':p.apiKey}});return(j.models||[]).map(m=>m.name.replace(/^models\//,''))}
+  if(p.type==='anthropic'){const j=await httpJson('https://api.anthropic.com/v1/models?limit=100',{headers:anthHdr(p)});return(j.data||[]).map(m=>m.id)}
+  throw new Error('Loại này không có danh sách model')}
+
+function friendlyErr(e){
+  if(e instanceof TypeError&&/fetch|network|load/i.test(e.message))return'Không kết nối được: sai địa chỉ, máy chủ chưa chạy, hoặc bị chặn CORS. Xem hướng dẫn trong “AI của tôi”.';
+  return e.message||String(e)}
+
+/* ---------- trạng thái ---------- */
+let cur=null,saveT=null,sel=null;
+const RS=new Map(),runningP=new Map();
+const NODE_W=300,PORT_Y=27;
+function dirty(){if(!cur)return;cur.updated=Date.now();const p=cur;clearTimeout(saveT);saveT=setTimeout(()=>DB.put(p).catch(e=>toast('Lỗi lưu: '+e.message)),400)}
+const ed=$('#editor'),world=$('#world'),svg=$('#edges');
+
+/* ---------- trang dự án ---------- */
+function updateProvCount(){$('#provCount').textContent=providers.length?`(${providers.length})`:''}
+async function showHome(){
+  if(cur){clearTimeout(saveT);await DB.put(cur)}
+  cur=null;sel=null;closeMenu();
+  ed.classList.add('hidden');$('#home').classList.remove('hidden');
+  $('#projTools').classList.add('hidden');$('#homeTools').classList.remove('hidden');
+  updateProvCount();
+  const list=(await DB.all()).sort((a,b)=>b.updated-a.updated);
+  $('#grid').innerHTML=`<div class="card newcard" data-act="new">＋ Dự án mới</div>`+list.map(p=>{
+    const img=p.nodes.find(n=>n.output?.kind==='image')?.output.value;
+    return `<div class="card" data-id="${p.id}"><div class="thumb" ${img?`style="background-image:url('${esc(img)}')"`:''}><span>${p.nodes.length} ô · ${p.edges.length} dây</span></div>
+    <div class="meta"><div class="name">${esc(p.name)}</div><div class="sub">Sửa lần cuối ${new Date(p.updated).toLocaleString('vi-VN')}</div></div>
+    <div class="acts"><button data-act="rename">Đổi tên</button><button data-act="dup">Nhân bản</button><button data-act="export">Xuất</button><button class="danger" data-act="del">Xoá</button></div></div>`}).join('')}
+$('#grid').addEventListener('click',async e=>{
+  const card=e.target.closest('.card');if(!card)return;
+  const act=e.target.closest('[data-act]')?.dataset.act;
+  if(act==='new'){const p={id:uid(),name:'Dự án không tên',created:Date.now(),updated:Date.now(),nodes:[],edges:[],view:{x:0,y:0,z:1}};await DB.put(p);return openProject(p.id)}
+  const id=card.dataset.id,p=await DB.get(id);if(!p)return;
+  if(act==='rename'){const n=prompt('Tên dự án:',p.name);if(n?.trim()){p.name=n.trim();p.updated=Date.now();await DB.put(p);showHome()}return}
+  if(act==='dup'){const c=structuredClone(p);c.id=uid();c.name=p.name+' (bản sao)';c.updated=Date.now();await DB.put(c);return showHome()}
+  if(act==='export')return download(p.name.replace(/[\\/:*?"<>|]/g,'_')+'.micron.json',JSON.stringify(p));
+  if(act==='del'){if(confirm(`Xoá dự án “${p.name}”? Không thể hoàn tác.`)){await DB.del(id);showHome()}return}
+  openProject(id)});
+$('#btnImport').onclick=()=>$('#importFile').click();
+$('#importFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{const p=JSON.parse(await f.text());if(!Array.isArray(p.nodes)||!Array.isArray(p.edges))throw new Error('Tệp không đúng định dạng');
+    p.id=uid();p.name=(p.name||'Dự án')+' (nhập)';p.updated=Date.now();p.view=p.view||{x:0,y:0,z:1};await DB.put(p);toast('Đã nhập dự án');showHome()}
+  catch(err){toast('Không nhập được: '+err.message)}};
+
+/* ---------- editor ---------- */
+async function openProject(id){
+  cur=await DB.get(id);if(!cur)return;cur.view=cur.view||{x:0,y:0,z:1};sel=null;RS.clear();
+  $('#home').classList.add('hidden');ed.classList.remove('hidden');
+  $('#homeTools').classList.add('hidden');$('#projTools').classList.remove('hidden');
+  $('#pname').value=cur.name;renderAll()}
+$('#btnBack').onclick=showHome;
+$('#pname').oninput=e=>{cur.name=e.target.value||'Dự án không tên';dirty()};
+$('#btnExport').onclick=()=>download(cur.name.replace(/[\\/:*?"<>|]/g,'_')+'.micron.json',JSON.stringify(cur));
+
+function applyView(){const v=cur.view;world.style.transform=`translate(${v.x}px,${v.y}px) scale(${v.z})`;
+  ed.style.backgroundSize=`${22*v.z}px ${22*v.z}px`;ed.style.backgroundPosition=`${v.x}px ${v.y}px`;$('#zoomInfo').textContent=Math.round(v.z*100)+'%'}
+function toWorld(cx,cy){const r=ed.getBoundingClientRect(),v=cur.view;return{x:(cx-r.left-v.x)/v.z,y:(cy-r.top-v.y)/v.z}}
+function renderAll(){applyView();world.querySelectorAll('.node').forEach(n=>n.remove());cur.nodes.forEach(n=>world.appendChild(nodeEl(n)));drawEdges();$('#empty').classList.toggle('hidden',cur.nodes.length>0)}
+const nodeById=id=>cur?.nodes.find(x=>x.id===id);
+const elOf=id=>world.querySelector(`.node[data-id="${id}"]`);
+const nodeOf=el=>{const ne=el.closest('.node');return ne?nodeById(ne.dataset.id):null};
+
+function nodeEl(n){const el=document.createElement('div');el.className='node'+(sel===n.id?' sel':'');el.dataset.id=n.id;
+  el.style.cssText=`left:${n.x}px;top:${n.y}px;width:${NODE_W}px`;el.innerHTML=nodeInner(n);return el}
+function rerenderNode(n){const el=elOf(n.id);if(el)el.innerHTML=nodeInner(n)}
+function refreshRes(n){const el=elOf(n.id);if(!el)return;const r=el.querySelector('.res');if(r)r.innerHTML=resHtml(n);
+  const b=el.querySelector('[data-act=run]');if(b){const busy=runningP.has(n.id);b.disabled=busy;b.textContent=busy?'Đang chạy…':'▶ Chạy'}}
+function nodeInner(n){
+  const title=n.type==='text'?'📝 Văn bản':n.type==='upload'?'📁 Tệp tải lên':`${TASK_ICON[n.data.task]} AI · ${KIND_LABEL[n.data.task]}`;
+  const busy=runningP.has(n.id);
+  let body;
+  if(n.type==='text')body=`<textarea data-f="text" style="min-height:110px" placeholder="Nhập văn bản, kịch bản, lời bài hát…">${esc(n.data.text||'')}</textarea>`;
+  else if(n.type==='upload')body=`<input type="file" data-f="file" accept="image/*,audio/*,video/*" style="margin-top:6px"><div class="res">${resHtml(n)}</div>`;
+  else body=aiBody(n);
+  return `<div class="nhead"><span class="t">${title}</span>${n.type==='ai'?`<button class="primary" data-act="run" ${busy?'disabled':''}>${busy?'Đang chạy…':'▶ Chạy'}</button>`:''}<button class="ghost danger" data-act="del" title="Xoá ô">✕</button></div>
+  <div class="nbody">${body}</div>${n.type==='ai'?'<div class="port in" title="Đầu vào"></div>':''}<div class="port out" title="Kéo sang một ô AI để nối"></div>`}
+function aiBody(n){
+  const d=n.data,list=providers.filter(p=>capsOf(p).includes(d.task)),p=providers.find(x=>x.id===d.provider);
+  const models=(p?.models||'').split(',').map(s=>s.trim()).filter(Boolean);
+  const showModel=p&&p.type!=='comfyui';
+  return `<div class="row"><div style="flex:0 0 100px"><label>Tác vụ</label><select data-f="task">${Object.entries(KIND_LABEL).map(([k,v])=>`<option value="${k}" ${k===d.task?'selected':''}>${v}</option>`).join('')}</select></div>
+  <div><label>AI</label><select data-f="provider"><option value="">— chọn AI —</option>${list.map(x=>`<option value="${x.id}" ${x.id===d.provider?'selected':''}>${esc(x.name)}</option>`).join('')}<option value="__add">＋ Thêm AI mới…</option></select></div></div>
+  ${!list.length?`<div class="status err">Chưa có AI nào tạo được ${KIND_LABEL[d.task].toLowerCase()}. Chọn “＋ Thêm AI mới…”.</div>`:''}
+  ${showModel?`<label>Model</label><input data-f="model" list="ml-${n.id}" value="${esc(d.model||'')}" placeholder="tên model của nhà cung cấp"><datalist id="ml-${n.id}">${models.map(m=>`<option value="${esc(m)}">`).join('')}</datalist>`:''}
+  <label>Prompt <span style="opacity:.75">— dùng {{input}} để chèn kết quả từ ô nối vào</span></label>
+  <textarea data-f="prompt" placeholder="Mô tả điều bạn muốn AI làm…">${esc(d.prompt||'')}</textarea>
+  <details ${d.opts?'open':''}><summary class="sub">Tuỳ chọn nâng cao (JSON)</summary><textarea data-f="opts" class="mono" style="min-height:50px" placeholder='vd: {"size":"1536x1024"} hoặc {"voice":"nova"} hoặc {"temperature":0.7}'>${esc(d.opts||'')}</textarea></details>
+  <div class="res">${resHtml(n)}</div>`}
+function resHtml(n){
+  const o=n.output,s=RS.get(n.id);let h='';
+  if(o){let inner;
+    if(o.kind==='image')inner=`<img src="${esc(o.value)}" alt="">`;
+    else if(o.kind==='audio')inner=`<audio controls src="${esc(o.value)}"></audio>`;
+    else if(o.kind==='video')inner=`<video controls src="${esc(o.value)}"></video>`;
+    else inner=esc(o.value);
+    h+=`<div class="out">${inner}</div><div class="links">${o.kind==='text'?'<a href="#" data-act="copy">Sao chép</a>':`<a href="${esc(o.value)}" download="${esc(o.name||('ket-qua-'+n.id))}" target="_blank">Tải xuống</a>`}${n.type==='ai'?' · <a href="#" data-act="clear">Xoá kết quả</a>':''}</div>`}
+  if(s)h+=`<div class="status ${s.cls}">${esc(s.msg)}</div>`;
+  return h}
+
+/* dây nối */
+const portPos=(n,side)=>({x:n.x+(side==='out'?NODE_W:0),y:n.y+PORT_Y});
+function pathD(a,b){const dx=Math.max(50,Math.abs(b.x-a.x)/2);return`M${a.x},${a.y} C${a.x+dx},${a.y} ${b.x-dx},${b.y} ${b.x},${b.y}`}
+function drawEdges(temp){let h='';
+  for(const e of cur.edges){const A=nodeById(e.from),B=nodeById(e.to);if(A&&B)h+=`<path data-e="${e.id}" d="${pathD(portPos(A,'out'),portPos(B,'in'))}"><title>Bấm để xoá dây</title></path>`}
+  if(temp)h+=`<path class="temp" d="${pathD(temp.a,temp.b)}"/>`;svg.innerHTML=h}
+svg.addEventListener('click',e=>{const id=e.target.closest('path')?.dataset.e;if(!id)return;cur.edges=cur.edges.filter(x=>x.id!==id);drawEdges();dirty()});
+function reaches(s,t){const st=[s],seen=new Set();while(st.length){const x=st.pop();if(x===t)return true;if(seen.has(x))continue;seen.add(x);cur.edges.forEach(e=>{if(e.from===x)st.push(e.to)})}return false}
+function connect(a,b){const B=nodeById(b);if(!B)return;if(B.type!=='ai')return toast('Chỉ nối được vào ô AI');
+  if(cur.edges.some(e=>e.from===a&&e.to===b))return;if(reaches(b,a))return toast('Không thể nối tạo thành vòng lặp');
+  cur.edges.push({id:uid(),from:a,to:b});dirty()}
+
+/* chọn, kéo, nối */
+function selectNode(id){sel=id;world.querySelectorAll('.node').forEach(el=>el.classList.toggle('sel',el.dataset.id===id))}
+world.addEventListener('pointerdown',e=>{
+  const ne=e.target.closest('.node');if(!ne)return;const n=nodeById(ne.dataset.id);if(!n)return;selectNode(n.id);closeMenu();
+  if(e.target.classList.contains('port')&&e.target.classList.contains('out')){e.preventDefault();return startConnect(n,e)}
+  if(e.target.closest('.nhead')&&!e.target.closest('button')){e.preventDefault();startDrag(n,ne,e)}});
+function startDrag(n,el,e){const sx=e.clientX,sy=e.clientY,ox=n.x,oy=n.y,z=cur.view.z;el.style.zIndex=2;
+  const mv=ev=>{n.x=Math.round(ox+(ev.clientX-sx)/z);n.y=Math.round(oy+(ev.clientY-sy)/z);el.style.left=n.x+'px';el.style.top=n.y+'px';drawEdges()};
+  const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);el.style.zIndex='';dirty()};
+  addEventListener('pointermove',mv);addEventListener('pointerup',up)}
+function startConnect(n,e){const a=portPos(n,'out'),sx=e.clientX,sy=e.clientY;closeMenu();
+  const mv=ev=>drawEdges({a,b:toWorld(ev.clientX,ev.clientY)});
+  const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);
+    const hit=document.elementFromPoint(ev.clientX,ev.clientY),t=hit?.closest('.node');
+    if(t){if(t.dataset.id!==n.id)connect(n.id,t.dataset.id);return drawEdges()}
+    // thả ra chỗ trống → mở bảng chọn AI ngay tại đó
+    if(Math.hypot(ev.clientX-sx,ev.clientY-sy)>8&&hit&&ed.contains(hit)){const b=toWorld(ev.clientX,ev.clientY);drawEdges({a,b});return openDropMenu(n,ev.clientX,ev.clientY,b)}
+    drawEdges()};
+  addEventListener('pointermove',mv);addEventListener('pointerup',up)}
+ed.addEventListener('pointerdown',e=>{if(e.target!==ed)return;closeMenu();selectNode(null);
+  const s={x:e.clientX,y:e.clientY,vx:cur.view.x,vy:cur.view.y};
+  const mv=ev=>{cur.view.x=s.vx+ev.clientX-s.x;cur.view.y=s.vy+ev.clientY-s.y;applyView()};
+  const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);dirty()};
+  addEventListener('pointermove',mv);addEventListener('pointerup',up)});
+ed.addEventListener('wheel',e=>{if(e.target.closest('.out,textarea,#addMenu'))return;e.preventDefault();
+  const r=ed.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top,v=cur.view;
+  const nz=Math.min(2,Math.max(.2,v.z*Math.exp(-e.deltaY*.0015)));v.x=mx-(mx-v.x)*nz/v.z;v.y=my-(my-v.y)*nz/v.z;v.z=nz;applyView();dirty()},{passive:false});
+
+/* sửa nội dung ô */
+world.addEventListener('input',e=>{const el=e.target,f=el.dataset.f;if(!f||el.tagName==='SELECT'||f==='file')return;const n=nodeOf(el);if(!n)return;n.data[f]=el.value;dirty()});
+world.addEventListener('change',e=>{const el=e.target,f=el.dataset.f,n=nodeOf(el);if(!n||!f)return;
+  if(f==='task'){n.data.task=el.value;const p=providers.find(p=>p.id===n.data.provider);
+    if(!p||!capsOf(p).includes(el.value)){const q=providers.find(p=>capsOf(p).includes(el.value));n.data.provider=q?.id||'';n.data.model=q?firstModel(q):''}
+    rerenderNode(n);dirty()}
+  else if(f==='provider'){
+    if(el.value==='__add'){el.value=n.data.provider;openProviders(id=>{const p=providers.find(x=>x.id===id);
+      if(p){if(!capsOf(p).includes(n.data.task))n.data.task=capsOf(p)[0];n.data.provider=id;n.data.model=firstModel(p)}rerenderNode(n);dirty()});return}
+    n.data.provider=el.value;const p=providers.find(x=>x.id===el.value);n.data.model=p?firstModel(p):'';rerenderNode(n);dirty()}
+  else if(f==='file'){const file=el.files[0];if(!file)return;
+    if(file.size>150*1024*1024)toast('Tệp lớn — dự án có thể chậm khi lưu.');
+    blobToDataURL(file).then(v=>{let k=file.type.split('/')[0];if(!['image','audio','video'].includes(k))k='text';n.output={kind:k,value:v,name:file.name};refreshRes(n);dirty()})}});
+world.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const n=nodeOf(b);if(!n)return;const a=b.dataset.act;
+  if(a==='copy'||a==='clear')e.preventDefault();
+  if(a==='run')runNode(n.id);
+  else if(a==='del')deleteNode(n.id);
+  else if(a==='copy')navigator.clipboard.writeText(n.output?.value||'').then(()=>toast('Đã sao chép'));
+  else if(a==='clear'){n.output=null;RS.delete(n.id);refreshRes(n);dirty()}});
+function deleteNode(id){cur.nodes=cur.nodes.filter(n=>n.id!==id);cur.edges=cur.edges.filter(e=>e.from!==id&&e.to!==id);RS.delete(id);if(sel===id)sel=null;elOf(id)?.remove();drawEdges();$('#empty').classList.toggle('hidden',cur.nodes.length>0);dirty()}
+addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeMenu();if(!$('#provModal').classList.contains('hidden'))closeProviders()}
+  if((e.key==='Delete'||e.key==='Backspace')&&cur&&sel&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)&&$('#provModal').classList.contains('hidden')){e.preventDefault();deleteNode(sel)}});
+
+/* menu ＋ */
+let pending=null; // {from, pos} khi bảng chọn mở ra từ việc thả dây
+function closeMenu(){const m=$('#addMenu');m.classList.add('hidden');m.style.cssText='';if(pending){pending=null;if(cur)drawEdges()}}
+const hasAI=k=>providers.some(p=>capsOf(p).includes(k));
+function aiMenuItems(){return ['text','image','audio','video'].map(k=>`<button data-add="ai:${k}">${TASK_ICON[k]} AI ${KIND_LABEL[k]}<small>${hasAI(k)?esc(providers.filter(p=>capsOf(p).includes(k)).map(p=>p.name).join(', ')):'Chưa có AI phù hợp — sẽ hỏi bạn thêm'}</small></button>`).join('')}
+$('#addBtn').onclick=()=>{const m=$('#addMenu');if(!m.classList.contains('hidden')&&!pending)return closeMenu();closeMenu();
+  m.innerHTML=`${aiMenuItems()}
+  <hr><button data-add="text">📝 Ô văn bản<small>Kịch bản, lời bài hát, ý tưởng… để nối vào ô AI</small></button>
+  <button data-add="upload">📁 Ô tải tệp<small>Ảnh / âm thanh / video từ máy bạn</small></button>
+  <hr><button data-add="prov">⚙ Quản lý AI của tôi</button>`;m.classList.remove('hidden')};
+function openDropMenu(from,cx,cy,pos){const m=$('#addMenu');closeMenu();pending={from:from.id,pos};
+  m.innerHTML=`<div class="sub" style="padding:6px 10px 4px">Nối sang ô AI mới:</div>${aiMenuItems()}<hr><button data-add="prov">⚙ Quản lý AI của tôi</button>`;
+  m.classList.remove('hidden');
+  const r=ed.getBoundingClientRect(),mw=m.offsetWidth||280,mh=m.offsetHeight||330;
+  const left=Math.max(8,Math.min(cx-r.left+8,r.width-mw-8)),top=Math.max(8,Math.min(cy-r.top-20,r.height-mh-8));
+  m.style.cssText=`left:${left}px;top:${top}px;bottom:auto;transform:none`}
+$('#addMenu').addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(!b)return;const v=b.dataset.add,pd=pending;pending=null;closeMenu();
+  if(v==='prov')return openProviders();
+  if(v.startsWith('ai:')){const task=v.slice(3),n=addNode('ai',{task,provider:'',model:'',prompt:'',opts:''},pd?.pos);
+    if(pd){connect(pd.from,n.id);drawEdges()}
+    const p=providers.find(p=>capsOf(p).includes(task));
+    if(p){n.data.provider=p.id;n.data.model=firstModel(p);rerenderNode(n);dirty()}
+    else openProviders(id=>{const q=providers.find(x=>x.id===id);if(q){if(!capsOf(q).includes(n.data.task))n.data.task=capsOf(q)[0];n.data.provider=id;n.data.model=firstModel(q)}rerenderNode(n);dirty()});
+    return}
+  addNode(v,{})});
+function addNode(type,data,pos){const r=ed.getBoundingClientRect(),v=cur.view;
+  const n={id:uid(),type,data,output:null,
+    x:Math.round(pos?pos.x:(r.width/2-v.x)/v.z-NODE_W/2+(Math.random()*80-40)),
+    y:Math.round(pos?pos.y-PORT_Y:(r.height/2-v.y)/v.z-160+(Math.random()*80-40))};
+  cur.nodes.push(n);world.appendChild(nodeEl(n));selectNode(n.id);$('#empty').classList.add('hidden');dirty();return n}
+
+/* chạy */
+function runNode(id){if(runningP.has(id))return runningP.get(id);
+  const p=doRun(id).finally(()=>{runningP.delete(id);const n=nodeById(id);if(n)refreshRes(n)});
+  runningP.set(id,p);const n=nodeById(id);if(n)refreshRes(n);return p}
+async function doRun(id){
+  const proj=cur,n=proj.nodes.find(x=>x.id===id);if(!n||n.type!=='ai')return true;
+  const setS=(msg,cls)=>{RS.set(id,{msg,cls});if(cur===proj)refreshRes(n)};
+  const ups=proj.edges.filter(e=>e.to===id).map(e=>proj.nodes.find(x=>x.id===e.from)).filter(Boolean);
+  for(const u of ups)if(u.type==='ai'&&!u.output){setS('Đang chạy ô phía trước…','run');await runNode(u.id)}
+  const texts=[],images=[],files=[];
+  for(const u of ups){const o=u.type==='text'?(u.data.text?.trim()?{kind:'text',value:u.data.text}:null):u.output;
+    if(!o){if(u.type==='ai'){setS('Ô phía trước chưa có kết quả (bị lỗi).','err');return false}continue}
+    if(o.kind==='text')texts.push(o.value);else{files.push(o.value);if(o.kind==='image')images.push(o.value)}}
+  const input=texts.join('\n\n');let prompt=n.data.prompt||'';
+  if(prompt.includes('{{input}}'))prompt=prompt.split('{{input}}').join(input);else if(input)prompt=prompt.trim()?input+'\n\n'+prompt:input;
+  if(!prompt.trim()&&!images.length){setS('Prompt đang trống.','err');return false}
+  setS('Đang chạy…','run');const t0=performance.now();
+  try{const imgs=await Promise.all(images.map(asDataURL));
+    const out=await runAI(n,prompt,imgs,files);n.output=out;
+    RS.set(id,{msg:`Xong sau ${((performance.now()-t0)/1000).toFixed(1)} giây`,cls:'ok'});
+    proj.updated=Date.now();if(cur===proj)dirty();else DB.put(proj);return true}
+  catch(e){RS.set(id,{msg:friendlyErr(e),cls:'err'});return false}}
+function topo(){const indeg=new Map(cur.nodes.map(n=>[n.id,0]));cur.edges.forEach(e=>indeg.set(e.to,(indeg.get(e.to)||0)+1));
+  const q=cur.nodes.filter(n=>!indeg.get(n.id)).map(n=>n.id),out=[];
+  while(q.length){const x=q.shift();out.push(x);cur.edges.forEach(e=>{if(e.from===x){indeg.set(e.to,indeg.get(e.to)-1);if(!indeg.get(e.to))q.push(e.to)}})}return out}
+$('#btnRunAll').onclick=async()=>{const ids=topo().filter(id=>nodeById(id)?.type==='ai');if(!ids.length)return toast('Chưa có ô AI nào');
+  const b=$('#btnRunAll');b.disabled=true;b.textContent='Đang chạy…';
+  ids.forEach(id=>{const n=nodeById(id);if(n){n.output=null;RS.set(id,{msg:'Đang chờ…',cls:'run'});refreshRes(n)}});
+  let ok=0,fail=0;for(const id of ids){(await runNode(id))?ok++:fail++}
+  b.disabled=false;b.textContent='▶ Chạy tất cả';toast(`Đã chạy xong ${ok} ô${fail?` · ${fail} ô lỗi`:''}`)};
+
+/* ---------- hộp thoại AI của tôi ---------- */
+let provCb=null,editing=null;
+function openProviders(cb){provCb=cb||null;$('#provModal').classList.remove('hidden');renderProvList();$('#pform').innerHTML='';if(cb||!providers.length)startEdit(null)}
+function closeProviders(){$('#provModal').classList.add('hidden');provCb=null;editing=null;$('#pform').innerHTML='';if(cur)renderAll();else updateProvCount()}
+function renderProvList(){
+  $('#provList').innerHTML=providers.length?providers.map(p=>`<div class="prov"><div class="n"><b>${esc(p.name)}</b><span class="tag">${PTYPES[p.type].short}</span>
+  <div class="sub">${capsOf(p).map(k=>KIND_LABEL[k]).join(' · ')}${p.baseUrl&&PTYPES[p.type].fields.includes('baseUrl')?' · '+esc(p.baseUrl):''}${p.apiKey?' · key ••••'+esc(p.apiKey.slice(-4)):''}</div></div>
+  <button data-pe="${p.id}">Sửa</button><button class="danger" data-pd="${p.id}">Xoá</button></div>`).join('')
+  :`<div class="sub" style="padding:6px 0 2px">Chưa có AI nào. Ứng dụng không cài sẵn AI — hãy thêm bằng API key của bạn hoặc AI chạy trên máy (Ollama, LM Studio, ComfyUI…).</div>`}
+function startEdit(p){editing=p?structuredClone(p):{id:uid(),name:'',type:'openai',baseUrl:DEFAULT_URL.openai,apiKey:'',models:'',workflow:'',
+  custom:{method:'POST',url:'',headers:'{\n  "Content-Type": "application/json",\n  "Authorization": "Bearer {{key}}"\n}',body:'{\n  "model": "{{model}}",\n  "prompt": "{{prompt}}"\n}',resultPath:'',resultFormat:'url',outputKind:'audio',mime:''}};
+  editing.custom=editing.custom||{};renderForm()}
+function renderForm(){const p=editing,t=p.type,F=PTYPES[t].fields,c=p.custom,isNew=!providers.some(x=>x.id===p.id);
+  const opt=(arr,v)=>arr.map(([k,l])=>`<option value="${k}" ${k===v?'selected':''}>${l}</option>`).join('');
+  let h=`<h3 style="margin:14px 0 2px;font-size:15px">${isNew?'Thêm AI mới':'Sửa: '+esc(p.name)}</h3>
+  <div class="row"><div><label>Tên hiển thị</label><input data-k="name" value="${esc(p.name)}" placeholder="vd: OpenAI của tôi, Ollama máy nhà…"></div>
+  <div><label>Loại kết nối</label><select data-k="type">${opt(Object.entries(PTYPES).map(([k,v])=>[k,v.label]),t)}</select></div></div>`;
+  if(F.includes('baseUrl'))h+=`<label>Địa chỉ (Base URL)</label><input data-k="baseUrl" value="${esc(p.baseUrl)}">${t==='openai'?`<div class="chips">${PRESETS.map(([n,u])=>`<button data-preset="${u}" data-pname="${n}">${n}</button>`).join('')}</div>`:''}`;
+  if(F.includes('apiKey'))h+=`<label>API key${t==='openai'?' (bỏ trống nếu là AI chạy trên máy)':''}</label><div class="row"><input data-k="apiKey" type="password" value="${esc(p.apiKey)}" autocomplete="off" spellcheck="false"><button class="fit" data-togglekey>Hiện</button></div>`;
+  if(F.includes('models'))h+=`<label>Model (cách nhau bằng dấu phẩy — model đầu tiên là mặc định)</label><div class="row"><input data-k="models" value="${esc(p.models)}" placeholder="vd: gpt-4o-mini, gpt-image-1, tts-1">${t!=='custom'?'<button class="fit" data-fetchmodels>Lấy từ máy chủ</button>':''}</div>`;
+  if(F.includes('workflow'))h+=`<label>Workflow ComfyUI (API format JSON)</label><textarea data-k="workflow" class="mono" style="min-height:150px" placeholder='{ "6": { "class_type": "CLIPTextEncode", "inputs": { "text": "{{prompt}}", ... } }, "3": { "inputs": { "seed": "{{seed}}", ... } } }'>${esc(p.workflow)}</textarea>`;
+  if(F.includes('custom'))h+=`<div class="row"><div style="flex:0 0 100px"><label>Method</label><select data-c="method">${opt([['POST','POST'],['GET','GET'],['PUT','PUT']],c.method)}</select></div><div><label>URL</label><input data-c="url" value="${esc(c.url)}" placeholder="https://api.vi-du.com/v1/music_generation"></div></div>
+  <label>Headers (JSON)</label><textarea data-c="headers" class="mono" style="min-height:70px">${esc(c.headers)}</textarea>
+  <label>Body (JSON mẫu)</label><textarea data-c="body" class="mono" style="min-height:90px">${esc(c.body)}</textarea>
+  <div class="row"><div><label>Loại kết quả</label><select data-c="outputKind">${opt(Object.entries(KIND_LABEL),c.outputKind)}</select></div>
+  <div><label>Đường dẫn kết quả trong JSON</label><input data-c="resultPath" value="${esc(c.resultPath)}" placeholder="vd: data.audio"></div>
+  <div><label>Định dạng kết quả</label><select data-c="resultFormat">${opt([['url','Đường link'],['base64','Base64'],['hex','Hex'],['text','Văn bản']],c.resultFormat)}</select></div>
+  <div><label>MIME (tuỳ chọn)</label><input data-c="mime" value="${esc(c.mime)}" placeholder="audio/mpeg"></div></div>`;
+  h+=`<div class="hint">${HINTS[t]}<br>🔒 Key chỉ lưu trong trình duyệt này, không gửi đi đâu ngoài địa chỉ AI bạn nhập.</div>
+  <div style="display:flex;gap:8px;margin-top:14px"><button data-ptest>Kiểm tra kết nối</button><span class="spacer"></span><button data-pcancel>Huỷ</button><button class="primary" data-psave>Lưu</button></div>`;
+  $('#pform').innerHTML=h}
+function readForm(){const f=$('#pform');f.querySelectorAll('[data-k]').forEach(el=>{editing[el.dataset.k]=el.value});f.querySelectorAll('[data-c]').forEach(el=>{editing.custom[el.dataset.c]=el.value})}
+function validate(p){const F=PTYPES[p.type].fields;
+  if(F.includes('baseUrl')&&!/^https?:\/\//.test(p.baseUrl.trim()))return'Địa chỉ phải bắt đầu bằng http:// hoặc https://';
+  if(['gemini','anthropic'].includes(p.type)&&!p.apiKey.trim())return'Cần nhập API key';
+  if(p.type==='comfyui'){if(!p.workflow.trim())return'Cần dán workflow API JSON';try{JSON.parse(p.workflow.split('"{{seed}}"').join('0').split('{{seed}}').join('0').split('{{prompt}}').join('x'))}catch(e){return'Workflow JSON không hợp lệ: '+e.message}}
+  if(p.type==='custom'&&!/^https?:\/\//.test(p.custom.url.trim()))return'URL phải bắt đầu bằng http:// hoặc https://';
+  return null}
+$('#provAdd').onclick=()=>startEdit(null);
+$('#provClose').onclick=closeProviders;
+$('#provModal').addEventListener('click',async e=>{
+  if(e.target.id==='provModal')return closeProviders();
+  const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+  if(d.pe)return startEdit(providers.find(p=>p.id===d.pe));
+  if(d.pd){const p=providers.find(x=>x.id===d.pd);if(confirm(`Xoá “${p.name}”? Các ô đang dùng AI này sẽ cần chọn lại.`)){providers=providers.filter(x=>x.id!==d.pd);saveProviders();renderProvList();if(editing?.id===d.pd){editing=null;$('#pform').innerHTML=''}}return}
+  if(!editing)return;
+  if(d.preset!==undefined){readForm();editing.baseUrl=d.preset;if(!editing.name.trim())editing.name=d.pname;return renderForm()}
+  if(d.togglekey!==undefined){const i=$('#pform [data-k=apiKey]');i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'Hiện':'Ẩn';return}
+  if(d.fetchmodels!==undefined){readForm();b.disabled=true;b.textContent='Đang lấy…';
+    try{const ms=await fetchModels(editing);if(!ms.length)throw new Error('Không có model nào');
+      const keep=editing.models.split(',').map(s=>s.trim()).filter(Boolean);editing.models=[...keep,...ms.filter(m=>!keep.includes(m))].join(', ');renderForm();toast(`Tìm thấy ${ms.length} model. Hãy xoá bớt, để model bạn hay dùng lên đầu.`,4000)}
+    catch(err){toast('Lỗi: '+friendlyErr(err),5000);b.disabled=false;b.textContent='Lấy từ máy chủ'}return}
+  if(d.ptest!==undefined){readForm();b.disabled=true;b.textContent='Đang kiểm tra…';
+    try{if(editing.type==='comfyui'){await httpJson(trimUrl(editing.baseUrl)+'/system_stats');toast('✅ Kết nối ComfyUI thành công')}
+      else if(editing.type==='custom')toast('API tuỳ chỉnh: hãy lưu rồi thử chạy một ô AI để kiểm tra.',4000);
+      else{const ms=await fetchModels(editing);toast(`✅ Kết nối thành công — ${ms.length} model khả dụng`)}}
+    catch(err){toast('❌ '+friendlyErr(err),6000)}
+    b.disabled=false;b.textContent='Kiểm tra kết nối';return}
+  if(d.pcancel!==undefined){editing=null;$('#pform').innerHTML='';return}
+  if(d.psave!==undefined){readForm();editing.name=editing.name.trim()||PTYPES[editing.type].short;
+    const err=validate(editing);if(err)return toast(err,4000);
+    const i=providers.findIndex(x=>x.id===editing.id);if(i>=0)providers[i]=editing;else providers.push(editing);
+    saveProviders();const id=editing.id,cb=provCb;editing=null;$('#pform').innerHTML='';renderProvList();toast('Đã lưu AI');
+    if(cb){closeProviders();cb(id)}}});
+$('#provModal').addEventListener('change',e=>{if(e.target.dataset.k!=='type'||!editing)return;readForm();
+  const t=e.target.value;if(!editing.baseUrl||Object.values(DEFAULT_URL).includes(editing.baseUrl))editing.baseUrl=DEFAULT_URL[t]||'';
+  editing.type=t;if(t==='anthropic'&&!editing.models.trim())editing.models=CLAUDE_MODELS;renderForm()});
+$('#btnProv').onclick=()=>openProviders();
+$('#btnProvHome').onclick=()=>openProviders();
+addEventListener('beforeunload',()=>{if(cur){clearTimeout(saveT);DB.put(cur)}});
+
+/* khởi động */
+DB.open().then(showHome).catch(e=>{document.body.innerHTML='<p style="padding:24px">Trình duyệt không cho phép lưu dữ liệu (IndexedDB): '+esc(e.message)+'</p>'});
+</script>
+</body>
+</html>
