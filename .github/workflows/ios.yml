@@ -4,6 +4,7 @@
 #   - Cách lâu dài / App Store / TestFlight: tài khoản Apple Developer (99 USD/năm), mở mobile/ios trong Xcode để ký.
 name: iPad / iOS
 on:
+  workflow_call:
   workflow_dispatch:
   push:
     branches: [main]

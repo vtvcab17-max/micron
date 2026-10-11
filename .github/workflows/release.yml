@@ -1,0 +1,45 @@
+# Build mọi nền tảng rồi gom thành MỘT file zip, đăng lên trang Releases của repo.
+# Chạy: Actions → "Đóng gói tất cả" → Run workflow   (hoặc đẩy tag dạng v1.0.1)
+# Tải:  https://github.com/vtvcab17-max/micron/releases/latest
+name: Đóng gói tất cả
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  android:
+    uses: ./.github/workflows/android.yml
+  ios:
+    uses: ./.github/workflows/ios.yml
+  desktop:
+    uses: ./.github/workflows/desktop.yml
+  bundle:
+    needs: [android, ios, desktop]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { path: dl }
+      - name: Gom thành 1 file zip và đăng Release
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          set -e
+          V=$(node -p "require('./desktop/package.json').version")
+          D="Micron-$V"
+          mkdir -p "$D"/{Android,iPad-iOS,Windows,macOS,Web,Bravin,Ma-nguon}
+          cp dl/Micron-Android-APK/*.apk "$D/Android/Micron-$V.apk"
+          cp dl/Micron-iOS-unsigned-ipa/*.ipa "$D/iPad-iOS/Micron-$V-unsigned.ipa"
+          cp dl/Micron-Windows/* "$D/Windows/"
+          cp dl/Micron-macOS/* "$D/macOS/"
+          cp -r web/. "$D/Web/"
+          cp -r web/bravin/plugin "$D/Bravin/plugin-Micron-AI"
+          cp web/bravin/micron-bravin-extension.zip web/bravin/README.md "$D/Bravin/"
+          git archive --format=zip -o "$D/Ma-nguon/micron-source.zip" HEAD
+          cp HUONG-DAN-CAI-DAT.md "$D/"
+          zip -qry "$D.zip" "$D"
+          ls -la "$D.zip"
+          if [ "$GITHUB_REF_TYPE" = tag ]; then TAG="$GITHUB_REF_NAME"; else TAG="v$V-b$GITHUB_RUN_NUMBER"; fi
+          gh release create "$TAG" "$D.zip" --target "$GITHUB_SHA" --title "Micron $V — tất cả nền tảng" \
+            --notes "Một file zip gồm: Windows (.exe + .zip), macOS (.dmg chip Apple & Intel), Android (.apk), iPad/iOS (.ipa chưa ký), bản Web, plugin + extension Bravin, mã nguồn. Xem HUONG-DAN-CAI-DAT.md bên trong."

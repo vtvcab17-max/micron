@@ -3,6 +3,7 @@
 # Tải APK: Actions → lần chạy mới nhất → mục Artifacts → "Micron-Android-APK".
 name: Android APK
 on:
+  workflow_call:
   push:
     branches: [main]
     paths: ["web/**", "mobile/**", ".github/workflows/android.yml"]

@@ -2,6 +2,7 @@
 # Tải về: Actions → "PC & macOS" → lần chạy mới nhất → mục Artifacts.
 name: PC & macOS
 on:
+  workflow_call:
   workflow_dispatch:
   push:
     branches: [main]
