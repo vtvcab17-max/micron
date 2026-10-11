@@ -13,7 +13,8 @@ Micron là một không gian làm việc dạng canvas, giống Canva hay TopVie
 ## Dùng ngay
 
 - **Online:** https://vtvcab17-max.github.io/micron/
-- **Offline:** tải file `index.html` về rồi mở bằng Chrome hoặc Edge. Không cần cài đặt, không cần máy chủ.
+- **Cài như ứng dụng (PWA):** mở link trên bằng Chrome/Edge rồi bấm **⬇ Cài ứng dụng** (hoặc biểu tượng cài trên thanh địa chỉ). Trên iPhone: Safari → Chia sẻ → *Thêm vào Màn hình chính*. Sau khi mở lần đầu, Micron chạy được cả khi mất mạng (riêng việc gọi AI vẫn cần mạng, trừ AI chạy trên máy).
+- **Dùng file:** tải `index.html` về rồi mở bằng Chrome hoặc Edge (chế độ này không cài được thành ứng dụng).
 
 ## Tính năng
 

@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Micron — Canvas AI mở</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg viewBox='0 0 64 64' width='64' height='64'%3E%3Cdefs%3E%3ClinearGradient id='mg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238B6BFF'/%3E%3Cstop offset='1' stop-color='%234F5BFF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23mg)'/%3E%3Cpath d='M19 44V28.5a6.5 6.5 0 0 1 13 0V44M32 28.5a6.5 6.5 0 0 1 13 0V44' fill='none' stroke='%23fff' stroke-width='5.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='19' cy='44' r='4.2' fill='%232FD4E8'/%3E%3Ccircle cx='32' cy='44' r='4.2' fill='%232FD4E8'/%3E%3Ccircle cx='45' cy='44' r='4.2' fill='%232FD4E8'/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#171A21">
+<meta name="description" content="Micron — canvas AI mở của Bravinall: bạn mang AI của mình, Micron nối chúng thành quy trình sáng tạo.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Micron">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
 <style>
@@ -136,6 +144,7 @@ iframe.art{width:100%;border:1px solid var(--line);border-radius:8px;background:
   <div class="logo" title="Micron"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><defs><linearGradient id="mg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8B6BFF"/><stop offset="1" stop-color="#4F5BFF"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#mg)"/><path d="M19 44V28.5a6.5 6.5 0 0 1 13 0V44M32 28.5a6.5 6.5 0 0 1 13 0V44" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="19" cy="44" r="4.2" fill="#2FD4E8"/><circle cx="32" cy="44" r="4.2" fill="#2FD4E8"/><circle cx="45" cy="44" r="4.2" fill="#2FD4E8"/></svg><svg viewBox="-2 5 171 46" height="19" aria-label="micron"><path d="M2.5 46V27a7 7 0 0 1 14 0v19M16.5 27a7 7 0 0 1 14 0v19M41.5 25v21M78.8 26.5a13 13 0 1 0 0 13M89.5 46V27a7 7 0 0 1 7-7h3.5M150 46V27a7 7 0 0 1 14 0v19" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="124" cy="33" r="13" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="41.5" cy="12" r="3.8" fill="#2FD4E8"/></svg></div>
   <div id="homeTools" style="display:contents">
     <span class="spacer"></span>
+    <button id="btnInstall" class="primary hidden">⬇ Cài ứng dụng</button>
     <button id="btnStoreHome">🧩 Extensions & Plugins</button>
     <button id="btnImport">Nhập dự án</button>
     <button id="btnProvHome">⚙ AI của tôi <span id="provCount"></span></button>
@@ -1053,8 +1062,15 @@ $('#btnStore').onclick=()=>showStore();
 $('#btnStoreBack').onclick=leaveStore;
 $('#btnProvStore').onclick=()=>openProviders();
 
+/* web app: cài đặt + chạy offline */
+let installEvt=null;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;$('#btnInstall').classList.remove('hidden')});
+addEventListener('appinstalled',()=>{installEvt=null;$('#btnInstall').classList.add('hidden');toast('✅ Đã cài Micron — mở từ màn hình chính hoặc menu ứng dụng')});
+$('#btnInstall').onclick=async()=>{if(!installEvt)return;installEvt.prompt();await installEvt.userChoice;installEvt=null;$('#btnInstall').classList.add('hidden')};
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+
 /* khởi động */
-DB.open().then(async()=>{try{plugins=await DB.pAll()}catch{plugins=[]}needCatalog();return showHome()}).catch(e=>{document.body.innerHTML='<p style="padding:24px">Trình duyệt không cho phép lưu dữ liệu (IndexedDB): '+esc(e.message)+'</p>'});
+DB.open().then(async()=>{try{plugins=await DB.pAll()}catch{plugins=[]}needCatalog();await showHome();if(location.hash==='#store')showStore()}).catch(e=>{document.body.innerHTML='<p style="padding:24px">Trình duyệt không cho phép lưu dữ liệu (IndexedDB): '+esc(e.message)+'</p>'});
 </script>
 </body>
 </html>
