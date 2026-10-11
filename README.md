@@ -65,6 +65,7 @@ Plugin cài xong sẽ nằm trong menu **＋** ở mục *Từ plugin* (có ô t
 | 🛒 Bravin Bán Hàng | 149.000đ | USP, 3 mẫu quảng cáo, livestream 15 phút, tin nhắn chốt đơn, banner, lịch 7 ngày, máy tính giá bán |
 | ⚡ Khởi đầu nhanh | Miễn phí | Tóm tắt, viết lại, dịch, tiêu đề, bài đăng, đếm ký tự mạng xã hội |
 | 🎵 Nhạc AI — Lời & phong cách | Miễn phí | Lời bài hát có cấu trúc, mô tả phong cách, chuyển sang AI tạo nhạc |
+| 🎯 Motion Tracking *(plugin chạy trong Bravin)* | 199.000đ | Theo dõi chuyển động theo phối cảnh, chống trôi, xử lý vật che; mask, làm mờ, mosaic, gắn chữ/sticker, thay màn hình (corner pin). Mua xong bấm **⬇ Tải file cho Bravin** → Bravin: Tiện ích → Chọn file |
 
 Muốn tự viết plugin? Xem [web/docs/PLUGIN-FORMAT.md](web/docs/PLUGIN-FORMAT.md).
 

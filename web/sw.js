@@ -1,5 +1,5 @@
 // Micron service worker — chạy offline, tự cập nhật khi có bản mới.
-const VERSION = 'micron-v4';
+const VERSION = 'micron-v5';
 const SHELL = ['./', './index.html', './assets/brand/apple-touch-icon.png', './manifest.webmanifest', './plugins/catalog.json',
   './assets/app/icon-192.png', './assets/app/icon-512.png', './assets/app/icon-maskable-512.png'];
 self.addEventListener('install', e => {
