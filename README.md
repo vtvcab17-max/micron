@@ -32,7 +32,7 @@ web/        bản web: nguồn chung cho mọi nền tảng
 desktop/    vỏ Electron cho Windows & macOS   (npm run desktop · desktop: npm run pack:win / pack:mac)
 mobile/     vỏ Capacitor cho Android & iPad   (mobile: npm run android:apk · npm run ios:open trên máy Mac)
 .github/workflows/  build APK (Android) và .ipa (iPad/iOS) tự động trên GitHub
-wrangler.jsonc      cấu hình Cloudflare
+wrangler.json       cấu hình Cloudflare (chỉ đưa thư mục web/ lên)
 ```
 Chỉ cần sửa trong `web/`. Các bản PC, Mac, Android, iPad đều lấy lại từ `web/` khi build.
 
