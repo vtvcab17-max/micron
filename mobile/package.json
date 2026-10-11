@@ -1,0 +1,20 @@
+{
+  "name": "micron-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Micron cho Android (APK) và iPad/iPhone — vỏ Capacitor quanh đúng bản web trong ../web",
+  "scripts": {
+    "copy-web": "node -e \"const fs=require('fs');fs.rmSync('www',{recursive:true,force:true});fs.cpSync('../web','www',{recursive:true});fs.rmSync('www/_headers',{force:true})\"",
+    "sync": "npm run copy-web && cap sync",
+    "android:apk": "npm run sync && cd android && ./gradlew assembleDebug",
+    "ios:open": "npm run sync && cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.5.2",
+    "@capacitor/core": "8.5.2",
+    "@capacitor/ios": "8.5.2"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.2"
+  }
+}

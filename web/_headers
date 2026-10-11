@@ -1,0 +1,21 @@
+# Cloudflare: header cho từng đường dẫn
+
+# Service worker và danh mục cửa hàng luôn lấy bản mới
+/sw.js
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+
+# Bravin cài plugin Micron AI bằng link → máy chủ phải bật CORS
+/bravin/plugin/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: no-cache
+/plugins/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: no-cache
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Micron</string>
+    <string name="title_activity_main">Micron</string>
+    <string name="package_name">com.bravinall.micron</string>
+    <string name="custom_url_scheme">com.bravinall.micron</string>
+</resources>

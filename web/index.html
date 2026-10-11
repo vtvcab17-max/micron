@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Micron — Canvas AI mở</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg viewBox='0 0 64 64' width='64' height='64'%3E%3Cdefs%3E%3ClinearGradient id='mg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238B6BFF'/%3E%3Cstop offset='1' stop-color='%234F5BFF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23mg)'/%3E%3Cpath d='M19 44V28.5a6.5 6.5 0 0 1 13 0V44M32 28.5a6.5 6.5 0 0 1 13 0V44' fill='none' stroke='%23fff' stroke-width='5.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='19' cy='44' r='4.2' fill='%232FD4E8'/%3E%3Ccircle cx='32' cy='44' r='4.2' fill='%232FD4E8'/%3E%3Ccircle cx='45' cy='44' r='4.2' fill='%232FD4E8'/%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.webmanifest">
@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f1115;--panel:#171a21;--panel2:#1f232c;--line:#2a2f3a;--text:#e6e8ee;--mut:#8b93a5;--acc:#7c5cff;--accs:#6447f0;--sig:#2fd4e8;--acc2:#a48bff;--ok:#2ecc71;--err:#ff6b6b;--warn:#f5b942}
+:root{--top:calc(52px + env(safe-area-inset-top,0px));--bg:#0f1115;--panel:#171a21;--panel2:#1f232c;--line:#2a2f3a;--text:#e6e8ee;--mut:#8b93a5;--acc:#7c5cff;--accs:#6447f0;--sig:#2fd4e8;--acc2:#a48bff;--ok:#2ecc71;--err:#ff6b6b;--warn:#f5b942}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:14px/1.45 "Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 button{font:inherit;color:inherit;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;white-space:nowrap}
@@ -33,13 +33,13 @@ label{display:block;font-size:12px;color:var(--mut);margin:8px 0 4px}
 a{color:var(--acc2)}
 .hidden{display:none!important}
 .sub{color:var(--mut);font-size:12px}
-.top{height:52px;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid var(--line);background:var(--panel)}
+.top{height:var(--top);display:flex;align-items:center;gap:8px;padding:env(safe-area-inset-top,0px) max(14px,env(safe-area-inset-right,0px)) 0 max(14px,env(safe-area-inset-left,0px));overflow-x:auto;border-bottom:1px solid var(--line);background:var(--panel)}
 .logo{display:flex;align-items:center;gap:9px;margin-right:8px;color:var(--text)}
 .spacer{flex:1}
 #pname{width:260px;background:transparent;border-color:transparent;font-weight:600}
 #pname:hover,#pname:focus{border-color:var(--line)}
 /* home */
-#home{height:calc(100% - 52px);overflow:auto;padding:24px}
+#home{height:calc(100% - var(--top));overflow:auto;padding:24px}
 #home h1{font-size:20px;margin:0 0 4px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-top:18px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;display:flex;flex-direction:column}
@@ -52,7 +52,7 @@ a{color:var(--acc2)}
 .card .acts button{padding:3px 8px;font-size:12px}
 .newcard{border-style:dashed;align-items:center;justify-content:center;min-height:210px;color:var(--mut);font-size:15px}
 /* editor */
-#editor{position:relative;height:calc(100% - 52px);overflow:hidden;background-color:var(--bg);background-image:radial-gradient(#262b36 1.2px,transparent 1.2px);touch-action:none}
+#editor{position:relative;height:calc(100% - var(--top));overflow:hidden;background-color:var(--bg);background-image:radial-gradient(#262b36 1.2px,transparent 1.2px);touch-action:none}
 #world{position:absolute;left:0;top:0;transform-origin:0 0}
 #edges{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
 #edges path{fill:none;stroke:#7a68f0;stroke-width:2.5;pointer-events:stroke;cursor:pointer}
@@ -74,13 +74,13 @@ a{color:var(--acc2)}
 .status{font-size:12px;color:var(--mut);margin-top:6px;white-space:pre-wrap}
 .status.err{color:var(--err)}.status.ok{color:var(--ok)}.status.run{color:var(--warn)}
 details summary{cursor:pointer;margin-top:8px}
-#addBtn{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:54px;height:54px;border-radius:50%;font-size:30px;line-height:1;padding:0;background:var(--accs);border:none;color:#fff;box-shadow:0 8px 24px #7c5cff66;z-index:5}
-#addMenu{position:absolute;left:50%;bottom:86px;transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px;width:280px;z-index:6;box-shadow:0 12px 32px #000a}
+#addBtn{position:absolute;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:54px;height:54px;border-radius:50%;font-size:30px;line-height:1;padding:0;background:var(--accs);border:none;color:#fff;box-shadow:0 8px 24px #7c5cff66;z-index:5}
+#addMenu{position:absolute;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px;width:280px;z-index:6;box-shadow:0 12px 32px #000a}
 #addMenu button{display:block;width:100%;text-align:left;border:none;background:transparent;padding:8px 10px;white-space:normal}
 #addMenu button:hover{background:var(--panel2)}
 #addMenu small{display:block;color:var(--mut)}
 #addMenu hr{border:none;border-top:1px solid var(--line);margin:4px 0}
-#zoomInfo{position:absolute;right:14px;bottom:14px;color:var(--mut);font-size:12px;background:var(--panel);padding:4px 8px;border-radius:6px;border:1px solid var(--line)}
+#zoomInfo{position:absolute;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));color:var(--mut);font-size:12px;background:var(--panel);padding:4px 8px;border-radius:6px;border:1px solid var(--line)}
 #empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--mut);pointer-events:none;text-align:center;padding:20px}
 /* modal */
 .modal{position:fixed;inset:0;background:#000b;display:flex;align-items:center;justify-content:center;z-index:50;padding:12px}
@@ -100,7 +100,7 @@ details summary{cursor:pointer;margin-top:8px}
 #toasts{position:fixed;bottom:20px;right:20px;z-index:60;display:flex;flex-direction:column;gap:8px;align-items:flex-end;max-width:min(420px,calc(100vw - 40px))}
 .toast{background:var(--panel2);border:1px solid var(--line);padding:10px 14px;border-radius:10px;box-shadow:0 8px 24px #0008}
 /* extensions & plugins */
-#store{height:calc(100% - 52px);overflow:auto;padding:24px}
+#store{height:calc(100% - var(--top));overflow:auto;padding:24px}
 #store h1{font-size:20px;margin:0 0 4px}
 .tabs{display:flex;gap:4px;margin-top:16px;border-bottom:1px solid var(--line);overflow-x:auto}
 .tabs button{border:none;border-bottom:2px solid transparent;border-radius:0;background:transparent;padding:9px 12px;color:var(--mut);font-weight:600}
@@ -497,10 +497,21 @@ function startConnect(n,e){const a=portPos(n,'out'),sx=e.clientX,sy=e.clientY;cl
     drawEdges()};
   addEventListener('pointermove',mv);addEventListener('pointerup',up)}
 ed.addEventListener('pointerdown',e=>{if(e.target!==ed)return;closeMenu();selectNode(null);
-  const s={x:e.clientX,y:e.clientY,vx:cur.view.x,vy:cur.view.y};ed.classList.add('dragging');
-  const mv=ev=>{cur.view.x=s.vx+ev.clientX-s.x;cur.view.y=s.vy+ev.clientY-s.y;applyView()};
-  const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);ed.classList.remove('dragging');dirty()};
-  addEventListener('pointermove',mv);addEventListener('pointerup',up)});
+  if(touches.size>1)return;
+  const s={x:e.clientX,y:e.clientY,vx:cur.view.x,vy:cur.view.y,id:e.pointerId,g:panGen};ed.classList.add('dragging');
+  const mv=ev=>{if(ev.pointerId!==s.id||pinch||s.g!==panGen)return;cur.view.x=s.vx+ev.clientX-s.x;cur.view.y=s.vy+ev.clientY-s.y;applyView()};
+  const up=ev=>{if(ev.pointerId!==s.id)return;removeEventListener('pointermove',mv);removeEventListener('pointerup',up);removeEventListener('pointercancel',up);ed.classList.remove('dragging');dirty()};
+  addEventListener('pointermove',mv);addEventListener('pointerup',up);addEventListener('pointercancel',up)});
+/* chụm 2 ngón để phóng to / thu nhỏ (điện thoại, máy tính bảng) */
+const touches=new Map();let pinch=null,panGen=0;
+ed.addEventListener('pointerdown',e=>{if(e.pointerType!=='touch'||!cur)return;touches.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(touches.size===2){panGen++;const[a,b]=[...touches.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y)||1,z:cur.view.z,vx:cur.view.x,vy:cur.view.y,mx:(a.x+b.x)/2,my:(a.y+b.y)/2}}},true);
+addEventListener('pointermove',e=>{if(!touches.has(e.pointerId))return;touches.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!pinch||touches.size!==2||!cur)return;
+  const[a,b]=[...touches.values()],r=ed.getBoundingClientRect(),nz=Math.min(2,Math.max(.2,pinch.z*Math.hypot(a.x-b.x,a.y-b.y)/pinch.d));
+  const wx=(pinch.mx-r.left-pinch.vx)/pinch.z,wy=(pinch.my-r.top-pinch.vy)/pinch.z;
+  cur.view.z=nz;cur.view.x=(a.x+b.x)/2-r.left-wx*nz;cur.view.y=(a.y+b.y)/2-r.top-wy*nz;applyView()});
+const endTouch=e=>{if(!touches.delete(e.pointerId))return;if(pinch&&touches.size<2){pinch=null;dirty()}};
+addEventListener('pointerup',endTouch);addEventListener('pointercancel',endTouch);
 ed.addEventListener('wheel',e=>{if(e.target.closest('.out,textarea,#addMenu'))return;e.preventDefault();
   const r=ed.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top,v=cur.view;
   const nz=Math.min(2,Math.max(.2,v.z*Math.exp(-e.deltaY*.0015)));v.x=mx-(mx-v.x)*nz/v.z;v.y=my-(my-v.y)*nz/v.z;v.z=nz;applyView();dirty()},{passive:false});
@@ -1129,10 +1140,12 @@ $('#btnBravin').onclick=()=>showStore('bravin');
 
 /* web app: cài đặt + chạy offline */
 let installEvt=null;
+const PLATFORM=window.micronDesktop?'desktop':window.Capacitor?.isNativePlatform?.()?'ios':(matchMedia('(display-mode: standalone)').matches||navigator.standalone)?'pwa':'web';
+document.documentElement.dataset.platform=PLATFORM;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;$('#btnInstall').classList.remove('hidden')});
 addEventListener('appinstalled',()=>{installEvt=null;$('#btnInstall').classList.add('hidden');toast('✅ Đã cài Micron — mở từ màn hình chính hoặc menu ứng dụng')});
 $('#btnInstall').onclick=async()=>{if(!installEvt)return;installEvt.prompt();await installEvt.userChoice;installEvt=null;$('#btnInstall').classList.add('hidden')};
-if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)&&!window.Capacitor)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 
 /* khởi động */
 DB.open().then(async()=>{try{plugins=await DB.pAll()}catch{plugins=[]}needCatalog();await showHome();if(location.hash==='#store')showStore();else if(location.hash==='#bravin')showStore('bravin')}).catch(e=>{document.body.innerHTML='<p style="padding:24px">Trình duyệt không cho phép lưu dữ liệu (IndexedDB): '+esc(e.message)+'</p>'});

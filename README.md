@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="assets/brand/micron-logo-light.svg#gh-light-mode-only" alt="Micron" height="64">
-  <img src="assets/brand/micron-logo-dark.svg#gh-dark-mode-only" alt="Micron" height="64">
+  <img src="web/assets/brand/micron-logo-light.svg#gh-light-mode-only" alt="Micron" height="64">
+  <img src="web/assets/brand/micron-logo-dark.svg#gh-dark-mode-only" alt="Micron" height="64">
 </p>
 
 <p align="center"><b>Canvas AI mở: bạn mang AI của mình, Micron nối chúng thành quy trình sáng tạo.</b><br>
@@ -14,7 +14,27 @@ Micron là một không gian làm việc dạng canvas, giống Canva hay TopVie
 
 - **Online:** https://vtvcab17-max.github.io/micron/
 - **Cài như ứng dụng (PWA):** mở link trên bằng Chrome/Edge rồi bấm **⬇ Cài ứng dụng** (hoặc biểu tượng cài trên thanh địa chỉ). Trên iPhone: Safari → Chia sẻ → *Thêm vào Màn hình chính*. Sau khi mở lần đầu, Micron chạy được cả khi mất mạng (riêng việc gọi AI vẫn cần mạng, trừ AI chạy trên máy).
-- **Dùng file:** tải `index.html` về rồi mở bằng Chrome hoặc Edge (chế độ này không cài được thành ứng dụng).
+- **Dùng file:** tải `web/index.html` về rồi mở bằng Chrome hoặc Edge (chế độ này không cài được thành ứng dụng).
+
+## Chạy trên mọi thiết bị
+
+| Nền tảng | Cách có Micron | Ghi chú |
+| --- | --- | --- |
+| 🌐 **Web** (mọi trình duyệt) | `web/`: GitHub Pages hoặc Cloudflare (`npm run deploy`) | Cài được như ứng dụng (PWA), chạy offline |
+| 🪟 **PC Windows** | `Micron-Windows-x64.zip` → giải nén → chạy `Micron.exe` | Gọi thẳng AI trên máy (Ollama, LM Studio, ComfyUI) không cần chỉnh CORS |
+| 🍎 **macOS** | `Micron-macOS-AppleSilicon.zip` (M1–M4) / `Micron-macOS-Intel.zip` → kéo `Micron.app` vào Applications | Lần đầu: chuột phải → *Mở* (app chưa ký Apple) |
+| 🤖 **Android (APK)** | Tab **Actions → Android APK** → tải `Micron-Android-APK` | Cho phép “cài từ nguồn không xác định” khi cài |
+| 📱 **iPad / iPhone** | Safari → Chia sẻ → *Thêm vào Màn hình chính* (dùng ngay) · hoặc **Actions → iPad / iOS** → `.ipa` chưa ký | `.ipa` cần ký bằng Apple ID (Sideloadly/AltStore) hoặc tài khoản Apple Developer |
+
+Cấu trúc repo:
+```
+web/        bản web: nguồn chung cho mọi nền tảng
+desktop/    vỏ Electron cho Windows & macOS   (npm run desktop · desktop: npm run pack:win / pack:mac)
+mobile/     vỏ Capacitor cho Android & iPad   (mobile: npm run android:apk · npm run ios:open trên máy Mac)
+.github/workflows/  build APK (Android) và .ipa (iPad/iOS) tự động trên GitHub
+wrangler.jsonc      cấu hình Cloudflare
+```
+Chỉ cần sửa trong `web/`. Các bản PC, Mac, Android, iPad đều lấy lại từ `web/` khi build.
 
 ## Tính năng
 
@@ -46,12 +66,12 @@ Plugin cài xong sẽ nằm trong menu **＋** ở mục *Từ plugin* (có ô t
 | ⚡ Khởi đầu nhanh | Miễn phí | Tóm tắt, viết lại, dịch, tiêu đề, bài đăng, đếm ký tự mạng xã hội |
 | 🎵 Nhạc AI — Lời & phong cách | Miễn phí | Lời bài hát có cấu trúc, mô tả phong cách, chuyển sang AI tạo nhạc |
 
-Muốn tự viết plugin? Xem [docs/PLUGIN-FORMAT.md](docs/PLUGIN-FORMAT.md).
+Muốn tự viết plugin? Xem [web/docs/PLUGIN-FORMAT.md](web/docs/PLUGIN-FORMAT.md).
 
 ### ③ Bravin: kết nối với trình dựng video Bravin
 - **Plugin “Micron AI” chạy trong Bravin:** viết chữ rồi đặt thẳng lên timeline, tạo ảnh lớp phủ, tạo giọng đọc, chuột phải để viết lại chữ trên clip.
 - **Extension “Micron ↔ Bravin”:** nút **🎬 Gửi sang Bravin** dưới mỗi kết quả của Micron đưa ảnh, giọng đọc hoặc video thẳng vào Thư viện hoặc timeline của Bravin.
-- Chi tiết xem [bravin/README.md](bravin/README.md).
+- Chi tiết xem [web/bravin/README.md](web/bravin/README.md).
 
 ## AI hỗ trợ (bạn tự thêm trong “⚙ AI của tôi”)
 
@@ -73,7 +93,7 @@ Muốn tự viết plugin? Xem [docs/PLUGIN-FORMAT.md](docs/PLUGIN-FORMAT.md).
 
 ## Bộ nhận diện
 
-Logo và biểu tượng nằm trong thư mục [`assets/brand/`](assets/brand/), gồm bản SVG cho nền sáng/tối, bản một màu và các file PNG.
+Logo và biểu tượng nằm trong thư mục [`web/assets/brand/`](web/assets/brand/), gồm bản SVG cho nền sáng/tối, bản một màu và các file PNG.
 
 | Màu | Mã | Dùng cho |
 | --- | --- | --- |

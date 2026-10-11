@@ -1,0 +1,28 @@
+# Build Micron cho iPad / iPhone trên máy Mac của GitHub.
+# Kết quả: Micron-unsigned.ipa (chưa ký). Muốn cài lên iPad cần ký bằng Apple ID:
+#   - Cách miễn phí: Sideloadly / AltStore ký bằng Apple ID cá nhân (hết hạn sau 7 ngày, ký lại).
+#   - Cách lâu dài / App Store / TestFlight: tài khoản Apple Developer (99 USD/năm), mở mobile/ios trong Xcode để ký.
+name: iPad / iOS
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["mobile/ios/**", ".github/workflows/ios.yml"]
+jobs:
+  ipa:
+    runs-on: macos-15
+    defaults: { run: { working-directory: mobile } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+      - run: npm run copy-web && npx cap sync ios
+      - run: |
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release \
+            -sdk iphoneos -destination "generic/platform=iOS" -archivePath build/App.xcarchive \
+            archive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+          mkdir -p Payload && cp -R build/App.xcarchive/Products/Applications/App.app Payload/
+          zip -qry Micron-unsigned.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with: { name: Micron-iOS-unsigned-ipa, path: mobile/Micron-unsigned.ipa }

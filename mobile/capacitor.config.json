@@ -1,0 +1,10 @@
+{
+  "appId": "com.bravinall.micron",
+  "appName": "Micron",
+  "webDir": "www",
+  "backgroundColor": "#0E1016",
+  "server": { "androidScheme": "https", "cleartext": true },
+  "android": { "allowMixedContent": true },
+  "ios": { "contentInset": "never", "scrollEnabled": false, "preferredContentMode": "desktop" },
+  "plugins": { "CapacitorHttp": { "enabled": true } }
+}

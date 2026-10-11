@@ -1,0 +1,12 @@
+{
+  // Micron trên Cloudflare Workers (static assets) — miễn phí, CDN toàn cầu, https sẵn.
+  // Triển khai:  npm run deploy     (hoặc tự động qua .github/workflows/cloudflare.yml)
+  // Chạy thử:    npm run dev        → http://localhost:8787
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "micron",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./web",
+    "not_found_handling": "single-page-application"
+  }
+}

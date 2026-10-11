@@ -1,4 +1,2 @@
-keys.json
-micron-admin*.html
-*.pem
-.DS_Store
+node_modules/
+.wrangler/

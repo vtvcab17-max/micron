@@ -1,0 +1,32 @@
+{
+  "name": "micron-desktop",
+  "productName": "Micron",
+  "version": "1.0.0",
+  "description": "Micron — canvas AI mở của Bravinall (bản PC & macOS)",
+  "author": "Bravinall",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "pack:win": "electron-packager . Micron --platform=win32 --arch=x64 --out=dist --overwrite --extra-resource=../web --icon=build/icon.ico --app-copyright=Bravinall --ignore=^/dist --ignore=^/build/icon-mac",
+    "pack:mac": "electron-packager . Micron --platform=darwin --arch=arm64,x64 --out=dist --overwrite --extra-resource=../web --icon=build/icon.icns --app-bundle-id=com.bravinall.micron --app-category-type=public.app-category.productivity --ignore=^/dist",
+    "dist:win": "electron-builder --win nsis zip --x64",
+    "dist:mac": "electron-builder --mac dmg zip --arm64 --x64"
+  },
+  "devDependencies": {
+    "electron": "44.4.5",
+    "@electron/packager": "20.3.0",
+    "electron-builder": "26.17.0"
+  },
+  "build": {
+    "appId": "com.bravinall.micron",
+    "productName": "Micron",
+    "copyright": "© 2026 Bravinall",
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["main.js", "preload.js", "build/icon.png"],
+    "extraResources": [{ "from": "../web", "to": "web" }],
+    "win": { "icon": "build/icon.ico", "artifactName": "Micron-Setup-${version}.${ext}" },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "shortcutName": "Micron", "language": "1066" },
+    "mac": { "icon": "build/icon.icns", "category": "public.app-category.productivity", "artifactName": "Micron-${version}-${arch}.${ext}" }
+  }
+}

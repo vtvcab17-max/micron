@@ -1,0 +1,16 @@
+{
+  "name": "micron",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Micron — canvas AI mở của Bravinall. Web (Cloudflare / GitHub Pages), PC (Electron) và iOS (PWA / Capacitor).",
+  "scripts": {
+    "dev": "wrangler dev --ip 0.0.0.0 --port 8787",
+    "deploy": "wrangler deploy",
+    "desktop": "npm --prefix desktop install && npm --prefix desktop start",
+    "desktop:win": "npm --prefix desktop install && npm --prefix desktop run pack:win",
+    "ios:sync": "npm --prefix ios install && npm --prefix ios run sync"
+  },
+  "devDependencies": {
+    "wrangler": "4.141.0"
+  }
+}
