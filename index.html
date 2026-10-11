@@ -132,6 +132,7 @@ details summary{cursor:pointer;margin-top:8px}
 .plist .it button{padding:3px 9px;font-size:12px}
 iframe.art{width:100%;border:1px solid var(--line);border-radius:8px;background:#12151b;display:block;margin-top:6px;height:320px}
 .dragging iframe{pointer-events:none}
+.btnlink{display:inline-block;padding:4px 10px;border-radius:8px;background:var(--accs);color:#fff;text-decoration:none;font-size:12px;border:1px solid var(--accs)}
 #addMenu{max-height:calc(100% - 110px);overflow:auto}
 #addMenu .mh{padding:6px 10px 2px}
 #addMenu .msearch{margin:2px 0 4px}
@@ -155,6 +156,7 @@ iframe.art{width:100%;border:1px solid var(--line);border-radius:8px;background:
     <span class="spacer"></span>
     <button id="btnRunAll" class="primary">▶ Chạy tất cả</button>
     <button id="btnStore" class="hide-sm">🧩 Plugin</button>
+    <button id="btnBravin" class="hide-sm">🎬 Bravin</button>
     <button id="btnProv">⚙ AI của tôi</button>
     <button id="btnExport" class="hide-sm">Xuất</button>
   </div>
@@ -174,7 +176,7 @@ iframe.art{width:100%;border:1px solid var(--line);border-radius:8px;background:
 <div id="store" class="hidden">
   <h1>Extensions & Plugins</h1>
   <div class="sub">Mở rộng Micron bằng mẫu quy trình, ô AI dựng sẵn và artifact — cho Bravin & Artifact.</div>
-  <div class="tabs"><button data-tab="store" class="on">① Cửa hàng Bravinall</button><button data-tab="mine">② Do AI của bạn tạo</button></div>
+  <div class="tabs"><button data-tab="store" class="on">① Cửa hàng Bravinall</button><button data-tab="mine">② Do AI của bạn tạo</button><button data-tab="bravin">③ Bravin</button></div>
   <div class="bar" id="storeBar"></div>
   <div class="grid pgrid" id="pgrid"></div>
 </div>
@@ -459,7 +461,7 @@ function resHtml(n){
     else if(o.kind==='audio')inner=`<audio controls src="${u}"></audio>`;
     else if(o.kind==='video')inner=`<video controls src="${u}"></video>`;
     else inner=esc(o.value);
-    h+=`<div class="out">${inner}</div><div class="links">${o.kind==='text'?'<a href="#" data-act="copy">Sao chép</a>':`<a href="${u}" download="${esc(o.name||('ket-qua-'+n.id))}" target="_blank" rel="noopener">Tải xuống</a>`}${runnable(n)?' · <a href="#" data-act="clear">Xoá kết quả</a>':''}</div>`}
+    h+=`<div class="out">${inner}</div><div class="links">${o.kind==='text'?'<a href="#" data-act="copy">Sao chép</a>':`<a href="${u}" download="${esc(o.name||('ket-qua-'+n.id))}" target="_blank" rel="noopener">Tải xuống</a> · <a href="#" data-act="bravin" title="Gửi vào Thư viện / timeline Bravin">🎬 Gửi sang Bravin</a>`}${runnable(n)?' · <a href="#" data-act="clear">Xoá kết quả</a>':''}</div>`}
   if(s)h+=`<div class="status ${s.cls}">${esc(s.msg)}</div>`;
   return h}
 
@@ -517,7 +519,8 @@ world.addEventListener('change',e=>{const el=e.target,f=el.dataset.f,n=nodeOf(el
     if(file.size>150*1024*1024)toast('Tệp lớn — dự án có thể chậm khi lưu.');
     blobToDataURL(file).then(v=>{let k=file.type.split('/')[0];if(!['image','audio','video'].includes(k))k='text';n.output={kind:k,value:v,name:file.name};refreshRes(n);dirty()})}});
 world.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const n=nodeOf(b);if(!n)return;const a=b.dataset.act;
-  if(a==='copy'||a==='clear')e.preventDefault();
+  if(a==='copy'||a==='clear'||a==='bravin')e.preventDefault();
+  if(a==='bravin')return sendToBravin(n);
   if(a==='run')runNode(n.id);
   else if(a==='del')deleteNode(n.id);
   else if(a==='copy')navigator.clipboard.writeText(n.output?.value||'').then(()=>toast('Đã sao chép'));
@@ -788,6 +791,7 @@ async function renderStore(){
     if(!catalog)grid.innerHTML='<div class="empty">Đang tải cửa hàng…</div>';
     await needCatalog();if(storeTab!=='store'||$('#store').classList.contains('hidden'))return;
     grid.innerHTML=catalog.plugins.length?catalog.plugins.map(storeCard).join(''):'<div class="empty">Cửa hàng chưa có plugin nào.</div>'}
+  else if(storeTab==='bravin')renderBravinTab(bar,grid);
   else{
     bar.innerHTML=`<button class="primary" id="btnGen">✨ Tạo plugin bằng AI</button><button id="btnPImport">Nhập file plugin</button><span class="sub">Plugin do AI của bạn tạo — chỉ lưu trên máy này, xuất file để chia sẻ.</span>`;
     const mine=plugins.filter(r=>r.source==='user').sort((a,b)=>b.installedAt-a.installedAt);
@@ -820,6 +824,7 @@ $('#store').addEventListener('click',async e=>{
   if(b.id==='btnLicImport')return $('#licFile').click();
   if(b.id==='btnGen')return openGenDialog();
   if(b.id==='btnPImport')return $('#pluginFile').click();
+  if(b.dataset.bv)return bravinAction(b.dataset.bv);
   const card=b.closest('.pcard');if(!card)return;
   if(b.dataset.sact){const entry=catalog?.plugins.find(x=>x.id===card.dataset.id);if(!entry)return;const a=b.dataset.sact;
     try{if(a==='install'){b.disabled=true;await installVersion(entry,b.dataset.v);toast(`✅ Đã cài ${entry.name} v${b.dataset.v}`);renderStore()}
@@ -1062,6 +1067,66 @@ $('#btnStore').onclick=()=>showStore();
 $('#btnStoreBack').onclick=leaveStore;
 $('#btnProvStore').onclick=()=>openProviders();
 
+/* ======================= Kết nối Bravin ======================= */
+const PAGES_BASE='https://vtvcab17-max.github.io/micron/';
+const appUrl=p=>/^https?:$/.test(location.protocol)?new URL(p,location.href).href:PAGES_BASE+p;
+const BRAVIN_PLUGIN_MANIFEST=appUrl('bravin/plugin/manifest.json'),BRAVIN_EXT_ZIP=appUrl('bravin/micron-bravin-extension.zip');
+let bravinCfg={url:'',addToTimeline:true,overlay:true};try{Object.assign(bravinCfg,JSON.parse(localStorage.getItem('micron_bravin')||'{}'))}catch{}
+const saveBravin=()=>{try{localStorage.setItem('micron_bravin',JSON.stringify(bravinCfg))}catch{}};
+const bravinBase=()=>String(bravinCfg.url||'').replace(/#.*$/,'');
+const hasBridge=()=>document.documentElement.dataset.micronBravin==='1';
+function bridgeCall(method,params,timeout=180000){return new Promise((res,rej)=>{
+  if(!hasBridge())return rej(new Error('Chưa cài extension Micron ↔ Bravin'));
+  const id='b'+uid(),t=setTimeout(()=>{removeEventListener('message',h);rej(new Error('Bravin không phản hồi'))},timeout);
+  function h(e){const m=e.data;if(e.source!==window||!m||m.micronBravin!=='res'||m.id!==id)return;clearTimeout(t);removeEventListener('message',h);
+    m.ok?res(m.result):rej(Object.assign(new Error(m.error?.message||'Bravin báo lỗi'),{code:m.error?.code}))}
+  addEventListener('message',h);window.postMessage({micronBravin:'call',id,method,params},location.origin)})}
+addEventListener('message',e=>{if(e.source===window&&e.data?.micronBravin==='ready'&&storeTab==='bravin'&&!$('#store').classList.contains('hidden')&&!$('#bvStatus')?.dataset.ext)renderStore()});
+async function sendToBravin(n){const o=n.output;if(!o||o.kind==='text')return;
+  if(!bravinCfg.url){toast('Hãy nhập địa chỉ Bravin trước');return showStore('bravin')}
+  const ext={image:'png',audio:'mp3',video:'mp4'}[o.kind],label={image:'anh',audio:'am-thanh',video:'video'}[o.kind];
+  const name=o.name||`micron-${label}-${Date.now().toString(36)}.${ext}`;
+  const isPublic=/^https:\/\//i.test(o.value)&&!/^https:\/\/(localhost|127\.|\[::1\])/i.test(o.value);
+  if(hasBridge()){toast('Đang gửi sang Bravin… (lần đầu Bravin sẽ hỏi bạn có cho phép Micron kết nối)',4500);
+    try{const params={name,addToTimeline:!!bravinCfg.addToTimeline,overlay:o.kind==='image'&&!!bravinCfg.overlay};
+      if(isPublic)params.url=o.value;else{params.dataUrl=await asDataURL(o.value);if(!/^data:/.test(params.dataUrl||''))throw new Error('Không đọc được tệp kết quả để gửi')}
+      await bridgeCall('media.import',params);toast('✅ Đã gửi sang Bravin'+(params.addToTimeline?' và đặt lên timeline':' (Thư viện)'),4500)}
+    catch(e){toast('❌ Bravin: '+e.message,7000)}return}
+  if(isPublic){window.open(bravinBase()+'#import='+encodeURIComponent(o.value),'bravin');toast('Đã mở Bravin với hộp “Tải về từ link” điền sẵn',4500);return}
+  const a=document.createElement('a');a.href=o.value;a.download=name;a.click();window.open(bravinBase(),'bravin');
+  toast('Đã tải tệp về và mở Bravin — kéo tệp vào Thư viện. Cài extension Micron ↔ Bravin để lần sau gửi thẳng.',8000)}
+function renderBravinTab(bar,grid){
+  bar.innerHTML=`<span class="sub">Bravin là trình dựng video của Bravinall. Micron tạo nội dung bằng AI của bạn, Bravin dựng thành video.</span>`;
+  const ext=hasBridge(),u=bravinCfg.url;
+  grid.innerHTML=`<div class="pcard" style="grid-column:1/-1">
+    <div class="row"><div><label>Địa chỉ Bravin của đội</label><input id="bvUrl" value="${esc(u)}" placeholder="https://bravin.example.com/"></div><button class="fit primary" data-bv="save">Lưu</button><button class="fit" data-bv="open" ${u?'':'disabled'}>Mở Bravin</button></div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap"><label class="sub" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="bvTl" style="width:auto" ${bravinCfg.addToTimeline?'checked':''}>Gửi xong thì đặt luôn lên timeline</label>
+    <label class="sub" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="bvOv" style="width:auto" ${bravinCfg.overlay?'checked':''}>Ảnh đặt thành lớp phủ</label></div>
+    <div class="sub" id="bvStatus" ${ext?'data-ext="1"':''}>${ext?'<span class="owned">✓ Extension Micron ↔ Bravin đang hoạt động trên trang này</span>':'Extension Micron ↔ Bravin: chưa thấy trên trang này'}</div></div>
+  <div class="pcard"><div class="ph"><div class="pic">🎬</div><div style="flex:1;min-width:0"><div class="name">Micron AI cho Bravin <span class="tag">v1.0.0</span></div><div class="sub">Plugin chạy bên trong Bravin · miễn phí</div></div></div>
+    <p>Dùng AI của bạn ngay trong Bravin: viết chữ rồi đặt thẳng lên timeline theo tốc độ đọc, tạo ảnh lớp phủ (gợi ý từ khung hình đang xem), tạo giọng đọc, chuột phải vào clip chữ → “Micron: viết lại chữ này”.</p>
+    <div class="sub">Quyền xin khi cài: đọc/sửa timeline, nhập media, chụp khung hình, giao diện, mạng (chỉ tới Anthropic, OpenAI, Gemini, OpenRouter, Groq, DeepSeek).</div>
+    <div class="sub">Bản Windows / Android: Tiện ích → <b>Từ link</b> → dán link dưới đây.</div>
+    <div class="kv" style="border:none"><b class="mono" style="word-break:break-all;font-weight:400">${esc(BRAVIN_PLUGIN_MANIFEST)}</b></div>
+    <div class="acts"><button class="primary" data-bv="install" ${u?'':'disabled title="Nhập địa chỉ Bravin trước"'}>Cài vào Bravin</button><button data-bv="copy">Chép link</button></div></div>
+  <div class="pcard"><div class="ph"><div class="pic">🧩</div><div style="flex:1;min-width:0"><div class="name">Extension Micron ↔ Bravin <span class="tag">v1.0.0</span></div><div class="sub">Chrome / Edge · miễn phí</div></div></div>
+    <p>Gửi ảnh, giọng đọc, nhạc, video Micron tạo ra thẳng vào Thư viện / timeline Bravin bằng nút <b>🎬 Gửi sang Bravin</b> dưới mỗi kết quả. Kèm chuột phải → “Gửi sang Bravin” trên mọi trang web.</p>
+    <ol class="steps" style="font-size:12px"><li>Tải extension và giải nén.</li><li>Mở <span class="mono">chrome://extensions</span> → bật <b>Chế độ dành cho nhà phát triển</b> → <b>Tải tiện ích đã giải nén</b> → chọn thư mục vừa giải nén.</li><li>Trong Tuỳ chọn: nhập địa chỉ Bravin và Micron → <b>Lưu và cấp quyền</b>.</li><li>Tải lại trang Micron. Lần gửi đầu, Bravin hỏi bạn có cho phép không.</li></ol>
+    <div class="acts"><a class="btnlink" href="${esc(BRAVIN_EXT_ZIP)}" download>Tải extension (.zip)</a><button data-bv="test" ${ext?'':'disabled'}>Kiểm tra kết nối</button></div></div>
+  <div class="pcard"><div class="ph"><div class="pic">↗</div><div style="flex:1;min-width:0"><div class="name">Không cài extension?</div></div></div>
+    <p>Kết quả có link https (ví dụ ảnh từ OpenAI): Micron mở Bravin với hộp “Tải về từ link” điền sẵn. Kết quả nằm trên máy (ảnh base64, ComfyUI, giọng đọc): Micron tải tệp về và mở Bravin để bạn kéo vào.</p>
+    <p>Bản Windows của Bravin không nhận cầu nối từ trình duyệt — dùng plugin Micron AI, hoặc tải tệp về rồi kéo vào.</p></div>`}
+async function bravinAction(a){
+  if(a==='save'){const v=$('#bvUrl').value.trim();if(v){try{const x=new URL(v);if(!/^https?:$/.test(x.protocol))throw 0;bravinCfg.url=x.href}catch{return toast('Địa chỉ Bravin không hợp lệ')}}else bravinCfg.url='';
+    saveBravin();toast('Đã lưu địa chỉ Bravin');return renderStore()}
+  if(a==='open')return window.open(bravinBase(),'bravin');
+  if(a==='install'){if(!bravinCfg.url)return toast('Nhập địa chỉ Bravin trước');window.open(bravinBase()+'#plugin='+encodeURIComponent(BRAVIN_PLUGIN_MANIFEST),'bravin');return toast('Đã mở Bravin — bấm Cài trong hộp xin quyền',4500)}
+  if(a==='copy')return navigator.clipboard.writeText(BRAVIN_PLUGIN_MANIFEST).then(()=>toast('Đã chép link plugin'));
+  if(a==='test'){toast('Đang hỏi Bravin… (lần đầu Bravin sẽ hỏi bạn có cho phép không)',4000);
+    try{const r=await bridgeCall('hello',{});toast(`✅ Đã kết nối ${r?.app||'Bravin'}${r?.version?' '+r.version:''}${r?.apiVersion?' · API v'+r.apiVersion:''}`,5000)}catch(e){toast('❌ '+e.message,6000)}}}
+$('#store').addEventListener('change',e=>{if(e.target.id==='bvTl'){bravinCfg.addToTimeline=e.target.checked;saveBravin()}if(e.target.id==='bvOv'){bravinCfg.overlay=e.target.checked;saveBravin()}});
+$('#btnBravin').onclick=()=>showStore('bravin');
+
 /* web app: cài đặt + chạy offline */
 let installEvt=null;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;$('#btnInstall').classList.remove('hidden')});
@@ -1070,7 +1135,7 @@ $('#btnInstall').onclick=async()=>{if(!installEvt)return;installEvt.prompt();awa
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 
 /* khởi động */
-DB.open().then(async()=>{try{plugins=await DB.pAll()}catch{plugins=[]}needCatalog();await showHome();if(location.hash==='#store')showStore()}).catch(e=>{document.body.innerHTML='<p style="padding:24px">Trình duyệt không cho phép lưu dữ liệu (IndexedDB): '+esc(e.message)+'</p>'});
+DB.open().then(async()=>{try{plugins=await DB.pAll()}catch{plugins=[]}needCatalog();await showHome();if(location.hash==='#store')showStore();else if(location.hash==='#bravin')showStore('bravin')}).catch(e=>{document.body.innerHTML='<p style="padding:24px">Trình duyệt không cho phép lưu dữ liệu (IndexedDB): '+esc(e.message)+'</p>'});
 </script>
 </body>
 </html>

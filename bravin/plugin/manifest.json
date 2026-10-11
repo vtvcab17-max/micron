@@ -1,0 +1,17 @@
+{
+  "id": "com.bravinall.micron-ai",
+  "name": "Micron AI",
+  "version": "1.0.0",
+  "author": "Bravinall",
+  "description": "Dùng AI của bạn (Claude, OpenAI, Gemini…) ngay trong Bravin: viết chữ và đặt thẳng lên timeline, tạo ảnh và giọng đọc vào Thư viện, viết lại chữ trên clip.",
+  "entry": "index.html",
+  "permissions": ["timeline.read", "timeline.write", "media.import", "project.read", "ui", "network"],
+  "network": ["api.anthropic.com", "api.openai.com", "generativelanguage.googleapis.com", "openrouter.ai", "api.groq.com", "api.deepseek.com"],
+  "panel": { "title": "Micron AI", "height": 480 },
+  "commands": [
+    { "id": "viet-lai", "title": "Micron: viết lại chữ này", "context": "clip" },
+    { "id": "phu-de-chon", "title": "Micron: viết lại các chữ đã chọn", "context": "selection" },
+    { "id": "caption", "title": "Micron: viết caption từ timeline", "context": "global" },
+    { "id": "mo", "title": "Mở Micron AI", "context": "global" }
+  ]
+}

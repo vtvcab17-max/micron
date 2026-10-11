@@ -48,6 +48,11 @@ Plugin cài xong sẽ nằm trong menu **＋** ở mục *Từ plugin* (có ô t
 
 Muốn tự viết plugin? Xem [docs/PLUGIN-FORMAT.md](docs/PLUGIN-FORMAT.md).
 
+### ③ Bravin: kết nối với trình dựng video Bravin
+- **Plugin “Micron AI” chạy trong Bravin:** viết chữ rồi đặt thẳng lên timeline, tạo ảnh lớp phủ, tạo giọng đọc, chuột phải để viết lại chữ trên clip.
+- **Extension “Micron ↔ Bravin”:** nút **🎬 Gửi sang Bravin** dưới mỗi kết quả của Micron đưa ảnh, giọng đọc hoặc video thẳng vào Thư viện hoặc timeline của Bravin.
+- Chi tiết xem [bravin/README.md](bravin/README.md).
+
 ## AI hỗ trợ (bạn tự thêm trong “⚙ AI của tôi”)
 
 | Loại kết nối | Dùng cho | Ví dụ |

@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Micron ↔ Bravin",
+  "version": "1.0.0",
+  "description": "Gửi ảnh, giọng đọc, video Micron tạo ra thẳng vào Thư viện / timeline Bravin. Kèm chuột phải → Gửi sang Bravin trên mọi trang.",
+  "permissions": ["contextMenus", "scripting", "storage"],
+  "optional_host_permissions": ["https://*/*", "http://localhost/*", "http://127.0.0.1/*"],
+  "background": { "service_worker": "background.js" },
+  "options_page": "options.html",
+  "action": { "default_title": "Micron ↔ Bravin", "default_popup": "options.html",
+              "default_icon": { "16": "icons/16.png", "32": "icons/32.png", "48": "icons/48.png" } },
+  "icons": { "16": "icons/16.png", "48": "icons/48.png", "128": "icons/128.png" }
+}

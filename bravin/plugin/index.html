@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Micron AI</title>
+<style>
+:root{--bg:var(--bv-bg,#0e1016);--panel:var(--bv-panel,#171a21);--line:var(--bv-line,#2a2f3a);--fg:var(--bv-fg,#e6e8ee);--mut:var(--bv-muted,#8b93a5);--acc:var(--bv-accent,#7c5cff);--sig:#2fd4e8;--ok:#2ecc71;--err:#ff6b6b;--warn:#f5b942}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:13px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:2}
+header .logo{display:flex;align-items:center;gap:6px;font-weight:700}
+nav{display:flex;gap:2px;margin-left:auto}
+nav button{background:transparent;border:none;border-bottom:2px solid transparent;border-radius:0;padding:6px 8px;color:var(--mut);font-weight:600}
+nav button.on{color:var(--fg);border-bottom-color:var(--acc)}
+main{padding:10px}
+section{display:none}section.on{display:block}
+button{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer}
+button:hover{border-color:var(--acc)}button:disabled{opacity:.55;cursor:default}
+button.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+input,select,textarea{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 8px;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc)}
+textarea{resize:vertical;min-height:64px}
+label{display:block;color:var(--mut);font-size:12px;margin:8px 0 3px}
+.row{display:flex;gap:8px;align-items:flex-end}.row>*{flex:1;min-width:0}.row>.fit{flex:0 0 auto}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.chips button{padding:3px 9px;font-size:12px}.chips button.on{border-color:var(--acc);color:#fff;background:color-mix(in srgb,var(--acc) 30%,transparent)}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
+.st{font-size:12px;color:var(--mut);margin-top:6px;white-space:pre-wrap}.st.err{color:var(--err)}.st.ok{color:var(--ok)}.st.run{color:var(--warn)}
+.prev{margin-top:8px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel)}
+.prev img{display:block;width:100%}
+.prev audio{width:100%;display:block}
+.hint{font-size:12px;color:var(--mut);border-left:3px solid var(--acc);padding:6px 8px;background:var(--panel);border-radius:6px;margin-top:8px}
+.check{display:flex;align-items:center;gap:6px;color:var(--mut);font-size:12px;margin-top:6px}.check input{width:auto}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px}
+h4{margin:12px 0 2px;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo"><svg viewBox="0 0 64 64" width="20" height="20" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8B6BFF"/><stop offset="1" stop-color="#4F5BFF"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#g)"/><path d="M19 44V28.5a6.5 6.5 0 0 1 13 0V44M32 28.5a6.5 6.5 0 0 1 13 0V44" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="19" cy="44" r="4.2" fill="#2FD4E8"/><circle cx="32" cy="44" r="4.2" fill="#2FD4E8"/><circle cx="45" cy="44" r="4.2" fill="#2FD4E8"/></svg>Micron AI</span>
+  <nav id="tabs"><button data-t="text" class="on">✍️ Chữ</button><button data-t="image">🖼 Ảnh</button><button data-t="voice">🔊 Giọng</button><button data-t="ai">⚙ AI</button></nav>
+</header>
+<main>
+  <section id="p-text" class="on">
+    <div class="chips" id="modes">
+      <button data-m="phu-de" class="on">Chữ chạy theo ý</button><button data-m="kich-ban">Kịch bản 60s</button><button data-m="tieu-de">Tiêu đề mở đầu</button><button data-m="caption">Caption + hashtag</button>
+    </div>
+    <label>Bạn muốn gì?</label>
+    <textarea id="req" placeholder="vd: review tai nghe Sony WH-1000XM6, giọng vui, nhấn mạnh chống ồn"></textarea>
+    <label class="check"><input type="checkbox" id="useTl" checked> Dùng chữ đang có trên timeline làm ngữ cảnh</label>
+    <div class="acts"><button class="pri" id="genText">Viết</button><span class="st" id="stText" style="margin:0"></span></div>
+    <div id="textOut" hidden>
+      <label>Kết quả — sửa / xoá dòng tuỳ ý, mỗi dòng là một clip chữ</label>
+      <textarea id="lines" style="min-height:130px"></textarea>
+      <div class="row"><div><label>Tốc độ đọc (từ/giây)</label><input id="wps" type="number" min="1" max="6" step="0.1" value="2.6"></div><div><label>Tối thiểu mỗi dòng (giây)</label><input id="minDur" type="number" min="0.5" max="10" step="0.1" value="1.4"></div></div>
+      <div class="acts"><button class="pri" id="place">Đặt lên timeline từ đầu phát</button><button id="copyText">Chép</button></div>
+    </div>
+  </section>
+
+  <section id="p-image">
+    <label>Mô tả ảnh cần tạo</label>
+    <textarea id="imgPrompt" placeholder="vd: tai nghe chụp tai màu bạc trên nền tím đậm, ánh sáng studio, không có chữ"></textarea>
+    <div class="acts"><button id="fromFrame" title="Chụp khung đang xem rồi nhờ AI gợi ý">✨ Gợi ý từ khung hình</button><select id="imgSize" style="width:auto"><option value="1536x1024">Ngang 16:9</option><option value="1024x1536">Dọc 9:16</option><option value="1024x1024">Vuông</option></select><button class="pri" id="genImg">Tạo ảnh</button></div>
+    <div class="st" id="stImg"></div>
+    <div id="imgOut" hidden>
+      <div class="prev"><img id="imgPrev" alt="Ảnh vừa tạo"></div>
+      <div class="acts"><button class="pri" id="imgToTl">Đặt lên timeline (lớp phủ)</button><button id="imgToLib">Chỉ đưa vào Thư viện</button></div>
+    </div>
+  </section>
+
+  <section id="p-voice">
+    <label>Nội dung đọc</label>
+    <textarea id="ttsText" style="min-height:100px" placeholder="Dán lời thoại, hoặc lấy chữ từ timeline"></textarea>
+    <div class="acts"><button id="ttsFromSel">Lấy chữ từ clip đã chọn</button><button id="ttsFromAll">Lấy toàn bộ chữ trên timeline</button></div>
+    <div class="row"><div><label>Giọng</label><select id="voice"><option>alloy</option><option>nova</option><option>shimmer</option><option>echo</option><option>onyx</option><option>fable</option></select></div><div class="fit"><label>&nbsp;</label><button class="pri" id="genTts">Tạo giọng đọc</button></div></div>
+    <div class="st" id="stTts"></div>
+    <div id="ttsOut" hidden>
+      <div class="prev"><audio id="ttsPrev" controls></audio></div>
+      <div class="acts"><button class="pri" id="ttsToTl">Đặt lên timeline</button><button id="ttsToLib">Chỉ đưa vào Thư viện</button></div>
+    </div>
+  </section>
+
+  <section id="p-ai">
+    <div class="hint">Micron AI dùng <b>AI của chính bạn</b>. Khoá chỉ lưu trong bộ nhớ riêng của plugin trong Bravin — Bravin và các plugin khác không đọc được.</div>
+    <h4>Khoá API</h4>
+    <label>Anthropic (Claude)</label><input id="kAnth" type="password" autocomplete="off" placeholder="sk-ant-…">
+    <label>OpenAI-compatible</label><input id="kOai" type="password" autocomplete="off" placeholder="sk-…">
+    <label>Địa chỉ OpenAI-compatible</label><select id="oaiBase"><option value="https://api.openai.com/v1">OpenAI</option><option value="https://openrouter.ai/api/v1">OpenRouter</option><option value="https://api.groq.com/openai/v1">Groq</option><option value="https://api.deepseek.com/v1">DeepSeek</option></select>
+    <label>Google Gemini</label><input id="kGem" type="password" autocomplete="off" placeholder="AIza…">
+    <h4>Dùng AI nào cho việc gì</h4>
+    <div class="row"><div><label>Viết chữ</label><select id="tProv"><option value="anthropic">Claude</option><option value="openai">OpenAI-compatible</option><option value="gemini">Gemini</option></select></div><div><label>Model</label><input id="tModel" placeholder="claude-sonnet-5-5"></div></div>
+    <div class="row"><div><label>Tạo ảnh</label><select id="iProv"><option value="openai">OpenAI-compatible</option><option value="gemini">Gemini</option></select></div><div><label>Model</label><input id="iModel" placeholder="tên model tạo ảnh"></div></div>
+    <div class="row"><div><label>Giọng đọc</label><select id="vProv"><option value="openai">OpenAI-compatible</option></select></div><div><label>Model</label><input id="vModel" placeholder="tên model giọng đọc"></div></div>
+    <div class="acts"><button class="pri" id="saveAi">Lưu</button><button id="testAi">Kiểm tra</button><span class="st" id="stAi" style="margin:0"></span></div>
+    <div class="hint">Plugin chỉ được phép gọi các địa chỉ đã khai trong manifest (Anthropic, OpenAI, Gemini, OpenRouter, Groq, DeepSeek). Muốn dùng AI chạy trên máy (Ollama, ComfyUI…), hãy làm trong Micron rồi bấm “🎬 Gửi sang Bravin”.</div>
+  </section>
+</main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let bv=null,cfg={};
+const DEF={kAnth:'',kOai:'',kGem:'',oaiBase:'https://api.openai.com/v1',tProv:'anthropic',tModel:'claude-sonnet-5-5',iProv:'openai',iModel:'',vProv:'openai',vModel:'',voice:'alloy',wps:2.6,minDur:1.4};
+const st=(id,msg,cls)=>{const e=$(id);e.textContent=msg||'';e.className='st'+(cls?' '+cls:'')};
+const errMsg=e=>e&&e.code==='permission_denied'?'Plugin chưa được cấp quyền này — cài lại plugin để duyệt quyền.':(e&&(e.message||e.code))||String(e);
+
+/* ---------- lưu cấu hình ---------- */
+async function loadCfg(){let v=null;try{v=await bv.storage.get('cfg')}catch{}
+  if(v&&typeof v==='object'&&'value'in v&&Object.keys(v).length===1)v=v.value;
+  if(typeof v==='string'){try{v=JSON.parse(v)}catch{v=null}}
+  cfg=Object.assign({},DEF,v&&typeof v==='object'?v:{});
+  for(const k of['kAnth','kOai','kGem','oaiBase','tProv','tModel','iProv','iModel','vProv','vModel','voice','wps','minDur'])if($(k))$(k).value=cfg[k]}
+async function saveCfg(){for(const k of['kAnth','kOai','kGem','oaiBase','tProv','tModel','iProv','iModel','vProv','vModel','voice','wps','minDur'])if($(k))cfg[k]=$(k).value.trim();
+  await bv.storage.set('cfg',JSON.stringify(cfg))}
+
+/* ---------- gọi AI qua net.fetch của Bravin ---------- */
+async function http(url,{method='POST',headers={},body,as='json'}={}){
+  const r=await bv.net.fetch(url,{method,headers,body:body==null?undefined:(typeof body==='string'?body:JSON.stringify(body)),as});
+  if(!r||!r.ok){const j=r&&r.json,m=j&&(typeof j.error==='string'?j.error:j.error&&j.error.message||j.message)||(r&&r.text||'').slice(0,300);
+    throw new Error(`HTTP ${r?r.status:'?'}${m?': '+m:''}`)}
+  return r}
+const oai=()=>({'content-type':'application/json',authorization:'Bearer '+cfg.kOai});
+function need(k,name){if(!cfg[k])throw new Error(`Chưa nhập khoá ${name} — mở tab ⚙ AI.`)}
+async function aiText(prompt,imageDataUrl){
+  const model=cfg.tModel;if(!model)throw new Error('Chưa nhập model viết chữ — mở tab ⚙ AI.');
+  if(cfg.tProv==='anthropic'){need('kAnth','Anthropic');
+    const content=[];if(imageDataUrl){const m=/^data:([^;]+);base64,(.*)$/.exec(imageDataUrl);if(m)content.push({type:'image',source:{type:'base64',media_type:m[1],data:m[2]}})}
+    content.push({type:'text',text:prompt});
+    const r=await http('https://api.anthropic.com/v1/messages',{headers:{'content-type':'application/json','x-api-key':cfg.kAnth,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:{model,max_tokens:4096,messages:[{role:'user',content}]}});
+    return(r.json.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('\n').trim()}
+  if(cfg.tProv==='openai'){need('kOai','OpenAI-compatible');
+    const content=imageDataUrl?[{type:'text',text:prompt},{type:'image_url',image_url:{url:imageDataUrl}}]:prompt;
+    const r=await http(cfg.oaiBase+'/chat/completions',{headers:oai(),body:{model,messages:[{role:'user',content}]}});
+    return String(r.json.choices?.[0]?.message?.content||'').trim()}
+  if(cfg.tProv==='gemini'){need('kGem','Gemini');
+    const parts=[{text:prompt}];if(imageDataUrl){const m=/^data:([^;]+);base64,(.*)$/.exec(imageDataUrl);if(m)parts.push({inline_data:{mime_type:m[1],data:m[2]}})}
+    const r=await http(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{headers:{'content-type':'application/json','x-goog-api-key':cfg.kGem},body:{contents:[{role:'user',parts}]}});
+    return(r.json.candidates?.[0]?.content?.parts||[]).filter(p=>p.text).map(p=>p.text).join('\n').trim()}
+  throw new Error('Chưa chọn AI viết chữ')}
+async function aiImage(prompt,size){const model=cfg.iModel;if(!model)throw new Error('Chưa nhập model tạo ảnh — mở tab ⚙ AI.');
+  if(cfg.iProv==='openai'){need('kOai','OpenAI-compatible');
+    const r=await http(cfg.oaiBase+'/images/generations',{headers:oai(),body:{model,prompt,n:1,size}});const d=r.json.data?.[0];if(!d)throw new Error('AI không trả về ảnh');
+    if(d.b64_json)return'data:image/png;base64,'+d.b64_json;
+    const f=await http(d.url,{method:'GET',as:'base64'});return`data:${f.contentType||'image/png'};base64,${f.base64}`}
+  if(cfg.iProv==='gemini'){need('kGem','Gemini');
+    const r=await http(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{headers:{'content-type':'application/json','x-goog-api-key':cfg.kGem},body:{contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{responseModalities:['TEXT','IMAGE']}}});
+    const p=(r.json.candidates?.[0]?.content?.parts||[]).find(x=>x.inlineData||x.inline_data);if(!p)throw new Error('Model không trả về ảnh — chọn model Gemini có hỗ trợ tạo ảnh.');
+    const d=p.inlineData||p.inline_data;return`data:${d.mimeType||d.mime_type};base64,${d.data}`}
+  throw new Error('Chưa chọn AI tạo ảnh')}
+async function aiTts(text,voice){const model=cfg.vModel;if(!model)throw new Error('Chưa nhập model giọng đọc — mở tab ⚙ AI.');need('kOai','OpenAI-compatible');
+  const r=await http(cfg.oaiBase+'/audio/speech',{headers:oai(),body:{model,input:text,voice},as:'base64'});
+  return`data:${r.contentType||'audio/mpeg'};base64,${r.base64}`}
+
+/* ---------- tiện ích timeline ---------- */
+const words=t=>(String(t||'').match(/[\p{L}\p{N}]+/gu)||[]).length;
+const clipText=c=>[c.text,c.text2].filter(Boolean).join(' ').trim();
+const textClips=tl=>(tl.clips||[]).filter(c=>c.kind==='text'||c.type==='text'||(c.text&&!c.mediaId)).sort((a,b)=>a.start-b.start);
+function cleanLines(t){return String(t||'').replace(/```[a-z]*\n?|```/g,'').split('\n')
+  .map(l=>l.replace(/^\s*(?:[-*•]|\d+[.)])\s*/,'').replace(/^\s*\[[^\]]*\]\s*/,'').replace(/\([^)]*\)/g,'').replace(/\*\*/g,'').replace(/^["“]|["”]$/g,'').trim())
+  .filter(l=>l&&!/^#{1,6}\s/.test(l))}
+function splitLong(lines,max=12){const out=[];for(const l of lines){if(words(l)<=max){out.push(l);continue}
+  const parts=l.split(/(?<=[.!?…;:,])\s+/);let cur='';for(const p of parts){if(cur&&words(cur+' '+p)>max){out.push(cur);cur=p}else cur=cur?cur+' '+p:p}if(cur)out.push(cur)}return out}
+
+/* ---------- ✍️ Chữ ---------- */
+let mode='phu-de';
+const MODES={
+  'phu-de':r=>`Viết các dòng chữ hiển thị lần lượt trên video theo yêu cầu dưới đây. Mỗi dòng là một câu ngắn, tối đa 10 từ, đọc tự nhiên. Chỉ trả về các dòng chữ, mỗi dòng một câu, không đánh số, không giải thích.\n\nYêu cầu: ${r}`,
+  'kich-ban':r=>`Viết lời thoại video ngắn 60 giây (khoảng 140–160 từ) theo yêu cầu dưới đây: mở đầu gây tò mò, 3 ý chính, kết bằng lời kêu gọi. Mỗi dòng là một câu ngắn tối đa 12 từ để hiển thị thành chữ trên video. Chỉ trả về các dòng lời thoại, không đánh số, không tiêu đề, không ghi chú cảnh quay.\n\nYêu cầu: ${r}`,
+  'tieu-de':r=>`Đề xuất 5 dòng tiêu đề mở đầu video, mỗi dòng tối đa 7 từ, khác kiểu nhau (câu hỏi, con số, bất ngờ, lợi ích, cảnh báo). Chỉ trả về 5 dòng.\n\nChủ đề: ${r}`,
+  'caption':r=>`Viết cho video này: 1 caption ngắn dưới 150 ký tự cho TikTok/Reels, 1 mô tả YouTube 2–3 câu, và 8–12 hashtag tiếng Việt + tiếng Anh. Trình bày rõ ràng.\n\nNội dung: ${r}`};
+$('modes').onclick=e=>{const b=e.target.closest('button');if(!b)return;mode=b.dataset.m;[...$('modes').children].forEach(x=>x.classList.toggle('on',x===b));$('place').hidden=mode==='caption'};
+async function timelineContext(){try{const tl=await bv.timeline.get();const t=textClips(tl).map(clipText).filter(Boolean);return t.length?t.join('\n'):''}catch{return''}}
+$('genText').onclick=async()=>{const req=$('req').value.trim();const ctx=$('useTl').checked?await timelineContext():'';
+  if(!req&&!ctx)return st('stText','Hãy nhập yêu cầu','err');
+  const b=$('genText');b.disabled=true;st('stText','Micron đang viết…','run');
+  try{const out=await aiText(MODES[mode](req||'(dựa theo chữ hiện có)')+(ctx?`\n\nChữ đang có trên timeline (ngữ cảnh):\n${ctx}`:''));
+    $('lines').value=mode==='caption'?out:splitLong(cleanLines(out)).join('\n');$('textOut').hidden=false;$('place').hidden=mode==='caption';st('stText','Xong','ok')}
+  catch(e){st('stText',errMsg(e),'err')}finally{b.disabled=false}};
+$('place').onclick=async()=>{const lines=splitLong(cleanLines($('lines').value));if(!lines.length)return st('stText','Không có dòng nào để đặt','err');
+  const wps=Math.max(.5,+$('wps').value||2.6),minDur=Math.max(.3,+$('minDur').value||1.4);const b=$('place');b.disabled=true;
+  try{const tl=await bv.timeline.get();let t=+tl.playhead||0;const ids=[];
+    for(const line of lines){const dur=Math.round(Math.max(minDur,words(line)/wps+.3)*10)/10;const r=await bv.timeline.addText({text:line,start:t,dur});if(r&&r.id)ids.push(r.id);t+=dur}
+    if(ids.length)try{await bv.timeline.select(ids)}catch{}
+    cfg.wps=wps;cfg.minDur=minDur;saveCfg().catch(()=>{});
+    const msg=`Đã đặt ${lines.length} dòng chữ (${Math.round((t-(+tl.playhead||0))*10)/10} giây). Ctrl+Z để hoàn tác.`;st('stText',msg,'ok');bv.ui.toast(msg)}
+  catch(e){st('stText',errMsg(e),'err')}finally{b.disabled=false}};
+$('copyText').onclick=()=>{const v=$('lines').value;(navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>st('stText','Đã chép','ok'),()=>{$('lines').select();st('stText','Bấm Ctrl+C để chép','')})};
+
+/* ---------- 🖼 Ảnh ---------- */
+let imgData='';
+$('fromFrame').onclick=async()=>{const b=$('fromFrame');b.disabled=true;st('stImg','Đang chụp khung hình…','run');
+  try{const f=await bv.project.snapshotFrame({type:'image/jpeg',quality:.85,maxWidth:1024});
+    st('stImg','AI đang xem khung hình…','run');
+    $('imgPrompt').value=(await aiText('Đây là một khung hình trong video đang dựng. Đề xuất MỘT prompt tạo ảnh minh hoạ (lớp phủ, ảnh chèn) hợp với cảnh này: mô tả chủ thể, bố cục, ánh sáng, phong cách, không có chữ trong ảnh. Chỉ trả về prompt, viết tiếng Việt.',f.dataUrl)).replace(/^["“]|["”]$/g,'');
+    st('stImg','Đã gợi ý — sửa lại nếu muốn rồi bấm Tạo ảnh','ok')}
+  catch(e){st('stImg',errMsg(e),'err')}finally{b.disabled=false}};
+$('genImg').onclick=async()=>{const p=$('imgPrompt').value.trim();if(!p)return st('stImg','Hãy mô tả ảnh','err');const b=$('genImg');b.disabled=true;st('stImg','Đang tạo ảnh… (có thể mất 10–60 giây)','run');
+  try{imgData=await aiImage(p,$('imgSize').value);$('imgPrev').src=imgData;$('imgOut').hidden=false;st('stImg','Xong','ok')}catch(e){st('stImg',errMsg(e),'err')}finally{b.disabled=false}};
+async function importMedia(dataUrl,name,addToTimeline,overlay,stId){
+  try{const r=await bv.media.import({dataUrl,name,addToTimeline,overlay});const msg=addToTimeline?'Đã đặt lên timeline. Ctrl+Z để hoàn tác.':'Đã đưa vào Thư viện.';st(stId,msg,'ok');bv.ui.toast(msg);return r}
+  catch(e){st(stId,errMsg(e),'err')}}
+const stamp=()=>new Date().toISOString().slice(0,19).replace(/[-:T]/g,'');
+$('imgToTl').onclick=()=>importMedia(imgData,`micron-anh-${stamp()}.png`,true,true,'stImg');
+$('imgToLib').onclick=()=>importMedia(imgData,`micron-anh-${stamp()}.png`,false,false,'stImg');
+
+/* ---------- 🔊 Giọng ---------- */
+let ttsData='';
+$('ttsFromSel').onclick=async()=>{try{const tl=await bv.timeline.get();const sel=new Set(tl.selection||[]);const t=textClips(tl).filter(c=>sel.has(c.id)).map(clipText);
+  if(!t.length)return st('stTts','Chưa chọn clip chữ nào trên timeline','err');$('ttsText').value=t.join('\n');st('stTts','')}catch(e){st('stTts',errMsg(e),'err')}};
+$('ttsFromAll').onclick=async()=>{const t=await timelineContext();if(!t)return st('stTts','Timeline chưa có clip chữ','err');$('ttsText').value=t;st('stTts','')};
+$('genTts').onclick=async()=>{const t=$('ttsText').value.trim();if(!t)return st('stTts','Hãy nhập nội dung đọc','err');const b=$('genTts');b.disabled=true;st('stTts','Đang tạo giọng đọc…','run');
+  try{cfg.voice=$('voice').value;ttsData=await aiTts(t,cfg.voice);$('ttsPrev').src=ttsData;$('ttsOut').hidden=false;st('stTts','Xong','ok');saveCfg().catch(()=>{})}catch(e){st('stTts',errMsg(e),'err')}finally{b.disabled=false}};
+$('ttsToTl').onclick=()=>importMedia(ttsData,`micron-giong-${stamp()}.mp3`,true,false,'stTts');
+$('ttsToLib').onclick=()=>importMedia(ttsData,`micron-giong-${stamp()}.mp3`,false,false,'stTts');
+
+/* ---------- ⚙ AI ---------- */
+$('saveAi').onclick=async()=>{try{await saveCfg();st('stAi','Đã lưu','ok')}catch(e){st('stAi',errMsg(e),'err')}};
+$('testAi').onclick=async()=>{const b=$('testAi');b.disabled=true;st('stAi','Đang kiểm tra…','run');
+  try{await saveCfg();const t=await aiText('Trả lời đúng một từ: OK');st('stAi',`✓ AI viết chữ trả lời: ${t.slice(0,40)}`,'ok')}catch(e){st('stAi',errMsg(e),'err')}finally{b.disabled=false}};
+
+/* ---------- tab ---------- */
+function tab(t){[...$('tabs').children].forEach(b=>b.classList.toggle('on',b.dataset.t===t));document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id==='p-'+t))}
+$('tabs').onclick=e=>{const b=e.target.closest('button');if(b)tab(b.dataset.t)};
+
+/* ---------- lệnh menu ---------- */
+const cmdIds=(cmd,tl)=>{const c=cmd||{};const ids=[].concat(c.clipId||[],c.clip&&c.clip.id||[],c.clipIds||[],c.ids||[],c.selection||[]).filter(Boolean);return ids.length?ids:(tl.selection||[])};
+async function rewrite(ids){const tl=await bv.timeline.get();const clips=textClips(tl).filter(c=>ids.includes(c.id));
+  if(!clips.length){bv.ui.toast('Micron: hãy chọn clip chữ trước');return}
+  bv.ui.toast(`Micron đang viết lại ${clips.length} dòng chữ…`);
+  try{for(const c of clips){const old=clipText(c);
+      const out=cleanLines(await aiText(`Viết lại dòng chữ hiển thị trên video sau cho cuốn hút hơn, giữ nguyên ý, tối đa ${Math.max(6,words(old)+3)} từ. Chỉ trả về đúng một dòng chữ mới.\n\n${old}`))[0];
+      if(out)await bv.timeline.updateClip(c.id,{line1:out})}
+    bv.ui.toast('Micron: đã viết lại — Ctrl+Z để hoàn tác')}
+  catch(e){bv.ui.toast('Micron: '+errMsg(e));if(/Chưa nhập/.test(e.message)){tab('ai');bv.ui.openPanel()}}}
+function wire(){
+  bv.on('command:viet-lai',async cmd=>rewrite(cmdIds(cmd,await bv.timeline.get())));
+  bv.on('command:phu-de-chon',async cmd=>rewrite(cmdIds(cmd,await bv.timeline.get())));
+  bv.on('command:caption',async()=>{tab('text');mode='caption';[...$('modes').children].forEach(x=>x.classList.toggle('on',x.dataset.m==='caption'));$('useTl').checked=true;bv.ui.openPanel();$('genText').click()});
+  bv.on('command:mo',()=>bv.ui.openPanel());
+}
+
+/* ---------- khởi động ---------- */
+(async()=>{
+  for(let i=0;i<40&&!window.Bravin;i++)await sleep(50);
+  if(!window.Bravin){document.querySelector('main').innerHTML='<div class="hint">Không tìm thấy Bravin SDK. Plugin này chỉ chạy bên trong Bravin (Tiện ích → cài từ link hoặc file).</div>';return}
+  bv=await Bravin.connect();await loadCfg();wire();
+  if(!cfg.kAnth&&!cfg.kOai&&!cfg.kGem)tab('ai');
+})().catch(e=>{document.querySelector('main').insertAdjacentHTML('afterbegin',`<div class="st err">${String(e&&e.message||e).replace(/</g,'&lt;')}</div>`)});
+</script>
+</body>
+</html>
