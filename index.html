@@ -89,8 +89,45 @@ details summary{cursor:pointer;margin-top:8px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .chips button{padding:2px 8px;font-size:12px}
 #pform:not(:empty){border-top:1px solid var(--line);margin-top:12px;padding-top:4px}
-.toast{position:fixed;bottom:20px;right:20px;background:var(--panel2);border:1px solid var(--line);padding:10px 14px;border-radius:10px;z-index:60;max-width:420px}
-@media (max-width:640px){#pname{width:120px}.hide-sm{display:none}}
+#toasts{position:fixed;bottom:20px;right:20px;z-index:60;display:flex;flex-direction:column;gap:8px;align-items:flex-end;max-width:min(420px,calc(100vw - 40px))}
+.toast{background:var(--panel2);border:1px solid var(--line);padding:10px 14px;border-radius:10px;box-shadow:0 8px 24px #0008}
+/* extensions & plugins */
+#store{height:calc(100% - 52px);overflow:auto;padding:24px}
+#store h1{font-size:20px;margin:0 0 4px}
+.tabs{display:flex;gap:4px;margin-top:16px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{border:none;border-bottom:2px solid transparent;border-radius:0;background:transparent;padding:9px 12px;color:var(--mut);font-weight:600}
+.tabs button.on{color:var(--text);border-bottom-color:var(--acc)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+.pgrid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.pcard .ph{display:flex;gap:10px;align-items:flex-start}
+.pic{width:44px;height:44px;border-radius:12px;background:var(--panel2);display:flex;align-items:center;justify-content:center;font-size:24px;flex:0 0 44px}
+.pcard .name{font-weight:600}
+.pcard p,.dlg>p{margin:0;color:#c3c8d4;font-size:13px}
+.price{font-weight:700;white-space:nowrap}.price.free{color:var(--ok)}
+.owned{color:var(--ok);font-size:12px;font-weight:600}
+.pcard .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.pcard .acts button{padding:4px 10px;font-size:12px}
+.pcard.off{opacity:.6}
+.empty{color:var(--mut);padding:30px;text-align:center;border:1px dashed var(--line);border-radius:12px;grid-column:1/-1}
+.buy{display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:start}
+.qr{background:#fff;border-radius:12px;padding:8px;display:flex;align-items:center;justify-content:center;min-height:220px}
+.qr img{width:100%;display:block}
+.noqr{color:#333;text-align:center;font-size:13px;padding:12px}
+.kv{display:flex;gap:8px;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.kv span{color:var(--mut);flex:0 0 110px}
+.kv a{font-size:12px}
+.steps{padding-left:18px;margin:10px 0 0;color:#c3c8d4}.steps li{margin:4px 0}
+.h3{font-size:14px;margin:14px 0 2px}
+.plist .it{display:flex;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
+.plist .it .n{flex:1;min-width:0}
+.plist .it button{padding:3px 9px;font-size:12px}
+iframe.art{width:100%;border:1px solid var(--line);border-radius:8px;background:#12151b;display:block;margin-top:6px;height:320px}
+.dragging iframe{pointer-events:none}
+#addMenu{max-height:calc(100% - 110px);overflow:auto}
+#addMenu .mh{padding:6px 10px 2px}
+#addMenu .msearch{margin:2px 0 4px}
+@media (max-width:640px){#pname{width:120px}.hide-sm{display:none}.buy{grid-template-columns:1fr}.qr{max-width:240px;margin:auto}}
 </style>
 </head>
 <body>
@@ -99,6 +136,7 @@ details summary{cursor:pointer;margin-top:8px}
   <div class="logo" title="Micron"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><defs><linearGradient id="mg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8B6BFF"/><stop offset="1" stop-color="#4F5BFF"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#mg)"/><path d="M19 44V28.5a6.5 6.5 0 0 1 13 0V44M32 28.5a6.5 6.5 0 0 1 13 0V44" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="19" cy="44" r="4.2" fill="#2FD4E8"/><circle cx="32" cy="44" r="4.2" fill="#2FD4E8"/><circle cx="45" cy="44" r="4.2" fill="#2FD4E8"/></svg><svg viewBox="-2 5 171 46" height="19" aria-label="micron"><path d="M2.5 46V27a7 7 0 0 1 14 0v19M16.5 27a7 7 0 0 1 14 0v19M41.5 25v21M78.8 26.5a13 13 0 1 0 0 13M89.5 46V27a7 7 0 0 1 7-7h3.5M150 46V27a7 7 0 0 1 14 0v19" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="124" cy="33" r="13" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="41.5" cy="12" r="3.8" fill="#2FD4E8"/></svg></div>
   <div id="homeTools" style="display:contents">
     <span class="spacer"></span>
+    <button id="btnStoreHome">🧩 Extensions & Plugins</button>
     <button id="btnImport">Nhập dự án</button>
     <button id="btnProvHome">⚙ AI của tôi <span id="provCount"></span></button>
   </div>
@@ -107,8 +145,14 @@ details summary{cursor:pointer;margin-top:8px}
     <input id="pname">
     <span class="spacer"></span>
     <button id="btnRunAll" class="primary">▶ Chạy tất cả</button>
+    <button id="btnStore" class="hide-sm">🧩 Plugin</button>
     <button id="btnProv">⚙ AI của tôi</button>
     <button id="btnExport" class="hide-sm">Xuất</button>
+  </div>
+  <div id="storeTools" class="hidden" style="display:contents">
+    <button id="btnStoreBack">← Dự án</button>
+    <span class="spacer"></span>
+    <button id="btnProvStore">⚙ AI của tôi</button>
   </div>
 </div>
 
@@ -116,6 +160,14 @@ details summary{cursor:pointer;margin-top:8px}
   <h1>Dự án của bạn</h1>
   <div class="sub">Mọi dự án và API key chỉ lưu trong trình duyệt này. Ứng dụng không cài sẵn AI nào — bạn tự thêm ở mục “AI của tôi”.</div>
   <div class="grid" id="grid"></div>
+</div>
+
+<div id="store" class="hidden">
+  <h1>Extensions & Plugins</h1>
+  <div class="sub">Mở rộng Micron bằng mẫu quy trình, ô AI dựng sẵn và artifact — cho Bravin & Artifact.</div>
+  <div class="tabs"><button data-tab="store" class="on">① Cửa hàng Bravinall</button><button data-tab="mine">② Do AI của bạn tạo</button></div>
+  <div class="bar" id="storeBar"></div>
+  <div class="grid pgrid" id="pgrid"></div>
 </div>
 
 <div id="editor" class="hidden">
@@ -134,7 +186,12 @@ details summary{cursor:pointer;margin-top:8px}
   </div>
 </div>
 
+<div id="pmodal" class="modal hidden"><div class="dlg" id="pdlg"></div></div>
+
 <input type="file" id="importFile" accept=".json,application/json" class="hidden">
+<input type="file" id="pluginFile" accept=".json,application/json" class="hidden">
+<input type="file" id="licFile" accept=".json,.txt,application/json,text/plain" class="hidden">
+<script type="application/json" id="micron-catalog">{"format":"micron-catalog@1","updated":"2026-10-11T02:53:21.458Z","store":{"name":"Bravinall","bankId":"","bankName":"","accountNo":"","accountName":"","contact":"","contactUrl":""},"plugins":[{"id":"review-cong-nghe-pro","code":"RVCN","name":"Review Công Nghệ Pro","icon":"📱","author":"Bravinall","description":"Bộ quy trình cho người làm video review công nghệ: từ thông tin sản phẩm ra bảng thông số, ưu/nhược điểm, kịch bản 60 giây, caption + hashtag và ảnh thumbnail. Kèm đồng hồ đo thời lượng và teleprompter.","tags":["review","công nghệ","video ngắn"],"releases":[{"version":"1.0.0","price":99000,"date":"2026-10-11","changelog":"Phát hành lần đầu.","preview":{"templates":[{"title":"Review sản phẩm 60 giây (đầy đủ)","description":"Thông tin sản phẩm → thông số + ưu/nhược → kịch bản 60s → caption, đo thời lượng và thumbnail."},{"title":"So sánh A vs B","description":"Hai sản phẩm → bảng so sánh → kịch bản \"A hay B?\" → caption."}],"nodes":[{"title":"Bảng thông số rút gọn","description":"Giữ thông số người xem quan tâm, kèm giải thích dễ hiểu."},{"title":"Ưu / nhược thẳng thắn","description":"Đánh giá như reviewer độc lập, không bịa số liệu."},{"title":"Hook 3 giây (5 kiểu)","description":"5 câu mở đầu giữ chân người xem."},{"title":"Kịch bản review 60 giây","description":"Hook → giới thiệu → 3 điểm nổi bật → 1 điểm trừ → kết luận, có gợi ý cảnh quay."},{"title":"Caption + hashtag","description":"3 caption, 1 mô tả Shorts, 8–12 hashtag."},{"title":"Ảnh thumbnail 16:9","description":"Ảnh nền thumbnail chừa chỗ chèn chữ."},{"title":"Bảng so sánh A vs B","description":"So sánh 6–8 tiêu chí, nói rõ ai nên chọn bên nào."},{"title":"Kịch bản \"A hay B?\"","description":"Video so sánh 60–90 giây, 3 vòng đối đầu."}],"artifacts":[{"title":"Đồng hồ kịch bản & teleprompter","description":"Đếm từ, ước tính thời lượng từng phần theo tốc độ đọc, chạy chữ teleprompter."}]},"enc":{"iv":"bq__cHy2JUOsYc7-","ct":"FG6mx1ZnVffNE14qAtqM_eKKlL_JQBMY5pUvltNw7VHp-Kz-N6kWGX-U1CTYZTC4bSDxMeaHMWjHsoMMiE816TcDc_r5D4H-xpDWj_DOPSkuK9Qj2EVXFS-aowa8_u_5RhvVR0RFPJ8SN1qR8zuIHIxvg4_T4w22TUn0pWsSd0U40yMekDaly9DthDkpoIMvKt64DN10JRJ9qiEDHIyiKe2pIurNewqnpv6nLlgGNqkz84sq3-RnuSVKPXQK4aAF09rkU1OI9yxs_0iCD5DgisNAc1HGeEi2ytn27KupXNQYwwh-Ol-HxStYzpWuZ-N0X8_MYtlKCf7rKCfA2rDeQxnrRaNtBsZiKkBzg7Vgy19BlJjqyZpynBy3z2_CV7gS6jNn_7OqtQOR49vevuUNgKNbXVAsDe--M3pN9-AiBLHS3-wR3iRkYDN5SrHwxcTGUfeGjigN7yCSja6C_kZ24cmpmCxuxyS2ejD0Vq7WoANZpUYvso2JIMPAZDSEoUR7bgCqMYsFqrr5g0i6Co4vj0IGBk857rjc6jcaSHTIe7lG3I6-_bFJrMRl8qEVsxF67n_AZyGLd_6o3sbPsOeJbtYwENh04d9-4uUX2XWDLfG2i2dpMdABAGblEbls4b1v5_y_MB0I3elgFPce2fTmJz14aDZKnU0dKlCVxDND7_D5l9UcjLfy0tozYvb0r7RtILsH5MP_qZHTmrBS8dhe_XvzoKeGUeIilviHBF1lvHx9cLASwg9fqsUYmJekyji1iskXG6KTUt2VrrSj1gNIZbt9z3kgeCx1pMcNPtkq4E3bFd-6EZhTxzj4KxMKnAwBlvcVHqtjWJRS2eRX_8Ie1aJjDoPux8EVZPQLkHyUF_u-BUxAb5Ut-WrBXCXifxEKcNmKxM4_4ki9blbrVP1bk4xDGrMjq8Ngt7ieXJ4JdwhOy7POeY_ilzOdgqh0i-In3w3zKX1A6-pehnDVaouGlRdDOuYOD-snLmwrFRT3-qsdTdrEJ6sUQyqrTB1rnym7PEvQSVcYjrvkEnAcGgrTucXslNlCrFXPFuQwZll9pdTTsxa0dewvsGuYdOnxJQrKNYuhvemWguUd1EGFVhT5laJdU2QinyP-teAKBiZkOxU3vpccTbdpNDM-_XJfCeIbcY2T0BtEyMMkOMWEe3oTocDkOS0NgDQzHEBLZi0S1TLVvbk7GnZstpjkkL7GptnPYX4jwkg1O925D94IxRsjMqybQCI8PodOvinD0zNgUMtZ5_WOo2rA85hWeo0XLCeTWWwlXCGV-9nJlO6Mp7WTUncyjD7NCY8q__QIIsixl1cG70B7ZWMVqQGi1CiGSTvjOjzrKVbCws2l8HOZT0qHUrzKNAqyM_aGR-cL0HQ423JEjEwfXr42VpeXE7XfOGe4gAL4VkgQHZVaTYBsmAk0AwErHwZjz1wsUIFMOATw66IZUdk9XiJ57EU6g6xu9M5ZWctvegzYg3tepNzNUjtBQJzixDrf5rMroLPkJrls-OWx6C_p9yPikFpbMEqr5w2FEfWEO12Ge9mSe6rYOAk0lXFBz1rXx_9NpfbHmJBPJ_OVSx1i6pHWkAys0bb3eFUaKD2GkVddhNV2zoz7YROh4Djcaup8EpRTtcthHx4FYXCJgDAJC7k7dOZgQ9x7aFl1CE9VS3JjFNXEUj7XV4HpqUuwrNBz7gYbHUcxHKp5Dbp5m8cStHx1gpXjHN8jxY8O36uL9ifdiuFQHKSp0_jB4jcth5CZpYEIK4wLCX23_dDvDMvR_cWdbeqfEYTe8SVvkRwGZuFawgGkq8QhrUjF5Yz006LL6irH0z-6E9K4lMbosO9N2gNrkDQPjt_N_VM49pIWIkcO0PA2FVCK_aZqDSdD_sc5os6oOeSf6AFgDz2dnk_LczQy_tSaMx_rWomzSH_ysI2qLLSBKVMetQH8DBWOaI4y9J0gvdRx8TBNgfoAfSTNNWRp6lK_Zo6dl87Bk-ElvQLLewVihmueXAXjYEzk1n__g7blYlVVzg2VjIMacQrXeFYN5WTLjsqzGdq44QItYxnD5SSvWQtF6ZGn-N-mOr-O0BztTf7MhPNDCwAsOURs_R-Jn0VteMgDdFfeoqp-X_yOS0dINkm8FhHKGtecCtXq9nWFsx68svPAB_WbS3wXzTG8lEYwtO_8CU-i-A30ibvF3quT-AoggWCVmgA13meEVBEuHUgXkqkhjGSSZIPzqPSpzPtLovz0iC5sCfZFZxqSJbXDMr6VOiokJ8B_plffLvpD5bz0HVbUY4CEPwZuThNjr5dDpuqsRG3CWArQSxsUvpvaetVeeR7_ZZOBEtyJzUL9h1XGyaMxYzu5AKjXK7FbdgTTLUs5m-wk7PMKQtuAN7Is4Q6zHl9P1Cky7SrQAnAV4NdLZ94TEQQJP1LpP2TkHyqwQ6HkAFfkCIW3SVak8lbDgCdyIP91j0a2D3eQc8TlNTCA7okqkgJyfKEh3bC4VdcAnxV_NVurknxrRDMUuNRm4wwOwhsF-vv0jNc5_jJh9VyWJ3lC1H8sHSmxp-fW_gGi0s3g28iDJp66yyPzPEdX1yzP2WWJElUZEmCDQCoxhdy8PtrMPB4ml0sjhm0aI8WhwwKQtAJM6sbMoyD6vDSAKUgtnW_Qtw25mjawpdPKzB7Sod-96wfiZdxphZqvEPWA9X7vks7JB05BjtxTbgfxszKMVPxUOfiRR406PNg5YNt_T9ykTDm2eme1NpzDwPBXx1rPvwv74LSYvyKTkT8Z1AsG5e_PpzZWmuXsgb01bgNQ3rUEQsQdshh4bMu0d-u1K5KC977m0wFysvHOCynKih75bpWGRdePPYHWybrZnBJD-xt9ulUTyiWygNPMmsIbe52Zc6qD2tydbmc1cNDNvWgehUzK1Cun3NeVMM-dQlqzPP5YHXNCiyADQq4PNyrDk1vJXKVjjrUKpjZhC5qv88sT6je-tHGy3WvptlbMhn8Crw5TBLLNh41BmyyieJGaehiUK3AvgQvYNKjTLyMOrn9QNXQXEEqMcYMC9MbMVxorFkNxpGcp96xwlGTwHAbSa7BnMDv0vOCXnv1_p0FdOkYEHCUwoK3n1wCzoILVrywmWa2T_q-yTF4hhH7DFwCCBRmzHr0_wnDNxdK-gnqRtY3z72OO6RBB8DBjfUaHnZz_vSRENadwgvETUGCKGeFuddZpqTE2u36e1fFJ5hYWESJiawBFJzxmBD8dD8znYEbtf83-U_iDHsoIDOMww5FSx15_bFvbjatbE7n_2zyj9sAdo_7X5ljvfHFFYDvCMV2NLbcv7sPQrNoKBTNS9P6Q0fdEt_I8LbAbFl8DzU6_C3baQwQwqaUHdRt3rVUGtOYqszES2U79EBAvIeXW1QcthTfmiv9Plo7FJ16V9GOOpVm6_WsFbZTsSVleGmBdTWLoCkNutukxsXf70D4Y00d55J6T0mW1WtT2n-ruDL08_z1wS4m0Ql6mE7OH69Cuc9WlAD2Rj1JhZUaX-OMqYVBvMiP_X4H06fiFHaV4EFHYaHupH7wAQY3JNBpg-Oa2whDe9GhDQ6E4r8l0yJPj2zmTafYPC-7juOH7wyPq4mpCw-5RHubnPjAA655reudtpAoxcN2Ca9X2v9lWhme6OL2iUdrU_4NYnGtDE3eVDtpI_jfxoLASm1HoARnD_ToQV4tJ6V7Am6GJp3WtmGY8YzEXsYLYupVcspEKKmQOD7Z0P2pB_Cdukgb9ye4FAIfhDxC81ChsUyXLxIk3MtsvAratIHtAJ-69w_Up_ooa3q_U4JMKQoXPHlk5LIp3uiRziqOflV84pWmPnFgQADdE8fpBgPR9SBiyRGgnEJEj6tEHI480ekOb38SQPjKCKCR2KyR_5eJVIUPRBg5IeiRdDtAeTgAo2Kno5g0Mw_OuP4-R-hibSTVUCT3F51_e7Mmk81rA6D_SlGgMN6cpNXsOdEiGOThUk6r_3mISgiPXl0XnN9FzS_z8eVpYAL3UvWBlFazVVMBGa6yuU7mEPwVhpguP7G7yaHfKxyws_s-vRJimIx800SXRmwBNkN2I8lHfNxuEUDYB46xMWYZLLDsMoR0ykLazvmDgnpDWbYsRxfx7ok0t4k-xXPGBylLHK2Onf_lxlEsRWeivWtn46LpDwqBwrRJIOMmjYEgW6JChS-Gk-R_5F0Dtad4W_udJ9nQsRDfmrY8Z-a33R8TZBDJR6fLkegMXhPDMSMMC-iw8CDqm5BcXXcSXCoZKDlXMALd9SSDgnzYJSF5arE932llpK1nhkJKAxFbNbNbbteOdB6FqgQTqaV4g-LWg7Zni-Z2IbjeY8KlXlt7RJe0rpBMW_P5aEeM2zWbDrodv_DAfLwS2sBIvOxYxJ1Yg4k_RgBsOvM25TjqBzHVIRXOzKbN6jbzO1WvNnedQ2N9ovZa11JDf-G949RiDAeR2GYiTd77OFBaSSpqi2GYpWwSQJPFb6bRpBOTIth0BuXEDkq_qEsDmG2yJN374wUqKDRdxDVFukhnzgxx8uvcdq1MjMS4jPVxRm4oU2eskTtIvTx3iIjGH8UoihnOQWH1AK8pgAbTL5sBxWtu8PsLBDbyd5DCdYsw-I8kU91o3aIsP5w0XuCrEjzV527LsPaQOCk3cp3-SR-ZqgsJs6m7F_vW0WwNeDNOOAFagJD5RfIr4HLx_nTJR2Vib1mQW-lwkILxsRra_otpejuVyrk50N8nfo10-eWh5A_EGbea6voezVprZ5n1x2yK2fly-qKIHhBtti5j2uDhBw5N0lDlKb5Pk-uYqszS8gcnrbnArR1QX0UE6GheZQnzLZ1VMxb1nkyxIztSdmaYN5Xc_KLWNfU0s5sqLDfERVu44zKT37tJ_8VaInX00eY7rpQOrWVwRde6ubqppxNjlFiJMXA4mVcxnircKnpkebhFFXDqovPTDHqDau17jK5hBFvr-i9GusY5Jz7xscHu7C0k9se0pyQ7-nGmxvh_KMBwyL6s2ux6as3TBK-twFPlSNc7F67URzUD1tPDIwYfe6T6YEUzBwmmmTZZONC9I6ZZl91gEhpYRsQvPS3LK6Y-0XFaGKDZ-FOFqlBVZEazhBoQrA5XuE4VVMGMCtr4rYQCAeN15-xSIooeWLl8o0jYPteV-upJgOUVPJkvoOfmKemtx6v_2Lnnt_h9tRX7WIBF0YveijOFQgf6eMcK1a_FI0pDTosyWI1GkS2vZ9-_zLzI_dt-hxs5Y6v-VXEzvhPdqQuJhUHaYGvxMU87UaHBH27kQe2I-MT8DtVLXh41IPT3cd8R-amnyT-N1qE6rK3LrmPL4UkR3EeSP0dXuUfFQ3wImwa9qO6n6Udw4TZaTOeRR5q0KJ4I9IJqJxKHS4vHDonkPeGbR0b3aRFtiuDq3etL9iUl4d7KXWd6_arJhxlcbqgBDZdGBTnwhwcfAb7F0fj2kbjwVdRo0F9iNcRBDfzbSkUff1PUdZHrcS9qK4m43IpBPCUJOgrPET4fm2YfsAe969hxvDdKlDqc_pmXA4BmUB7MRasGyQqzi57x7eXt86fQVykNPbmlaH4TMiZNKnCFh2bJWRuH86ekyH1qwqsdDOrDtM7oLHVW7dkWrjY5sJ_TyXcSmNLG4LSU0GFKXvBWxTfUOapcxCSsS8CFm2nwvFY8QDN4TNT9ckBHkzvi554cUQVglTYVp6wXj8kz3T92YR9jLJ6aV6JCOFwRPyeETi9r-1BOIu5QyjmqJ2FudpddCBdlIwMHE3Yd-rhilwt_6NWK3MiOxa0AgIpaQNqT5qqqb4yOqDDyftqWdt7Se_T7tzJeavWxxaLIK-aD3pnchp6N2f4S5CtvY_Lpbt2RAmdpp2xXd-hmQJJbdG3xeouZMnh8frC0NP1zRhbqdOlQYvtzlbiWDm-eW2r5RU1czab51AZ0BWPhqIQOTMcabG45zvQ66jjb27pDuWO3UuhTjEhhtNWYEjz8tzUzWT6_0KN93ndIpEFE2T1ZZWEJmlPojpd8XC2fMpDfGh-2521Q2kAOY92CLqI3n8iAdkR_kZQvgtQ3Hdp9zDhRU4HXQoLZNYQJLpw4J3nJyfLsmOTdEOcoBi2LURg56me131ZzK9TUzi31AEp21oMdC3ghn6sNM18vQUZL_aYASrRQ89iKHcOp9pVuEOtnXDFuq829unMbOZpNcYsFVHKMuXlIB_jpsvZFYa6SifrG-HTQwtqWSl8-_SlcuuWz8OvaiBr_JuLXVmHHQRU_pW8l9iO6GUvkodGVrWrBgJ-_LzzFreOAzrSnRhnNKpoE2iiaypEromwni424OaZ79wCU_zx9vMIsqh-fxFshQdS-FxzbEiAQyFaHnd2m5298wY0Wxz4nfLOU3BFNSnhAEnn8vR1O1qZV4kVLi1mZvtKdE_ZBjHMe8pdRWrsjlvhejpPFjthIIcrdAtj4HZ2ZRgFy7DZln2ux3w6Zww5Xon4bMg99r2rzlsMhc7hn_qDj8JbZPPHDIB3-SawTrWdYdBRFyRfFqq6Y0iPtrXOR84lUYraT12O9J9Sqyp2wB0YuTpOLsZXDRHN4lP1M2XPjB7Cu9VmLVHz8dBvYuoQnv3ylw-UrSr0MmNeTqlyf04qBLC1cAxOV_gqDEp-IOUGaOmiz5gKnp5zyfh4woWex6HbDTnBvA0gfn06lNAItiA3dXpyyr4zaIiLuoVOFTOoLWdKIUb89NuB35dIVn8qEGpyXqpIbPMkLPJutADKkAKhXEXKzRvabbFhCZ68527BGhWpStDSi9FF_w0JtMWkYmxOLYdDZWVADfYL6Qe-3jAVaI02HqPD9MIgHQczFU-pyqP6cNZREylwjDId3N_8P92_NSJzK-mxP1LlvdKtOsXW-XUQE3lZx7ojkiQxidQnuEY2qoKG9SqX8OPAt8es8GcBTG3ifH-46Jn1vyYrphp3JQNbv6ioCOJoTvIJaqnerxb3d6RMF6lj8PBDnPThdv1FwCKIDy99n_PKhvjJSusIlesfWLtCByaMVuKaJhoz7qjJSxGrivJW3Uo18TSp9gMAlTC1OQ2iUToN8CiigCKUoQpSLwFM_DumtTLfeSwtRjwRhLmczWuRIILVkpNGJKMYkNI6vykKdqyHi1O4z4xHqswS6nugnq6IQG2HfLcuY9WdYsXrAQL4X0QySuMutVHp5yQ5WxQS9Y5vqo0xAMZG4gRDSQ-UkW5YI3SpID7JGNy16xZzPLZL9Qp4No1WiQx8IRbvaa7mUT1UHqOinxmE6U8hUOo1KbA0isYtW7VEfi25uOJr4vAU_ZF2lgrlp0UMZtk6cwjzqEe8BxKSB2Mej7GS3l09DitVNDEF6mKSpjYkKCdbTy1zvQglcJIkrVbmTcCtP7ssFliYhK87LC5T5rrgYR57EyWFUXfqZ_v6mqNTdyvR3KmrTMQUk0IHHFEhqS50VeE6X_KZb-Zx5VXUEv8Bzcrs1B5WLxSPG9JYCRzTUadAcvAvRD0c1vkPxQbpfn4H849ah6_LP0GvdqD59ITCc_4zztH6p6T7pJtOKTZjKqJfGi9FeIdHzuMBc6HX_Bm90ryJGOCGguic1kfLrOgA9R3LGfXH0x_VQFS48wJyTLAHRzbHjKttaYG4FzIB16n-nPROdKek1lQRsgJnhmPWVr8JD73pk5K4Fu2UbZ246vZ4xjEMA5y60Crj9aX8BOhigD7w5pYhSr_qnQQbdNbL7LGQFxkiAUehUwe-YjcLJab7qRzuhq4txj9u-id40mQrNx1b7_5bMSqt-69JOp3FzYJLT_WSI-1oeBolm8jpEWydD8I7Btyl1FOBv78wwrBrYUQ3F9qw62tHYdVvTJQ3Q68Nie2WLvn29rMo1t0s-bGvrbEnMIns8d42g_j1c-D8_QNJect3sVEDuOgPid0ty0WPTmlmdiBt5XFJ8rcBsqHV8X-GOy1BRBw07UNFhBe5PxVx33S0Uq_x1d1uLP7NBZOWJ8JqMPINacZ3yxF18gcrKXhk7S4k5ULMlNUY0AAUTD-X7iT2REEECb7_msTgNJb2nzEcnjtaVSM8voHZt6VMiNou2ltGIXi6Qp4NNQqTQyqjtxRpsciSgi6SitLmexCZUSlx28VkK73Gvbp_gYzYa8nhuKubnbT0P4ASG9HTRAcIBJzlVrIv5gLV-sVmVHqZW-GC8zYIZGYuCce25bVTEvwODXFQW64668AnhXM1oLIhnm9O_5j0JryrJrvMZN5RbX2kHzqbcfTZ6MOaEoaYQ0PF6Bh1LE-IAKGMQCtmhqWxT8dY6puWwMWUH1MIlOzfekhAWRUrNjnuiRaW5vDYfHzJmGSXfhdUfKmcQTgHAmLhrzutKn9V0i97tRVuh_kH2UB83iVg0UT3zJaLeeCrVbiNkS_V9EGod87NSW6bHZvLunARaHUvmbTI4VutGwGdYUPf0eQfh-Evyxo4i08i6rK5m_EbX4pcAcF39oABh_0gR6ANo7-7zuDZmyMDrKwfKXgX55RSQweRV9u_7VMVQaBE7zgSQJ3CwpMxus6jlkvuaF06S_oBUlq-FSiRBlwEbWNmxYbG77geNSyL1bcySJNvT6IClHdZ1SqwEanaKz3-c5gAcTc1Z-gPOb3dNqIrUS_TLbKyX-OItTNwzrRUQBtYcoVVmikf04zLa1erBkupMLOMQaTcZEdpNTcVPslu30lAe12JXxctxmD9xTtKoTqQ-wVeMaQjqPbnhMxhLRooc_R5XDXisf83uU7Ps0B7utFoeSZov5tWmZekcgBV9WM1tosI8MmrXRBGHhRFVkW6C9xgyIGLu28rfuquL_JD3RjKr_q9UsPL8GKV10jxIfdBa1y1IQpPLHw3BFkQFJjAdiKVlRpzLWG-fQOIlTHMi-ae0FpUhKcNcr4b_MXEcKtDdGTGWjuBA6ejx3chrpa6VyFFUOg5addgalWNZo1EzZcC_h-RwYIOr7-pErXQuMfdEIUBB5H7MMGvXvjb0mrXzqeyP8PQag49v9S9nbC30KMn9cZvXdYEkZPNPVCo73zpxrbDfJ5oWZhAvSO_nntfZqaslPBCcR6Wjh5Szrap8t9xob6OFFCFTi6JLcPPovsPIIoovdMdmqdoV4tUurM7zIUxedyQrZM3ZU1ry6JTMu8MiQjb6R0lsDvZcXy5Atk_XSGexR8D5zVAgIV4x5xnJ5HBAUcK3D8PC1hwbAcDuJXHmdhBnpvdwNICpVKEnopv0jlaWKjeVsPtYcfMv5c9vQ4qUtafizmsVbnUoPSOqTgRvGydrsV-4V0EYzoHDUU61oyHPxsNxXyhq5pXfXT6dynntYjOmN-px5m_P2LxnuribOLNqxXMf2jbKeN0wKWfIDvk0r65ULI0dU8Py6yCDnG7b5FlDCXadvyXyif4p5Vpmh3pUdv_jbRb6KaC40w3GTfyoeKjq7VuUeSscvx5h62-f6x0xPliYB9XGUdeKK_oRDbsPP4AgDFNUEUKP8zcOS2ysgXHFRJtiROpwCsGJmovG3SM_SKpHZHV8D4ZfUcGj0P7ro2VHG1HtkqD8X6s9NE-cNRaW6TdSxreuCMfXp5vCGfrUyo3_hEmtNh75YpOLDowAU3nhOWMtGjVKL6fGpAip3aVGvqOWnHauGnAGJ12DFNQhCcSol3gTfgZ45F7_aNvXmQnNG99ccWLkdMfuXm-60tR4SdoPQBMcYBAdV70kASAxDk8KkSvnmV9402tNOA7OTUdg_RwpNB0OFrZGWLHCfXAxeFELV0mz7AUkY-_St7n8VHp1rmslqncjzvTpsqyX4prbN9F0F-Z2BBzsrm7y9kE6gulinKOasOGbmoCD_9lMpppqco6pphwGmT2bD0DVmXWeoYAxcOHwBgqsK7681_vyMqajMRs_PSx513bbmxnBXVSBmxsHZ1DNY4XgrD8maoPQC9tSzZvejPJIJAglNx1sKs_gJBDd_b0_N30BLqejPoi-bl17BBb8Ek7FD1YQMKX-CsP0vwUlIs2vm4vboczYfvTAqQ6Ob6mEacnLFbjNYQmqXy7XQYthx8sCCs7mHvC69FCWLKV9kYD2iQ05JLck11rYF-JGq7Ln1HDUMsfujGKZccuOxVdzoYybtSZxpBvC9UgMW6cOTH4bIM7jHD_9eyBjsjRaCjHbIxCX4AxTU1C7Byk3T7oSdsKwDIBnhn45HPrSy-BpNvvWOPYkZffoc-IWqIJIzZ9skUGugsDRGtUgpQfKYSjW-Rq8lB4syMsIw3p9SEohToVXTfR5C2RRJcxg5jTYcIzkVLB-AaBIlz9mY8wnXmH0WCL0Nr03fyNumTvkw5ex5OdBRrVPiGsWGjMNiFPOj7N1SaMuIwMLBIIbupyUsYRYZURi0tkuDJCBuTCmqg059Mt-C46_lIQ8o33-KouNwMatNQBmc01KlvPZeZHkhnhvAxg1VD29dMeHGeDZM9Fi13_okv_Tgun05V_n_qPga3foeoq0O1ZJ5w9all7Ct1FkSftvNjRbvBWNLBl0OvsP0zS3KbWwcJjLiV-mgTthY6ywZSO6NVsHMHFuL04wPtn76-M1bYUdPS-bJQ-Gs0-2ursToWEyBR5wk5sRTi2DJc9p5NaKahaWEvEtVhikjfLypKxKfe22A5O1FxBsP3GJhkIoqTqAv0A5l5mXUNq2rtPF_2PTc4vByjpWTerNaW2nzcK0Y7VWwo-J9mxTmM4-upvExYpvEP7lHp7J7WeRXKI2Lwn9q4UW0gyXZV_tlnewXbWVbNzFqYtS1aPgVGZ6YtTWD2EibAnGjmo5srYAXB98tdYjmhpu9S9UMpUnWk313RNqoSyZozkXM1agbvmYyJpQGlCB3YBfi0am6oGq31bOZ1C-JTHT4dgxCm_1zmXXADKUlF9FdabiRHQvcu5Dri9pJHUbkFV1Im8edAJNFQFwO7cSd6_JYIVnKxi_SebxZkFhGlYIL73pZEj0ZHPWZrtYhiUIA54ZYrKIrwAQd1CYzjtbG6wJTShhK150l-xD2_Dh6nIHJQc8eI9Cbn2n4ov8XOMQEkUKZbJ1zU8y6lbKu_339yetY1Pe8oPN0NHnEg_atxFdVjXhUm91YCbN8GqI8c3s9DYbFneXm4V8qlE89BvTKnrZSeApkAUMUn3Mn9kbgem9i9XFIH760cHsdAGoY2RQYVeaeP2cMKas6kGOjp_cwBuEOYAROe0zax5U6HB4MyIGzgytAKoPQ79cUy4PJ5Rp_vbFgLolGK2t3sPjuPuPnkoniofOv9oyt2cIgUG2nG8DPrlTMNFldyhq6CJ-4F98Yd_VQ82Lw6INUyuiWzl-r-a89_5GnT4KnRZZMjyVXEOlIOJVIb64sZelzQiA9xTGlaLJ9kt4A5Hx7DC2QH7AQnP2xTYW4Hf5Ps8faBIbrTGZ3PAZYEvDht8023pofbIqxQC4UPh9XQaBNWirTrYyS0DgSzO4C__sGjcxTNc9Tg4Slw4zZexvslEC_2ibZ4DIoS5xQ760B5NJr05r-AoNrxje5FfxpbaOMLVHKQC-c2MQZnR7gffgRuLa9-Ddy4uheuffd_4L5baRLtIZWf2vPPDhMiK_9nJG42Ubuo-DeaQQJ8EMM2Gg-XYMKxwVR3_FIkVGldB7_0ZBhR22PrKqp9DZj8n8asjjWsI02FV_gTMlqlxvnJ_hlKUF_NbWT7woq_MX6rU7zD5UdLhGzvghGkeF9S7G50unk9OeNCZQssRT3RBd9555ktsgBgK02K_MEHSo15ERWUPlAfz8etv1zgUBhEQJb4DFsEp40Oet2MzManKNuaSDDpmIdTUCoVK4e-Jx_OSuQvQ-QC53iOrdoIVdh0aahiLluKSrWjzi8oNt-hLAic8EvM3cnHSeVvYp7uyUV7dKeLqsMR9Zwjrb1B-HStV8AjVjCvJY63m4Ypt_QdpGEvdqzkKsGw2pi4c0_cYXx9pA9_wOpFGSZX8OBQxvji7I2_nhhd2neb0Jp7EjtV22Boey8cpRsM2CJVYqF--Q4fZWnNzo_v4Zu0ZPR5se5Kbww8z0gtRxlFK_jdr8_4nmJRB2ucCHcq_f0Zwkz8HVSAVBRileQUR1q14w4uGCg5SjxgwLzmc23_252CkUbNs6VXuMOk1Fl9r0PSCXGjWaxp3KI4jUe4d8wlvW1Y3qhxeScfyMyNYL2xoPbhhC-WQffQINIGJosOXzYDG9fS-uZV-KMNrn8agLM8o64Wp0bjdZBN6W3_zcji97jCLhkwY2Ur1a1qFa1gQf63pfWtL8f1qqKtmj39dgy52fknSuK4hmpAMORjL5Y5F4iVGOzpDRGIq9JdzgicKQu21B0Krr9dr8MNEPBiwE_P4h0nFuOw8E3ZQ9Hc8-6S59GdJcX0cKgWWJKk0dF_f6KT5GM1fR3UtDEiamqAoM80rb7-a1feUyVqjRBxocXhv469xIARpJgkJcVmHiFxN0ZKZ17LXHft4tZZVf2idZ8JWEsxufYIGGGND4Yf9U2GWp1hAZbjlXFjrXxy0sqzdDLvo6Ly6oRUclKrFE24qUkqhKTq77LAvcyzjOhB6lW5blMhT8WBOSSqHc9BDI3yjM3_ILrMbkowkxwOuVk4u6I8Z0y8eVOr6O_-vdPIYNeTlKQvZSSqco5AoEvi2okyXNDnRhGxwwXWwRthcFIICbaQzNaneDQkJgy0N6N4SN1nB0gsoHnCwvygp6QJOvKOVPx77dva0DIabB9p-I3EcvDtIUpdzq0yEGwFbUnce2YV0sqZeu5__IU5YOEfrNcKI4gQELEhj-OZOMRb3qhuZy3cFuv2nKA2vwd2O9ey7vN0PWrig2GFml0DTySDBc5oV4ymXM_DE1ASTgb3NO3Dq7ogj8V3naI34_dEYh9fslS8ck9yWN1_LnIgf3h5gUWfkdGydAZtNbLSbGVtHiKnkX0sc_NkOUW2LFlMcP3tigmex3fbrokZc3T1aYuseJRJPbpTrSD52bDnK7NZYjeeJOiwb4GD1XdZMko3k11aqv3ub9eJZALz82h4wn2BCYRk9ssKBQPDuyxbx75_LBY07YWhOa8a-Mr44Vai9neeOMM6fqjjXSG8TwSJxrhPkRQb1Vljf0sIT3egGbPaM2t8iPtQLxO8hXPEBo8pXNmM6c2xmnajxTdy2NgPri5Obmi16hCeDdtx2zuJEDY57xcguxi62nYR5atoxzkOHN1T4uGUfiEDsMpHG6Sj5J1d9b2eZ4-dKLH7hN4e1DrReCK_ksrW6ocwX_awOR1ZLH3wumJrM961fkUMPfsEaUJ38tXjNtTKEYjpo1Q6IJecDi2CJZSii_K25vXvlLmF1NpLxJsGKAkq6_6lFoN9hGNp3RcP-xFNRqll9lE73ua6siAPdDTSrMr53LA_ezY0C5NZINoJEwg3G0lRlpJA5nMT5aYIaYIZqpAPfi2A6raXuVdmNfDdiL0bHKMbjZKYV9x951Ib3tAkPgYgUyH59qE5wUbllVaLxlK76GDtd-G2AAfwwp527uneJOxMRJ7KLRAVLZN4xGAqzaYZxVGN50y7Yr0NU3_5Ff9BnjsjgG2K7DSRPgjVJYRqjTEF5R9jjV13ghpyi2skJzfQYfbkTeTjmrEY7mnPWjtF7w3CHK1HpBz0z1bqbMcJkJXEATd-PzSTP8EJYb4d-VtvQQurctFmxb5zOFvy9RLeSRHG7Aqe8pUUGiqofJ7TznkbcX3jrPiBQDMqe6tAzMWGNnKczkiiSFCXtwj8Cewfs414Bj8fCSrMYv4HiuIrq5BnPsfGPAdd5hUR1KxXWj4QeTx0S8zd-J1p-E7w2yYcqQZOdw4XtjPXZ5wH86goH5VOKmPRBqxp3BKlt55p_GQ7Dtq49mbTei2nuTTrFYgtAO4B0hNTTURHZG9oPVLyvDVWgtOVFs0YGAR0b2mQv5VZi8PG6-BSeX4DP1u9mxRlr-5hVajC3sxme5pnIeXvwJu_xvEmGoSqjAYJHpOxCNBlNeskCeTMEuaFo3luMZ4XX3Odoy4HrtnHKWnWCclLUR0C4YZHFxCbUEKUJHC6rMVZHmYic0ecc7pes_QgrQzTEUWTgH4Ln9W9ersMpvvdn3eQP7oN1Hu8PUOmZwEH0wrYU34JS0n7sBCKKNmauMNUsnMWksArwHn5gj_DJySVOGH3zZQUCNDaweLhMmDehESx9jsmGOgLWqCwsj23dqAChpg_BMwa6x6N2v07D0VIIfyCDLVcHvXoYGWomw7AFUi5wO64N2rg0AdzqqcpcQJQJUkGJ4dqm6YPX8xfadwNhw6br2dlBzNLerquNJSzKYGJvZ4LO67Jp0-fIPfTs33DXXm0O9J_uYoG39tDME4oZLn_UAezW5noxx89q9m1eUdRoKltfO_McyoasR2qtx3gQ1jh3PzcWvGBlkhJhGdM75wCGKPLsVNKfs07v_rhwCsoLDecF6xNwA-Nm52JXmQ6mhhRS-wd53Artdt4WOyfOUDpWrXaSGptiZf52RvAR-Jq_AcagL3zTjsdqpWdNXcO2mt15XW3mFRuCfB1joDBNJ8tnsXSh3W4NrJyl0Z0DxX4LzVmdvwjKWdCIqIJ0_dyIwWO3HDiKH70Ovxnqa8MvvRFtKJQobovlcd-DE0jf-Jb2yA54KY95FvF-gHKMLdGGEfXWlIdLtoHMYFd37iH4SgSGMvCkpbofHI3cLLd4nKr6C7JYVQR2kELKygy5et6bHh0LdYTYDsFxlSoYTTJB6tYfa8BDUed7Nbu_P_SiZ9uQfx_XariGQnHbF80yBZmaH8RPBVeQ77jJrNvPdv--yxqVF6VBTeyPsx52NHVoUqUKQZeLhEuUzIN5wmju26ZnLpqLG6CW4vTkJ5t1Wi4w6PpzvcugUxn4tCHH_TfPxuo-1HFtG9PqZgio-OEWyc9fll1q-s8U6wIrx8BPZjbKp9tlmgsiJu2l8Uq3LrB8riGzuJG5V5lE41M6yUbCNERYQAYA3lhS-fDBTwO9zFqNlrpEJdotJ3ed4dylOEyB8rzEiO-9bcB1aDewBr0vFbTQEdFGNO0ebynqLxUQXnZ1vMT2bkOlRIxXtEBMyg3ae0gW5bceejSCXV20TqU2z8VI5XOWeAi2cKzNsiTEaXveUmmkDSWpfLv3MjkEB-BnMg76Q354KxfNFZs8Dm2eF8bkKNbKfNMvt2WKvcBiq_w6fv1xNcKMt7PGc"}}]},{"id":"bravin-ban-hang","code":"BBHG","name":"Bravin Bán Hàng","icon":"🛒","author":"Bravinall","description":"Quy trình nội dung bán hàng của Bravinall: USP và chân dung khách, 3 mẫu quảng cáo, kịch bản livestream 15 phút, tin nhắn chốt đơn, banner và lịch đăng 7 ngày. Kèm máy tính giá bán & lợi nhuận.","tags":["bán hàng","quảng cáo","livestream"],"releases":[{"version":"1.0.0","price":149000,"date":"2026-10-11","changelog":"Phát hành lần đầu.","preview":{"templates":[{"title":"Chiến dịch ra mắt sản phẩm","description":"Thông tin → USP → quảng cáo, livestream, chốt đơn và banner."},{"title":"Lịch nội dung 7 ngày","description":"Thông tin → USP → lịch đăng 7 ngày."},{"title":"Tính giá bán & lợi nhuận","description":"Máy tính giá bán theo giá vốn, phí sàn, VAT, quảng cáo."}],"nodes":[{"title":"USP & chân dung khách hàng","description":"3 USP, 2 chân dung khách, 5 lý do ngần ngại, thông điệp chính."},{"title":"3 mẫu quảng cáo Facebook","description":"AIDA, PAS và câu chuyện khách hàng."},{"title":"Kịch bản livestream 15 phút","description":"Chia mốc thời gian, câu tương tác, xử lý chê giá."},{"title":"Tin nhắn chốt đơn & xử lý từ chối","description":"Mẫu tin cho tư vấn viên Messenger/Zalo."},{"title":"Banner quảng cáo 1:1","description":"Ảnh sản phẩm nền sạch, chừa chỗ tiêu đề."},{"title":"Lịch nội dung 7 ngày","description":"Bảng 7 ngày xen kẽ nội dung giá trị và bán hàng."}],"artifacts":[{"title":"Máy tính giá bán & lợi nhuận","description":"Ra giá bán đẹp từ giá vốn, phí sàn, VAT, quảng cáo, vận chuyển và % lợi nhuận mong muốn."}]},"enc":{"iv":"TdtQ7VA-D4s1UfKQ","ct":"EyOqhATs-nIOZd6i2Omf2sLtGs8Bp0H4f5o7z8Y5_hVLA0MEngPFGIw1X7ZUVZgBHh_8NwOs95nntIgK7LDe1I0usvPriSUVdbd28whxJ0MIbs295jTWZDSOv4OayASDk1rTOZT_M6vsSFMoEb1_CDe7oGT4nRGCG2cl_JooIb4F2d9_DUDNT2YcKDLocmojD-uElzU2JWZ8ulbBTwW4E9fS3B9WlAHNRSLDY2xk3shUicYcZyoUa_Dp5l2oT9EyqBh36m_75svWSGZ9-W1cMNWwPQRuM_ovcSVVoXZYIMoU3TmzT1cZ09Llb8YMkGU2ehwU5TLMK23VWMtS0hBVDHP4VrGmhsFpXSBHSBA2WcsrQe0M07wkV00gmvww4z_4Sz1TPcGBXY0J842ceUe3a7GqHcGGJRTrq3X96EdhKEMjv6SRICvE5KxGmw1pkEy0GsjaIFrb9rvtDMl-lu5c8AAVQ9C221t6dkLaQkGvOptoTWwJayugY7GvcX8XuETmDLGG5q_HsxGTptFNaCIwhIGlkKCZsoirW-LvHUPSZlggmIUEXitKgG_BX5DbVIpqkk6ajOl24hXYoXPMYf8iAhJLChZPnkVo-C2NmoQiSvptppvAsdXl6Wwd_BKYcLoma5fnQNuK1L7Foev20glL82P8WWBghjyCuqdvbvg1m7ZtzTBtrLgRGAocmfak0ZJWk9LOWcIytoYcNmBudFv33FwzEozJ1pnF_gEbSgTe-ATYzjCcvetodjGueS0LEwLIM8ppyXCnBbreW0QGAIZpIEhvRJ4sp0hvxcfmImf7iOzZjJXTOUYsNbHwP4P2gw2rGVCOjrMTrXUfqr995NgqB0-qGTUSt8QnZpehKxvC1iUaf8ASUd_PglK1QEv-gSLNqZ-3Dt4R4r42hGSJ-2Ia9bGnvySRcPXJYEwnkUHEIuierwGZRTRgc3PERa4U6EdXtBgJ7PTvCJWzaIqFuIIORIIdTH8ElBsWkZwlisatelv6QCFjaupS24VCZj6H95wEAPYFZD8XDNm8FLdatjtR3NrTTqbjdndz8vLjAHiNvvrSgnjjEc-w4mMPgBCcIzNqgGnA-XizO3-dHWHu6yGrMTAoZPUY8YS-EN3VTSy-hAFBdJLeP1QH2R8XAKsQzyv3mHhnXmz0NUnttrgiO73cXEE2BEc1aZxb2jzFASo1YkWQKqElYofPeB_ccLSthN48o596Bwml1jN9dhLXARmku7G5xwhx_czs1UTky0CH_XI9P8nLC-OiW3JASyTzRvchBzQD16f5-UzgMvgTahv7jVhWYM_EWms4G320cZewZ4cH7DNUO48th9fQjDJxo4kw9_je4Sjmy9KCZBUZ2Bi_ZeXJ2zlWkcawQQMmJZaXCNGieSD_Qt7MKeArmLC57oiQRKm-OzTOj3DI0DPBJtxZo93gWXTrzQmwcBEHv7R-W4HiugxQURkX2J09NR7-1JFq2GlY_gY4XyQiPEi3KkAqJwhLcaZL11uF6YXctKUCt3zLEJ6jTCorGES_Avo-_rsuJVfbyQ0QsS_n_MIOgphssadxjfbPJES8WNTCEQZfvbAJUdbA-r8Vq06p2Uad0apoq6FYwc5jW_pslo4OKWkVZEVVpNUkPy89l51CLhRAwjUa_25kYapEgKMth8bgvKQk_fl-k8y3apoc9NZDS9koAliwRypW7HRKcyTPhD1zUBLll7HvRkBHWhHU-4u5B2_yDKOFebD3qSC63cLizEKXByui9Lgf5O8sgHeirM_TakiDSW1_vrcJMm9EB27Tu9fC9VZGoTxj9bR54Xwqryc1dOf2XCab1JxFVnF7ro7_L_gpB7wrLaE-92FLspGVjDJttSU4CAP13zGDStCPmPOOO1BaSswoDRXlndyhotgBFWhDruRgH6RCnWI_Z37hqIylONIpliBwEi9aG3ntwH58bOe-Kan8wrjwWCepZ6m5ikITw4U-o6sWurDFFkzB-m3YCnzKUxEXdc4zvNxkVLc_w2pzJKzD1ucdoUGIcZ1mF9oveYow8iL1jz0NadCd8BFHR8mOXz6KwLP8PGf458CCLWHCioVoY3hgc-nJW3huUl9KPsFN2FCEr7viePOR9iIXA6JdSNY7pz9WEsEy2FrUVU945TmHWyPPV9KszqPm4nQLdh1ugAO-OJVj63hFyFpsVpkiFuLYeWDNev-GK_5tLeblQQDjt-gjKjqvMNLnHnWqEOxXQIQudmRJBwx1c8x834EH9zENx4z_hAHdEKtAyGK6A-THjdN7StO8mmTkswpdICQP4opMZvKz2kDaroGFeYwpME6tVe2yOOZCMQtnI19fwHycCBItjvKjq3tSjJKXRsmtt5LlU8FdhkUFPlD8bhdZkNr82X36_b-GXCB12SwwNc4WhA6nQh4zDA7KjmnsieF8Wym-xUPx1PPfiHn1qk1brTJZGcSvntaFw3nMWq9TOpZvwRWEdDBywcYf8zMWxyDWSDnkqRkXwygXSD3fGfSEcT_f6pjwZONqYD1st2N3zx6XyDpvRbyh9jS7cAsOuqs3dg6hGqHS3zS4viSKF-NSkKmRyZm8Gjhv7dReGVAEr1air6hwsFUwnMsiP-Xum7smEvMu4eLNw-toVv-RtH2KaIzYd1AN4wI554tHOFdcxmHmikLcHvERGNecaS3OYO6J7bbKw1tL6sv-9LMSAM0-fIIkZ2GEwkx_p0h3WCh64tiB6sJ3FxL92OCGpYSHASWDIQoOGHP4PRMk7nARGitmZ-mgPj-TNlemQP2_yUQ__0hsmecJyqKm_A4kDf-i6LL33p0k8ILqlb0H6yh-RO6CaVAn97GR5Nv27X82naZ6NYePc9HQV5GP1e-hvfEjSy8na7xDrMm4Th3aCUeSGu5Bh3qdTYYMeGogyl5tgYaTPdCip78AK5dISs-PRaUFQEdu4XZjaJUfrcW-fRmplN9CfIUsMQBy1Lup8HqAKkqGg0pLkLwMBpSVkEmglE-ET0Cuq46o38QRcyloCmoCieKKqBln_vE37TTZYAaOo-O9-ftNroo1QplY3tVUxn6q3Xe6Hlm2s1fYhS33ffgw6gzBgyaOf6KN3y5-jkHA9UbpC91-tPoW4O8JDJmrl6yGbmHBU9v7VxdEPpyGsLu3r2t_QDggiQtmN_r3wwbxhOJJqkTIIyNqIisJfUnXxsZ-iFJATmSR6iGm4L-x4WrWrORRZOprYTPaP0lEgu7aZ14SwTOyQ2DfvBclSI0zJ7MEfMJ_6pcWX3CWxVZTWixtlRe9ne_fAtKfSLo8ll2_LmftD_XB84cOfaf8pyWh7bNQl7MjqeWpFgsf2yFSVEuMvb7tIL0VaRjpUi4TsYXFk2UrM2fQaUVZIFKWEP19rLD5RDd-h9Jyo1GZ1qXetfhKIKHecHGms44bdYuiz5fAdSZCpIfNpluJFX2vj-Dukn6fz3vI-_Wh8Fq7oaOa_5FXx0KLBqlGQBZL35aoAh8zOdeNOW9Jw2xDDT9LA_5PW7Q5QbfW8myk3pVFl2QaTMg52q4ZVoPAGDEElIUTRwE3YjD6HlHMXZGk_B7UP1wgpgz7aqricZrhKJ7h4mwuqbgDI9Pj3fqMgQeLrTHQzIWjb11Uc86S9p4iKlvMwXZkrhUYoxNMnKYCdEiSQO4A2dbJACjoEkc7iT0Vb6O47fO93uisR9BAoNk0L6KoF9LiwBl2oEijZieE6pMMiFqp2Ua5WIFsik8tmyf56YYxxX7v7AtfB1JXeXdTn2X5nBQtCcwQY8cVpR4iKNMSnwuSdTiumAdtnXpHmF3W8YpVZuiZp8qinYizldF-o1m6n_VfDQMIbHB11Na84Mmd10B-mB6x32H7Dj9LGStUcW4rTRpV0u2pYL0L6rUYiaptXRPbEqDVY4mNrgeukLV9sDYLS3nysiReH6V2QwpSF7fijjXOjPTJJkgWGswdv70UEqnPO3RotzR4pwmJKRA9Ah_IWiQ7mByLrImyCQ2lENCwAZRTjXLEmuTd847OPBKpEpQXFuoQZEoB_KCzXbQYIIyU044ajL7vSVPGW5q60KwCR7XUnu_XxGT6ez7NPtuoPZOhp26SYrjosTRl5I7-r4WWW1id4Co9LySXt5b0KK5onZPn8QNnAcwhKy9naNoUwUTRFAug-USQl8dkY5jCF7YRa1RgeeOO4NsAHNFo1dQELyL81ZatVWHfmqgDDFFa0gIjtzhGbUNvm_oFg9t3yy6gftr08npR8zt_SXB-OhS71JiNXB114DvIOXwHJdeJlWYhJsXljLpPiYaFj4fmDXJAcswP3ba8-umW1z2fo5F1mDGlAZbMQqt5FeFxubcBEVQRUG8pGSFg-s8jhszTLk4xLuenLPT482sXlmIIlCtB_8JGiDUXZVGfTSntmCABnYy5AgA3GQYHWs_IkE58lX_Xiy5gb9Yx8ZqGWcGy2JwbFbN2jjWqg2_cNdfUZ2fKKco7Gm1Sn36SEPC_lclO-xUlNjQC8cZ-2laW0jXNlsG7PIKf1ExlgqeJFcHefngictZt_xeTeLswQ1qiqESfy4os4jOMSWATClA70oreYuf7llanFiWNyixKgA0tDESTc3j3IZXoJsXK0HyTGyqSXZUAkvwZ8TGEPtVk-CPx9ccSfdgfyRj3iUfgcEab8VselOaglpzA_HnOZI0Ce8PPzQIbqZBvtPa9ejtLDIK21zjpb65oswcnhTnDbZoDXh8lSPs_UndsIYjpQB-f_SyyT4R1hxivTsAdXxiQzlvWge8rKN2WWbD9SkSvpngYiQyB1VQHm6V0onkwxANOyzRZEpe6I2t0AjyuVm_JL6Wwa0CuJunz538YysMIDRj2OE16FXuNt6JdTfQHjRBv15O3JuvDOjpqpAxBvzohiD0KYUBP5wel0Vkx1W44MrZbQJRdqpshXg4HV0Q5bYPKgj1vZQ_2alkEm7R0KsedMJBnpxRi7pvIn7Zfp_Bwac4T9DyrIVV3mJyGHbyz69rBE-cAHbbFnWsWtiw0Inzh3odej3BnYk97FARlLUDOZ4z9mj5nbofiXtFJjmjnCygDeKiYqWu9TUbkVKjhU6l0JAfrDWwDrTnmrb_GHOhkLFNtkQiO6vG2QapZTelRX4RU-DsoMmwqIMlGWf25zglFyr1fUBrcMZbUWw77p7G8Mxo298t_PLBHsVASluVTPuGLpJw28RA9yWZQV7ASMgybVtpbtUZfyNKXowPLOgIRNORJMkjtV5CaADPxZwF1m7cV863uW_ivSN0o2nnb967OCA7Ppo4TGzY6LzhCh3zr2IaZ9fm7iJxx_pm2dOSBGFZHJI-vV-SngoRqaPNPpj0CsDTnfaF0oG_erduY-lwVWWxZbxEJZ7Y7JWseSXojG8V_L68wimIBIJMluVkVRqc-xmCaQjUl0fh46kMhhZQRLYFvk2ffJ5DsYAy5r9gfu93_2-Q-ohDAn6fI2MERkz_hXFFXYgMDNpbnqCOZSNhf3hCAY6Tzdiv3wht_xFImo77qF9bQQh0zhDp3bM621OVyt87YN2fn_1pfPgvoAMK91SwDaai58DSb_Ock0gDghbIgSE8QYg7926fFMsHFIGJ1kvYYIOBl55i-BiYPObJ7OrTRDXybzVpUf-WSEBpuXyeoowkzzusK3SmfrhcVpY2I5u8zuMYiE96um9xy4Ts6P2VjFjumx7ggQf7o1xRVz8-YptJH_WL--5CYF-EUimuwg2UVb7YpTGR_PDL0uuIn8yWjLOp5up_f1RvKPsuJjGwc86ylEx2vaYglu-VtFfZ7nOShitF5mWutQbNoK5_RM26U0DQd4AEUw3we4Jp7atmkh-X115Ycv6kZn-mVJ-MzX1VXxbRljToecd3z_JhEdVQQwSlM4u75DcRt07i3Xbno39YMGGVDxF3aABDgO2o6kTn9suenD4T1k32pZ7K1g0TcOU0IhKmKIj2KsTOrGnbgnnXvvyo7KjwSW3bBleze55MPbU-iaEprxr_8_0L5dcWFhoEQ58V629oWDLjjLi3u-O7YxEtcjN8byS8UoZcAeHbLWhuROkyjH3LkQB5KYzzFAl87h0G6RfTbxhyho8XGTzyfrGSYf5E5HLl-uVVMQ3jP2sYBaQ0kuaGIXx_iZq4dHR6ETJqV2VMsWfts19dXatHRG3gwHC6TbmN3CS3i8V2km7BLsOj3Y8qIedw-XeZGMb_dcDeISKCC6tQ-EkGPaJ_5zVD22GaAO29g62-RUwDOtdU5n1OikJ3fWW8AOKbsC9eBtekrcanFQTBnR45mtvxMX-ByCpY_L3j93gKkhNV3Dgpm1RPg9U95CZB87QGUyxGUKzFt64zUwWCLeytSVSBSjGFKkdJZft-E2aOSB-7_QCJucWAzT-JCwgTCcfSxK3FTO8pm0U0DGP4iwHX5_770KqBjgQ0roHdgwoips_7xMYQIEUGiliwRZCYSZ6-ibUjVFPy5wpHfiTxmr51WsltDtG4mbXQHGPOrn-0Z4zQng8rq1UgSxe355oue1TYL0DIMVgakaO0zTs-F4wZRwN_SGX2h3Vd8--1HSMmMjZ6SaAB5um2OnfrBk5IxyV5FgmS1kNpaMhvu76Q3cTSUln0ANrt2Mh5Y8KTnD5nMRCN3haNN9Cluy4RGUxDyARDpcUj9Is1880sghIXjjqPLSYKwv-PFfue6J2yZYV8prOUkJBvGHTXm5W2QcvBXtdbnfvEIYr0xoV_rDRUE8Fv__eIcnVs2eLjCnKjLk0TkzbtJhITIqq3l2XNoW8f3oZY59tFQPo5VELrp3BqcXFSK7RoafL3dyvi0urQFKNwcIkHDVfep76-yAEuQLh1j4gpjV7fMkM65Cle3F7OKoGhKu7PGi2LE_BDBx7DuiaJ7Ftk7AiUiaiwAG8VAqHk1kInS9U1th5RMolJdSicOH4hzTDVmb_9IeiAVIF0k-x9v4R_Eou8evlRd44Tf8ysxzkekY_wI8QZuG8d1Ikq44zp7vLfuyvPyW-_OYkJuHDL0mo8UFFCMVtfVPq1qzn6XZu6AsYPC3sP-8hs9qeTFdZfIosLtc1VC0OAevEiyOeCzFnAUIOJG0c5RiFSWe7zTtBZ6AUPfiaTeO0Nr5_KXIs0i2ZqtVMs38UVVzfmeGVB5Ud8o4yAV1sfGm1myn7fX9P_FAfXBGLlxh-f0_Y8mPDG6DgRhXNTBM2vg8si9UqaYsuRYK2NPSKcqhJSMW9Fj6JvvoXmljwfCgLvIltFkm34EwYbBG5Bqz8HpdNdKPsjiyP5QNml5dgPjuUjt4xKKYYnXzU7dnK7kUbNNdRXb0qUyD8Uj4AUCeMxtHrxpQR-7pLq5r2adbgGKdAumDCcOLv0LRS141j8mEtewwYX643iMiOhBLcXFfBZ5u9J0jtJ5kFLUy028Wxq1nbrhI2ldqiKM52vVnWNI2i26_P3S99HO8Mi0g9YkBnJwbaxiuuaADuVphghITRtdHGP3VokB4zwtXLRUasNYoexx_t79wuOcChL9nvl-cyiEDBeXtR57QX0f_YOCDkMI5SnkNu37kdRu_aYYEX7vLnICNbJcpS-aC-udLDxFLVsud_Zj9eW6XUXHXErLBBzTYxx9vak8bplrYg0uWacGwgt_hTi4WKZjbBut1uk2Wu1O0yczOS8glQjk5YWrqaXC--K42Qv1ZFjbZhFROYMhY0WGcMwlEhgS-ytSJr6K3ztPlCUEzz6AgDB9DgrX5niJSFEgF10SWw-TRTfygIPukV_CWrQilki79aqcAr7avpXKT7cuiAflGbupOZNxiYUfrJ89G2WbrpgEySsytbBjiT9CL6OrMu0r1AJUIgOY2558T6cQKy8oHVOudOaKbvk-ZEDmAmDE7b1CXJR26-TQoDGmvBCe6nUTdnVDYhs-0NVffsLodHFYhpZ9OgzGiG2XlkZAQ_ShMK-GkA-rliRwSjbkPefQ6k1TpwaZ_zs6IihKof72Mh0rwfntCESwfY-cbYYe3KsXC0-WHPljUAXoUjWiGRrzbEA2154f7UEu78wAPU2Gn_n3cblp-iOomSismk-IVro3vfntAGqMfix-DpkPaLC6wOyV0RI2v81-HlI7zjeosjU3DHJB9Xys3r13IDaOxgSD5XoGrGxJQ89CWRCBWtLgBmlEcdDoCCgVD1NREgVmWFBbhOajraFg5g3IWoHa_R_gAw4qJvUMhyVIM6n9JJ9Ma2wIgnZOzd0VPHfLayNMWosOdg-k6odcsFUxsuv66pMbkKzTHuWV49QS_SYGbPfo3Lw8DcGthh7VzLf4pCgcd4BEE48yleT_OTW38hcmNsKPdsnJ_HvKj_a7JceIklCytML4rw-FgHAkFX78pXTPBmQbsmzIHDopfGcwtMyf4KOGYjvhR7ZTaqIDCXOAAoTQ5lpnwM0YmlvDvPbJT1dkMA1kujpeudWYGADnjAz8G6uh-T5VVDhA0TeQJqinRabYPa3MIi38nytXwm5X3k9pxnso2viOokT7kfLolSuRrG9pO4KFbJpt0CNMNaY7Jt-omILTKvgpjFhq8WfvFl5IMnpF-mfgsrquz1nsBjjKk_h207b6SUYGtYCCIY8toSiJ2utpD98nNNYvFENpVl2_pd0xUgonq4iEBifRuxQGFFiGdZLoS6CHSjldIUqcCS4p36Fk_v-TpBF5rWKYXykO6m2YwavXT3j_1FeDg0UJ8MSVU4cOl1FiuMmSQ6w4Xy8AclQJF_lRy21Y8oweAAA6g3tdZLXcpXAgi6bzVaePXRuCSAt5KDYQ7cAkbSG7Wdn_1tm-csKTwYWs6xS_7msmzOzXKutqswaxBe-dP1E8XhPX6COkyWtP710JnKq1rF8p4YV41FyvIlyzNXUKgoXPlv1pOUJ-222tk_xlAKtzvAztlc2TVkYs-1b0bTrqrIIsjAB8rCd_vxB6xr1bekOsUVsPL7kO4ALprwN72lPt1FtsSFHq1RN2x7XjI2Xa961qMjCVpdz_T1MCYbILsMVgLNtYVG0f-9n_A8eZAnifGrlHE-sPM47tjpqrgzpN_h2r6YBSqi6boiopZfYkJM7-GjOfmhqT1NWfQEvYVwPJQLGXxllC5tlvkBZcBZR1bBi5IiUrVKvIqWL7axX5TQcD4P8cOMQAflyF3ctwNVhO-evVn1jdSFQEgnLweHxC1e2VRt4O_bQaYkyOxQYqa6mxaZTsIfg_geoR6hfXIQNUmhh1LSiTHt1citg7_hs9ZyHsIRKEaKaFdRsdaYOS6PSr7Jv6fbamM_biX77TZeHm75zooczDCDy4mnK4zZeL2hYhUdHFmlwhSzqGPf4nwk_pzllZYvVNekM8xJk4mapQzD4yM3b3BXxBAS2lfxMRS89jebsGTbXE4Nf3iGKI5Mcs2iRPM6qRumFVcgHMHDOt3S2cnwKBcntna7dw5bNnVMRJc1R6B5sy_JbrQ6oOb_U6jd-BJDYgME71eLSLxO0m3IQ29rAhaKIdss7s7tH4TP_PrqaRBY2F6UfjPmL4sLZRk3t6nahSlLI1fq2vY7gSoFXYsR8TTYHZhm1qQhhiRUIZ-zr5W6KcsdABLNzwEmnHtya_0BU79ii4VvmF1ESPLlzKB3oSA2Erqqtb6ZaM7X4Zkvdo4uog0JwvMApfBLY2Ioj6Oal8HDW7J_x-v0gHjsK9svWcX1Bae8JpygJQzGaQ1BGkTTPipeDu5FIxvAy92NIA0SeyFYyDxQHpPSy7lKqaGBk5JbNoXcH3GMqZgRv6MHDKt49WEKvXPAxFvAY4udvijcP2ID4RlDW594L0Ee4nNpA57QmRxNLWL_9ziLtXiyArOajvl1PXkp7VDdY4JOsaRJxkfG_Lcb6ouBNmvQ25v-HxEFwTy9oZft9gCpLeA3WIxrXy3wKt57Qdj4_2FlfgVNcsLcW9l5IL65viR0ZUZdj9Vy2UxQ1pMhql13APCA7enI8Pt4SPYZnazyQZNHd9oOWPC3xbyxelY6rb-f7VOCYHErkq380039AiEMhPri8YsZZaibUcoQwG0EnrM6Tn5fd3d3XMFg66SEA_rrL94k7EcR1PURMU-sQfw_F5fGIsslfSfZZY6g93PwPgpQuXDufUI3q6XO7Ld5V09XiJ9qAeYZQNqWrl4ySjShmzNBevrZA3aoAliMrBlpzj14IRjDCaWJTxQ9AP6v9oNOJfQV1AVHywyo4pmxs7N65z4KRKedD89klh_BXLSGbtS7oIYbsBo2AxBVTzd11IYN7ZdIJvmBkN4Fuwz2S6D3o6Ez-OmmPzz1xoVMbws-2c0bBhBvrdTwmBhokZWPR7YXRYyupvYpZwgn3B8udFiVnJVoZ0a_ZMrwIOK2Uxm49TZnwmC1FmsfZZAnbY_MnOiqGcOHdlpvRSo5-DXws7Zn-Isdl8Vc25RuQufD9KE3Di2WxpJX_wZmcRPgcIFjUzRocDH0VtICJ_4qH17GwG-0sqoL1gCM6QflhcrW1K5N0wdd0yZdLXJcopb7t2TXbhrCT0KFD75LC7XV8Qz2FgEI5YNcHyxzSt4djt8qi6S0IkxjM-Ia4CbnB7D06jpYTbjckI0WlQknH_LmK9ZjLTxA4NxZd9NigiZa3TmSBPMJu8Op5VbDDnMXrnB1TCrGwv52Pk_MSnpY_grEW9Ohos2spkHm0aoNb8aobH1kLMMVthC7u7F0zAKZ0NgNEl9gwn-5g_ljPXG6yihgfBoHO0cbpm1jr6XDen_iO_7g5DsT8OW0XuG9Ij5Hxkt2jDPGYV13WHmJL3xMV2QxJ5FGHN-uNnUXt5fwvUt22QiHcCLWHXLZ1DS9EFtpn4hcIR69wvwTOiYuDLwBkwA970yoYpxXEufEHJeBhTrjgpsv5cQDL03rFPnaUrBs-6GAyLYTJIkC4petLpx3MHTOojmNP40r-7AZOXnJNWKEqBukvtX5-phbrDJsjPAreydOrZJlcVkNAd3L_x41R80vtb5I9zqyNyJg-LYw402ykObyBHcixz2DDCxE9-x5RJqPzG9sFYz8D9j_dUOvbJb1aU2O1tZDXLzQRvHcejNyvjrmmiL2kOXFCBrCP313PIbvtXF3edhcV2PyOHSsankES5U5_DraNIza3Gv9z9Y5GnC2cU-xvt1HUXUDX2XNaWRJC43xqAcmCennj3KzN8jCSfARS4s5DeSIJt3mZBtx79J0WvuH0hbuGbEGp-KkjiB6HqXG9CjaQ0dc_emEjQzRvfTVlgehl5S1krH3vpWeijnzDIzcJuAqEvz3VfKHWqH62E8BE0EAf1EjxRQCkNvAjb0195dOX3cpZWhw4XROCzG6hXNovK8HxkLdz09nmCPr5vAJhhVcKX2Y51q0OupVDQjdQLoSJZRfNTA1upkeueIB64czH76o6FxrIeqZ7tSg0OnzTj_B0cu-WusUPHGTvxGVsu3aWWZXuHGJi2W6KW5_oAJVWkjTFQLb8MFzPW0rFrl4TtJo4emd-1vbLX50MbEQ2L-Mpb1FGY3frf9xZ9ozyi1D2pt3DK3rm02-0uLjFooipQaM6qLlktlCKXXWTEwJ_FXERp8LQMcm-_UedZ596sot2LuocvjZbzgQinWhHDKy922gd5ByCUoIn3wnLMGj2ZfeUOVwY8IQ8nTGRgQ5RbZLXvf6sHYyMAW5hvTgocJL9PWuAJWR955AowjbvjENB38uWOq_h-hudpzSb3wNNDpqnaWZFV3p4y31oTY1rruw51RfE1Q-i88wwWUQ95ZIOIL73jtS3PK8-GJHXD2nWLK2aWpW6gPTbAUdkPWtxqQ1HoNJ_Ka8x5qivgZ0ygd-X9wEmXrsjYuUcaxohkJ2Wbf43JgTIyXhwTkoCZd6xFV5a69X-L8qO_kV7jNFBzXH3KAxPFT4-otTRntIz7cW7b_uZ56Qc_QazldtcRpDtEM4IhRtXYjNIhRVTzhxFvw5po5TBct1RjoZhhsgtHz8Sv1aHHhXXdRqOfAdLFmrg7aGrmLxh5ueoR2YhJ6EiHN-zYzM_Chzt1jm6LE9hPiMnPpRQkb3rXBsLnir6aeYh0Ysv1kCipqhVn0GK4YE7klluaeBbw5rARdtOJI1zIIfLTVaWn0HREmS2dd18g2GFjNB6h32o24oNxuFDGrKmGyej15PNKTlCePF9_4UjAcaA0c8f5FL-5T1SqFzOMcTQ2jMm1cy32jSawsbf6Ba-aq2Txgb1cL1biQiP07g-vZNPi3rwBjDnE4ryHYpF344kaDFBv6eSQ1Tvi2GLRTZRnjRdWwTV8qjh6g369g_POFKujb4tbasVgliuuRtlSCryI_vQJNQDl0LGmy3n7v15icPEMqMJkk5DkfpaCWXeNI5wDp_8XY8Y2YgpBwm_B1CciBjxLzWaLPFg0B_NcP73Ngt0oKM7yxpfY-cXLIP_edm8fAbfev8lfOXSFMDSVtvN9NHemDODOlbygyfqpjaowPKUBd8MCzVPpfjdJR2dDQFrJE1MMMxves7oT0RXcy0o_uWw974ZNptN2OufMpiaOCG0oYB_-dtZba9WmxAmRhlnS5YVSemnOfFTsten_e6-FD76mYd2LmticV_3IrWnI_lX3lxhfYzUaogCuV4qQXozaEnXHa3o_barH6imK0JNC7D6bDDE0rCEZeNpm3TQ08zNYwPudLvjTtERZRvdR8g0"}}]},{"id":"khoi-dau-nhanh","code":"KDNH","name":"Khởi đầu nhanh","icon":"⚡","author":"Bravinall","description":"Những ô AI dùng hằng ngày: tóm tắt, viết lại, dịch, nghĩ tiêu đề, viết bài đăng. Kèm công cụ đếm ký tự theo giới hạn từng mạng xã hội.","tags":["cơ bản"],"releases":[{"version":"1.0.0","price":0,"date":"2026-10-11","changelog":"Phát hành lần đầu.","preview":{"templates":[{"title":"Ý tưởng → bài đăng","description":"Chủ đề → 10 tiêu đề → bài đăng → kiểm tra độ dài."}],"nodes":[{"title":"Tóm tắt 5 ý","description":""},{"title":"Viết lại thân thiện hơn","description":""},{"title":"Dịch sang tiếng Anh tự nhiên","description":""},{"title":"10 tiêu đề hấp dẫn","description":""},{"title":"Bài đăng mạng xã hội","description":""}],"artifacts":[{"title":"Đếm ký tự mạng xã hội","description":"Đếm ký tự, từ, hashtag và so với giới hạn TikTok, Instagram, Facebook QC, X, YouTube."}]},"package":{"id":"khoi-dau-nhanh","name":"Khởi đầu nhanh","version":"1.0.0","author":"Bravinall","icon":"⚡","description":"Những ô AI dùng hằng ngày: tóm tắt, viết lại, dịch, nghĩ tiêu đề, viết bài đăng. Kèm công cụ đếm ký tự theo giới hạn từng mạng xã hội.","nodes":[{"id":"tom-tat","title":"Tóm tắt 5 ý","task":"text","prompt":"Tóm tắt nội dung sau thành 5 gạch đầu dòng ngắn gọn, giữ số liệu quan trọng, cuối cùng thêm 1 câu \"Điều đáng nhớ nhất\".\n\n{{input}}"},{"id":"viet-lai","title":"Viết lại thân thiện hơn","task":"text","prompt":"Viết lại đoạn sau bằng giọng thân thiện, gần gũi, câu ngắn, dễ đọc trên điện thoại. Giữ nguyên ý và thông tin.\n\n{{input}}"},{"id":"dich-anh","title":"Dịch sang tiếng Anh tự nhiên","task":"text","prompt":"Dịch sang tiếng Anh tự nhiên như người bản xứ viết, giữ giọng văn gốc. Chỉ trả về bản dịch.\n\n{{input}}"},{"id":"tieu-de","title":"10 tiêu đề hấp dẫn","task":"text","prompt":"Đề xuất 10 tiêu đề hấp dẫn, khác kiểu nhau (câu hỏi, con số, so sánh, cảnh báo, lợi ích…) cho chủ đề sau. Mỗi tiêu đề dưới 70 ký tự, không giật tít sai sự thật.\n\n{{input}}"},{"id":"bai-dang","title":"Bài đăng mạng xã hội","task":"text","prompt":"Viết một bài đăng mạng xã hội 120–180 từ từ nội dung sau: câu mở đầu thu hút, 3 ý chính dễ đọc, câu kêu gọi tương tác ở cuối, 3–5 hashtag.\n\n{{input}}"}],"templates":[{"id":"y-tuong-bai-dang","title":"Ý tưởng → bài đăng","description":"Chủ đề → 10 tiêu đề → bài đăng → kiểm tra độ dài.","nodes":[{"key":"a","type":"text","text":"Chủ đề / ý tưởng của bạn: "},{"key":"b","type":"ai","ref":"tieu-de"},{"key":"c","type":"ai","ref":"bai-dang"},{"key":"d","type":"artifact","artifact":"dem-ky-tu"}],"edges":[["a","b"],["b","c"],["c","d"]]}],"artifacts":[{"id":"dem-ky-tu","title":"Đếm ký tự mạng xã hội","height":330,"description":"Đếm ký tự, từ, hashtag và so với giới hạn TikTok, Instagram, Facebook QC, X, YouTube.","html":"\u003c!doctype html>\n\u003chtml lang=\"vi\">\u003chead>\u003cmeta charset=\"utf-8\">\u003cmeta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n\u003cstyle>\n*{box-sizing:border-box}html,body{margin:0}\nbody{padding:10px;background:#12151b;color:#e6e8ee;font:13px/1.45 \"Be Vietnam Pro\",system-ui,sans-serif}\ntextarea{width:100%;min-height:90px;background:#0e1016;color:#e6e8ee;border:1px solid #2a2f3a;border-radius:8px;padding:8px;font:inherit;resize:vertical}\ntextarea:focus{outline:none;border-color:#7c5cff}\n.k{display:flex;gap:12px;margin:8px 0;color:#8b93a5}.k b{color:#e6e8ee}\n.p{margin:6px 0}.p .top{display:flex;justify-content:space-between;gap:8px}\n.bar{height:6px;background:#1f232c;border-radius:6px;overflow:hidden;margin-top:3px}.bar i{display:block;height:100%;background:#7c5cff}\n.p.over .bar i{background:#ff6b6b}.p.over .top span:last-child{color:#ff6b6b}\n.muted{color:#8b93a5;font-size:12px}\n\u003c/style>\u003c/head>\u003cbody>\n\u003ctextarea id=\"t\" placeholder=\"Dán nội dung bài đăng / caption…\">\u003c/textarea>\n\u003cdiv class=\"k\">\u003cspan>\u003cb id=\"c\">0\u003c/b> ký tự\u003c/span>\u003cspan>\u003cb id=\"w\">0\u003c/b> từ\u003c/span>\u003cspan>\u003cb id=\"h\">0\u003c/b> hashtag\u003c/span>\u003c/div>\n\u003cdiv id=\"list\">\u003c/div>\n\u003cdiv class=\"muted\">Giới hạn có thể thay đổi theo nền tảng — kiểm tra lại khi đăng.\u003c/div>\n\u003cscript>\nconst $=id=>document.getElementById(id);\nconst P=[['TikTok — caption',4000],['Instagram — caption',2200],['Facebook QC — hiện trước “Xem thêm”',125],['X (Twitter)',280],['YouTube — tiêu đề',100],['YouTube — mô tả',5000]];\nconst len=t=>[...t].length;\nfunction calc(){const t=$('t').value,c=len(t);\n  $('c').textContent=c;$('w').textContent=(t.match(/[\\p{L}\\p{N}]+/gu)||[]).length;$('h').textContent=(t.match(/#[\\p{L}\\p{N}_]+/gu)||[]).length;\n  $('list').innerHTML=P.map(([n,l])=>`\u003cdiv class=\"p ${c>l?'over':''}\">\u003cdiv class=\"top\">\u003cspan>${n}\u003c/span>\u003cspan>${c}/${l}\u003c/span>\u003c/div>\u003cdiv class=\"bar\">\u003ci style=\"width:${Math.min(100,c/l*100)}%\">\u003c/i>\u003c/div>\u003c/div>`).join('');\n  return c}\nfunction summary(){const c=calc();const over=P.filter(([,l])=>c>l).map(([n,l])=>`${n} (vượt ${c-l})`);\n  return`${c} ký tự, ${$('w').textContent} từ, ${$('h').textContent} hashtag.`+(over.length?`\\nVượt giới hạn: ${over.join('; ')}`:'\\nVừa với mọi nền tảng trong danh sách.')}\n$('t').oninput=calc;\nMicron.onInput(d=>{if(d.text&&d.text.trim())$('t').value=d.text;Micron.send('text',summary())});\ncalc();\n\u003c/script>\n\u003c/body>\u003c/html>\n"}]}}]},{"id":"nhac-ai","code":"NHAC","name":"Nhạc AI — Lời & phong cách","icon":"🎵","author":"Bravinall","description":"Viết lời bài hát có cấu trúc và mô tả phong cách nhạc, rồi chuyển thẳng sang AI tạo nhạc của bạn (MiniMax Music 3, ACE-Step qua ComfyUI, hoặc API nhạc bất kỳ).","tags":["nhạc","lời bài hát"],"releases":[{"version":"1.0.0","price":0,"date":"2026-10-11","changelog":"Phát hành lần đầu.","preview":{"templates":[{"title":"Từ ý tưởng đến bài hát","description":"Ý tưởng → lời bài hát + phong cách → AI tạo nhạc."}],"nodes":[{"title":"Viết lời bài hát","description":""},{"title":"Mô tả phong cách nhạc","description":""},{"title":"Tạo bài hát","description":"Nhận lời + phong cách, gửi cho AI nhạc của bạn."}],"artifacts":[]},"package":{"id":"nhac-ai","name":"Nhạc AI — Lời & phong cách","version":"1.0.0","author":"Bravinall","icon":"🎵","description":"Viết lời bài hát có cấu trúc và mô tả phong cách nhạc, rồi chuyển thẳng sang AI tạo nhạc của bạn (MiniMax Music 3, ACE-Step qua ComfyUI, hoặc API nhạc bất kỳ).","nodes":[{"id":"loi-bai-hat","title":"Viết lời bài hát","task":"text","prompt":"Viết lời bài hát tiếng Việt theo yêu cầu sau, đánh dấu cấu trúc bằng thẻ [Intro] [Verse 1] [Pre-Chorus] [Chorus] [Verse 2] [Chorus] [Bridge] [Chorus] [Outro]. Điệp khúc dễ nhớ, có vần, mỗi dòng 6–10 chữ. Chỉ trả về lời bài hát.\n\nYêu cầu: {{input}}"},{"id":"phong-cach","title":"Mô tả phong cách nhạc","task":"text","prompt":"Từ lời bài hát sau, viết MỘT dòng mô tả phong cách nhạc bằng tiếng Anh, dưới 200 ký tự, cho AI tạo nhạc: thể loại, tempo (BPM), nhạc cụ chính, giọng hát (nam/nữ), cảm xúc. Chỉ trả về dòng mô tả.\n\n{{input}}"},{"id":"tao-nhac","title":"Tạo bài hát","task":"audio","prompt":"{{input}}","description":"Nhận lời + phong cách, gửi cho AI nhạc của bạn."}],"templates":[{"id":"y-tuong-bai-hat","title":"Từ ý tưởng đến bài hát","description":"Ý tưởng → lời bài hát + phong cách → AI tạo nhạc.","nodes":[{"key":"a","type":"text","text":"Chủ đề, cảm xúc, thể loại bạn muốn: "},{"key":"b","type":"ai","ref":"loi-bai-hat"},{"key":"c","type":"ai","ref":"phong-cach"},{"key":"d","type":"ai","ref":"tao-nhac"}],"edges":[["a","b"],["b","c"],["b","d"],["c","d"]]}],"artifacts":[]}}]}]}</script>
 
 <script>
 /* ---------- tiện ích ---------- */
@@ -143,7 +200,7 @@ const uid=()=>Math.random().toString(36).slice(2,10);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const trimUrl=u=>(u||'').trim().replace(/\/+$/,'');
-function toast(m,ms=2800){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),ms)}
+function toast(m,ms=2800){let box=document.getElementById('toasts');if(!box){box=document.createElement('div');box.id='toasts';document.body.appendChild(box)}const t=document.createElement('div');t.className='toast';t.textContent=m;box.appendChild(t);setTimeout(()=>t.remove(),ms)}
 const blobToDataURL=b=>new Promise((res,rej)=>{const f=new FileReader();f.onload=()=>res(f.result);f.onerror=rej;f.readAsDataURL(b)});
 const splitDataURL=d=>{const m=/^data:([^;,]+);base64,(.*)$/s.exec(d||'');return m?{mime:m[1],b64:m[2]}:null};
 async function asDataURL(u){if(!u||u.startsWith('data:'))return u;try{const r=await fetch(u);return await blobToDataURL(await r.blob())}catch{return u}}
@@ -154,13 +211,16 @@ function download(name,text){const a=document.createElement('a');a.href=URL.crea
 
 /* ---------- lưu trữ dự án (IndexedDB) ---------- */
 const DB={db:null,
-  open(){return new Promise((res,rej)=>{const r=indexedDB.open('ai-canvas-studio',1);r.onupgradeneeded=()=>r.result.createObjectStore('projects',{keyPath:'id'});r.onsuccess=()=>{this.db=r.result;res()};r.onerror=()=>rej(r.error)})},
-  st(m){return this.db.transaction('projects',m).objectStore('projects')},
+  open(){return new Promise((res,rej)=>{const r=indexedDB.open('ai-canvas-studio',2);r.onupgradeneeded=()=>{const d=r.result;if(!d.objectStoreNames.contains('projects'))d.createObjectStore('projects',{keyPath:'id'});if(!d.objectStoreNames.contains('plugins'))d.createObjectStore('plugins',{keyPath:'key'})};r.onsuccess=()=>{this.db=r.result;res()};r.onerror=()=>rej(r.error)})},
+  st(m,s='projects'){return this.db.transaction(s,m).objectStore(s)},
   q(r){return new Promise((res,rej)=>{r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})},
   all(){return this.q(this.st('readonly').getAll())},
   get(id){return this.q(this.st('readonly').get(id))},
   put(p){return this.q(this.st('readwrite').put(p))},
-  del(id){return this.q(this.st('readwrite').delete(id))}};
+  del(id){return this.q(this.st('readwrite').delete(id))},
+  pAll(){return this.q(this.st('readonly','plugins').getAll())},
+  pPut(r){return this.q(this.st('readwrite','plugins').put(r))},
+  pDel(k){return this.q(this.st('readwrite','plugins').delete(k))}};
 
 /* ---------- nhà cung cấp AI (do người dùng tự thêm) ---------- */
 const PTYPES={
@@ -309,8 +369,8 @@ function updateProvCount(){$('#provCount').textContent=providers.length?`(${prov
 async function showHome(){
   if(cur){clearTimeout(saveT);await DB.put(cur)}
   cur=null;sel=null;closeMenu();
-  ed.classList.add('hidden');$('#home').classList.remove('hidden');
-  $('#projTools').classList.add('hidden');$('#homeTools').classList.remove('hidden');
+  ed.classList.add('hidden');$('#store').classList.add('hidden');$('#home').classList.remove('hidden');
+  $('#projTools').classList.add('hidden');$('#storeTools').classList.add('hidden');$('#homeTools').classList.remove('hidden');
   updateProvCount();
   const list=(await DB.all()).sort((a,b)=>b.updated-a.updated);
   $('#grid').innerHTML=`<div class="card newcard" data-act="new">＋ Dự án mới</div>`+list.map(p=>{
@@ -337,8 +397,8 @@ $('#importFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';
 /* ---------- editor ---------- */
 async function openProject(id){
   cur=await DB.get(id);if(!cur)return;cur.view=cur.view||{x:0,y:0,z:1};sel=null;RS.clear();
-  $('#home').classList.add('hidden');ed.classList.remove('hidden');
-  $('#homeTools').classList.add('hidden');$('#projTools').classList.remove('hidden');
+  $('#home').classList.add('hidden');$('#store').classList.add('hidden');ed.classList.remove('hidden');
+  $('#homeTools').classList.add('hidden');$('#storeTools').classList.add('hidden');$('#projTools').classList.remove('hidden');
   $('#pname').value=cur.name;renderAll()}
 $('#btnBack').onclick=showHome;
 $('#pname').oninput=e=>{cur.name=e.target.value||'Dự án không tên';dirty()};
@@ -357,15 +417,19 @@ function nodeEl(n){const el=document.createElement('div');el.className='node'+(s
 function rerenderNode(n){const el=elOf(n.id);if(el)el.innerHTML=nodeInner(n)}
 function refreshRes(n){const el=elOf(n.id);if(!el)return;const r=el.querySelector('.res');if(r)r.innerHTML=resHtml(n);
   const b=el.querySelector('[data-act=run]');if(b){const busy=runningP.has(n.id);b.disabled=busy;b.textContent=busy?'Đang chạy…':'▶ Chạy'}}
+function nodeTitle(n){if(n.type==='text')return'📝 Văn bản';if(n.type==='upload')return'📁 Tệp tải lên';if(n.type==='artifact')return'🧩 '+esc(n.data.title||'Artifact');
+  return n.data.title?`${esc(n.data.icon||TASK_ICON[n.data.task])} ${esc(n.data.title)}`:`${TASK_ICON[n.data.task]} AI · ${KIND_LABEL[n.data.task]}`}
+const runnable=n=>n.type==='ai'||n.type==='artifact';
 function nodeInner(n){
-  const title=n.type==='text'?'📝 Văn bản':n.type==='upload'?'📁 Tệp tải lên':`${TASK_ICON[n.data.task]} AI · ${KIND_LABEL[n.data.task]}`;
+  const title=nodeTitle(n);
   const busy=runningP.has(n.id);
   let body;
   if(n.type==='text')body=`<textarea data-f="text" style="min-height:110px" placeholder="Nhập văn bản, kịch bản, lời bài hát…">${esc(n.data.text||'')}</textarea>`;
   else if(n.type==='upload')body=`<input type="file" data-f="file" accept="image/*,audio/*,video/*" style="margin-top:6px"><div class="res">${resHtml(n)}</div>`;
+  else if(n.type==='artifact')body=artBody(n);
   else body=aiBody(n);
-  return `<div class="nhead"><span class="t">${title}</span>${n.type==='ai'?`<button class="primary" data-act="run" ${busy?'disabled':''}>${busy?'Đang chạy…':'▶ Chạy'}</button>`:''}<button class="ghost danger" data-act="del" title="Xoá ô">✕</button></div>
-  <div class="nbody">${body}</div>${n.type==='ai'?'<div class="port in" title="Đầu vào"></div>':''}<div class="port out" title="Kéo sang một ô AI để nối"></div>`}
+  return `<div class="nhead"><span class="t">${title}</span>${runnable(n)?`<button class="primary" data-act="run" ${busy?'disabled':''}>${busy?'Đang chạy…':'▶ Chạy'}</button>`:''}<button class="ghost danger" data-act="del" title="Xoá ô">✕</button></div>
+  <div class="nbody">${body}</div>${runnable(n)?'<div class="port in" title="Đầu vào"></div>':''}<div class="port out" title="Kéo sang ô khác để nối, hoặc thả ra chỗ trống để chọn AI"></div>`}
 function aiBody(n){
   const d=n.data,list=providers.filter(p=>capsOf(p).includes(d.task)),p=providers.find(x=>x.id===d.provider);
   const models=(p?.models||'').split(',').map(s=>s.trim()).filter(Boolean);
@@ -378,14 +442,15 @@ function aiBody(n){
   <textarea data-f="prompt" placeholder="Mô tả điều bạn muốn AI làm…">${esc(d.prompt||'')}</textarea>
   <details ${d.opts?'open':''}><summary class="sub">Tuỳ chọn nâng cao (JSON)</summary><textarea data-f="opts" class="mono" style="min-height:50px" placeholder='vd: {"size":"1536x1024"} hoặc {"voice":"nova"} hoặc {"temperature":0.7}'>${esc(d.opts||'')}</textarea></details>
   <div class="res">${resHtml(n)}</div>`}
+const safeUrl=v=>/^(data:|https?:|blob:)/i.test(String(v||'').trim())?v:'about:blank';
 function resHtml(n){
   const o=n.output,s=RS.get(n.id);let h='';
-  if(o){let inner;
-    if(o.kind==='image')inner=`<img src="${esc(o.value)}" alt="">`;
-    else if(o.kind==='audio')inner=`<audio controls src="${esc(o.value)}"></audio>`;
-    else if(o.kind==='video')inner=`<video controls src="${esc(o.value)}"></video>`;
+  if(o){let inner;const u=esc(safeUrl(o.value));
+    if(o.kind==='image')inner=`<img src="${u}" alt="">`;
+    else if(o.kind==='audio')inner=`<audio controls src="${u}"></audio>`;
+    else if(o.kind==='video')inner=`<video controls src="${u}"></video>`;
     else inner=esc(o.value);
-    h+=`<div class="out">${inner}</div><div class="links">${o.kind==='text'?'<a href="#" data-act="copy">Sao chép</a>':`<a href="${esc(o.value)}" download="${esc(o.name||('ket-qua-'+n.id))}" target="_blank">Tải xuống</a>`}${n.type==='ai'?' · <a href="#" data-act="clear">Xoá kết quả</a>':''}</div>`}
+    h+=`<div class="out">${inner}</div><div class="links">${o.kind==='text'?'<a href="#" data-act="copy">Sao chép</a>':`<a href="${u}" download="${esc(o.name||('ket-qua-'+n.id))}" target="_blank" rel="noopener">Tải xuống</a>`}${runnable(n)?' · <a href="#" data-act="clear">Xoá kết quả</a>':''}</div>`}
   if(s)h+=`<div class="status ${s.cls}">${esc(s.msg)}</div>`;
   return h}
 
@@ -397,7 +462,7 @@ function drawEdges(temp){let h='';
   if(temp)h+=`<path class="temp" d="${pathD(temp.a,temp.b)}"/>`;svg.innerHTML=h}
 svg.addEventListener('click',e=>{const id=e.target.closest('path')?.dataset.e;if(!id)return;cur.edges=cur.edges.filter(x=>x.id!==id);drawEdges();dirty()});
 function reaches(s,t){const st=[s],seen=new Set();while(st.length){const x=st.pop();if(x===t)return true;if(seen.has(x))continue;seen.add(x);cur.edges.forEach(e=>{if(e.from===x)st.push(e.to)})}return false}
-function connect(a,b){const B=nodeById(b);if(!B)return;if(B.type!=='ai')return toast('Chỉ nối được vào ô AI');
+function connect(a,b){const B=nodeById(b);if(!B)return;if(!runnable(B))return toast('Chỉ nối được vào ô AI hoặc ô artifact');
   if(cur.edges.some(e=>e.from===a&&e.to===b))return;if(reaches(b,a))return toast('Không thể nối tạo thành vòng lặp');
   cur.edges.push({id:uid(),from:a,to:b});dirty()}
 
@@ -407,13 +472,13 @@ world.addEventListener('pointerdown',e=>{
   const ne=e.target.closest('.node');if(!ne)return;const n=nodeById(ne.dataset.id);if(!n)return;selectNode(n.id);closeMenu();
   if(e.target.classList.contains('port')&&e.target.classList.contains('out')){e.preventDefault();return startConnect(n,e)}
   if(e.target.closest('.nhead')&&!e.target.closest('button')){e.preventDefault();startDrag(n,ne,e)}});
-function startDrag(n,el,e){const sx=e.clientX,sy=e.clientY,ox=n.x,oy=n.y,z=cur.view.z;el.style.zIndex=2;
+function startDrag(n,el,e){const sx=e.clientX,sy=e.clientY,ox=n.x,oy=n.y,z=cur.view.z;el.style.zIndex=2;ed.classList.add('dragging');
   const mv=ev=>{n.x=Math.round(ox+(ev.clientX-sx)/z);n.y=Math.round(oy+(ev.clientY-sy)/z);el.style.left=n.x+'px';el.style.top=n.y+'px';drawEdges()};
-  const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);el.style.zIndex='';dirty()};
+  const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);el.style.zIndex='';ed.classList.remove('dragging');dirty()};
   addEventListener('pointermove',mv);addEventListener('pointerup',up)}
-function startConnect(n,e){const a=portPos(n,'out'),sx=e.clientX,sy=e.clientY;closeMenu();
+function startConnect(n,e){const a=portPos(n,'out'),sx=e.clientX,sy=e.clientY;closeMenu();ed.classList.add('dragging');
   const mv=ev=>drawEdges({a,b:toWorld(ev.clientX,ev.clientY)});
-  const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);
+  const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);ed.classList.remove('dragging');
     const hit=document.elementFromPoint(ev.clientX,ev.clientY),t=hit?.closest('.node');
     if(t){if(t.dataset.id!==n.id)connect(n.id,t.dataset.id);return drawEdges()}
     // thả ra chỗ trống → mở bảng chọn AI ngay tại đó
@@ -421,9 +486,9 @@ function startConnect(n,e){const a=portPos(n,'out'),sx=e.clientX,sy=e.clientY;cl
     drawEdges()};
   addEventListener('pointermove',mv);addEventListener('pointerup',up)}
 ed.addEventListener('pointerdown',e=>{if(e.target!==ed)return;closeMenu();selectNode(null);
-  const s={x:e.clientX,y:e.clientY,vx:cur.view.x,vy:cur.view.y};
+  const s={x:e.clientX,y:e.clientY,vx:cur.view.x,vy:cur.view.y};ed.classList.add('dragging');
   const mv=ev=>{cur.view.x=s.vx+ev.clientX-s.x;cur.view.y=s.vy+ev.clientY-s.y;applyView()};
-  const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);dirty()};
+  const up=()=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);ed.classList.remove('dragging');dirty()};
   addEventListener('pointermove',mv);addEventListener('pointerup',up)});
 ed.addEventListener('wheel',e=>{if(e.target.closest('.out,textarea,#addMenu'))return;e.preventDefault();
   const r=ed.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top,v=cur.view;
@@ -450,8 +515,8 @@ world.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)
   else if(a==='clear'){n.output=null;RS.delete(n.id);refreshRes(n);dirty()}});
 function deleteNode(id){cur.nodes=cur.nodes.filter(n=>n.id!==id);cur.edges=cur.edges.filter(e=>e.from!==id&&e.to!==id);RS.delete(id);if(sel===id)sel=null;elOf(id)?.remove();drawEdges();$('#empty').classList.toggle('hidden',cur.nodes.length>0);dirty()}
 addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeMenu();if(!$('#provModal').classList.contains('hidden'))closeProviders()}
-  if((e.key==='Delete'||e.key==='Backspace')&&cur&&sel&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)&&$('#provModal').classList.contains('hidden')){e.preventDefault();deleteNode(sel)}});
+  if(e.key==='Escape'){closeMenu();if(!$('#provModal').classList.contains('hidden'))closeProviders();else if(!$('#pmodal').classList.contains('hidden'))closeModal()}
+  if((e.key==='Delete'||e.key==='Backspace')&&cur&&sel&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)&&$('#provModal').classList.contains('hidden')&&$('#pmodal').classList.contains('hidden')&&!ed.classList.contains('hidden')){e.preventDefault();deleteNode(sel)}});
 
 /* menu ＋ */
 let pending=null; // {from, pos} khi bảng chọn mở ra từ việc thả dây
@@ -462,15 +527,21 @@ $('#addBtn').onclick=()=>{const m=$('#addMenu');if(!m.classList.contains('hidden
   m.innerHTML=`${aiMenuItems()}
   <hr><button data-add="text">📝 Ô văn bản<small>Kịch bản, lời bài hát, ý tưởng… để nối vào ô AI</small></button>
   <button data-add="upload">📁 Ô tải tệp<small>Ảnh / âm thanh / video từ máy bạn</small></button>
-  <hr><button data-add="prov">⚙ Quản lý AI của tôi</button>`;m.classList.remove('hidden')};
+  ${pluginMenuItems(true)}
+  <hr><button data-add="store">🧩 Extensions & Plugins<small>Cài thêm mẫu quy trình, ô AI và artifact</small></button>
+  <button data-add="prov">⚙ Quản lý AI của tôi</button>`;
+  if(enabledPlugins().length)m.insertAdjacentHTML('afterbegin','<input class="msearch" placeholder="Tìm ô, mẫu, artifact…">');
+  m.classList.remove('hidden');m.querySelector('.msearch')?.focus()};
 function openDropMenu(from,cx,cy,pos){const m=$('#addMenu');closeMenu();pending={from:from.id,pos};
-  m.innerHTML=`<div class="sub" style="padding:6px 10px 4px">Nối sang ô AI mới:</div>${aiMenuItems()}<hr><button data-add="prov">⚙ Quản lý AI của tôi</button>`;
+  m.innerHTML=`<div class="sub" style="padding:6px 10px 4px">Nối sang ô mới:</div>${aiMenuItems()}${pluginMenuItems(false)}<hr><button data-add="prov">⚙ Quản lý AI của tôi</button>`;
   m.classList.remove('hidden');
   const r=ed.getBoundingClientRect(),mw=m.offsetWidth||280,mh=m.offsetHeight||330;
   const left=Math.max(8,Math.min(cx-r.left+8,r.width-mw-8)),top=Math.max(8,Math.min(cy-r.top-20,r.height-mh-8));
   m.style.cssText=`left:${left}px;top:${top}px;bottom:auto;transform:none`}
 $('#addMenu').addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(!b)return;const v=b.dataset.add,pd=pending;pending=null;closeMenu();
   if(v==='prov')return openProviders();
+  if(v==='store')return showStore();
+  const pm=/^(tpl|pn|pa):(.+)\|([^|]+)$/.exec(v);if(pm)return addFromPlugin(pm[1],pm[2],pm[3],pd);
   if(v.startsWith('ai:')){const task=v.slice(3),n=addNode('ai',{task,provider:'',model:'',prompt:'',opts:''},pd?.pos);
     if(pd){connect(pd.from,n.id);drawEdges()}
     const p=providers.find(p=>capsOf(p).includes(task));
@@ -478,6 +549,8 @@ $('#addMenu').addEventListener('click',e=>{const b=e.target.closest('[data-add]'
     else openProviders(id=>{const q=providers.find(x=>x.id===id);if(q){if(!capsOf(q).includes(n.data.task))n.data.task=capsOf(q)[0];n.data.provider=id;n.data.model=firstModel(q)}rerenderNode(n);dirty()});
     return}
   addNode(v,{})});
+$('#addMenu').addEventListener('input',e=>{if(!e.target.matches('.msearch'))return;const q=e.target.value.trim().toLowerCase();
+  $('#addMenu').querySelectorAll('button[data-add]').forEach(b=>b.style.display=!q||b.textContent.toLowerCase().includes(q)?'':'none')});
 function addNode(type,data,pos){const r=ed.getBoundingClientRect(),v=cur.view;
   const n={id:uid(),type,data,output:null,
     x:Math.round(pos?pos.x:(r.width/2-v.x)/v.z-NODE_W/2+(Math.random()*80-40)),
@@ -489,14 +562,18 @@ function runNode(id){if(runningP.has(id))return runningP.get(id);
   const p=doRun(id).finally(()=>{runningP.delete(id);const n=nodeById(id);if(n)refreshRes(n)});
   runningP.set(id,p);const n=nodeById(id);if(n)refreshRes(n);return p}
 async function doRun(id){
-  const proj=cur,n=proj.nodes.find(x=>x.id===id);if(!n||n.type!=='ai')return true;
+  const proj=cur,n=proj.nodes.find(x=>x.id===id);if(!n||!runnable(n))return true;
   const setS=(msg,cls)=>{RS.set(id,{msg,cls});if(cur===proj)refreshRes(n)};
   const ups=proj.edges.filter(e=>e.to===id).map(e=>proj.nodes.find(x=>x.id===e.from)).filter(Boolean);
-  for(const u of ups)if(u.type==='ai'&&!u.output){setS('Đang chạy ô phía trước…','run');await runNode(u.id)}
+  for(const u of ups)if(runnable(u)&&!u.output){setS('Đang chạy ô phía trước…','run');await runNode(u.id)}
   const texts=[],images=[],files=[];
   for(const u of ups){const o=u.type==='text'?(u.data.text?.trim()?{kind:'text',value:u.data.text}:null):u.output;
-    if(!o){if(u.type==='ai'){setS('Ô phía trước chưa có kết quả (bị lỗi).','err');return false}continue}
+    if(!o){if(runnable(u)){setS('Ô phía trước chưa có kết quả (bị lỗi).','err');return false}continue}
     if(o.kind==='text')texts.push(o.value);else{files.push(o.value);if(o.kind==='image')images.push(o.value)}}
+  if(n.type==='artifact'){setS('Đang gửi dữ liệu vào artifact…','run');const t0=performance.now();
+    try{n.output=await runArtifact(n,{text:texts.join('\n\n'),files:ups.map(u=>u.output).filter(o=>o&&o.kind!=='text')});
+      RS.set(id,{msg:`Xong sau ${((performance.now()-t0)/1000).toFixed(1)} giây`,cls:'ok'});proj.updated=Date.now();if(cur===proj)dirty();else DB.put(proj);return true}
+    catch(e){RS.set(id,{msg:friendlyErr(e),cls:'err'});return false}}
   const input=texts.join('\n\n');let prompt=n.data.prompt||'';
   if(prompt.includes('{{input}}'))prompt=prompt.split('{{input}}').join(input);else if(input)prompt=prompt.trim()?input+'\n\n'+prompt:input;
   if(!prompt.trim()&&!images.length){setS('Prompt đang trống.','err');return false}
@@ -509,7 +586,7 @@ async function doRun(id){
 function topo(){const indeg=new Map(cur.nodes.map(n=>[n.id,0]));cur.edges.forEach(e=>indeg.set(e.to,(indeg.get(e.to)||0)+1));
   const q=cur.nodes.filter(n=>!indeg.get(n.id)).map(n=>n.id),out=[];
   while(q.length){const x=q.shift();out.push(x);cur.edges.forEach(e=>{if(e.from===x){indeg.set(e.to,indeg.get(e.to)-1);if(!indeg.get(e.to))q.push(e.to)}})}return out}
-$('#btnRunAll').onclick=async()=>{const ids=topo().filter(id=>nodeById(id)?.type==='ai');if(!ids.length)return toast('Chưa có ô AI nào');
+$('#btnRunAll').onclick=async()=>{const ids=topo().filter(id=>{const n=nodeById(id);return n&&runnable(n)});if(!ids.length)return toast('Chưa có ô AI nào');
   const b=$('#btnRunAll');b.disabled=true;b.textContent='Đang chạy…';
   ids.forEach(id=>{const n=nodeById(id);if(n){n.output=null;RS.set(id,{msg:'Đang chờ…',cls:'run'});refreshRes(n)}});
   let ok=0,fail=0;for(const id of ids){(await runNode(id))?ok++:fail++}
@@ -586,8 +663,398 @@ $('#btnProv').onclick=()=>openProviders();
 $('#btnProvHome').onclick=()=>openProviders();
 addEventListener('beforeunload',()=>{if(cur){clearTimeout(saveT);DB.put(cur)}});
 
+/* ======================= Extensions & Plugins ======================= */
+const PUBLIC_JWK={"kty":"EC","crv":"P-256","x":"OYU83SGe5fGkr5qt73SddRy-L1KwEC3fcLXDp8gq85o","y":"4qE2_g9ef9kCpxO0eMOshJ7Ct-5ZXt5bEB1lBR6vGhE"};
+const CATALOG_URLS=['plugins/catalog.json','https://vtvcab17-max.github.io/micron/plugins/catalog.json'];
+const ART_BRIDGE=`<script>(function(){var h=null,id=null;window.Micron={onInput:function(f){h=f},send:function(kind,value){parent.postMessage({type:'micron:output',id:id,kind:kind||'text',value:value},'*');id=null},resize:function(){parent.postMessage({type:'micron:resize',height:Math.ceil(document.body?document.body.scrollHeight:0)},'*')}};addEventListener('message',function(e){var d=e.data||{};if(d.type==='micron:input'&&e.source===parent){id=d.id;if(h)h(d)}});addEventListener('load',function(){Micron.resize();if(window.ResizeObserver)new ResizeObserver(function(){Micron.resize()}).observe(document.body)})})();<\/script>`;
+function withBridge(html){html=String(html||'');
+  for(const re of[/<head[^>]*>/i,/<html[^>]*>/i,/^\s*<!doctype[^>]*>/i]){const m=re.exec(html);if(m){const i=m.index+m[0].length;return html.slice(0,i)+ART_BRIDGE+html.slice(i)}}
+  return ART_BRIDGE+html}
+const TE=new TextEncoder(),TD=new TextDecoder();
+const b64u={enc(u8){let s='';for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')},
+  dec(s){s=String(s).replace(/-/g,'+').replace(/_/g,'/');s+='==='.slice((s.length+3)%4);const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}};
+const cmpV=(a,b)=>{const x=String(a).split('.').map(Number),y=String(b).split('.').map(Number);for(let i=0;i<3;i++)if((x[i]||0)!==(y[i]||0))return(x[i]||0)-(y[i]||0);return 0};
+const vnd=n=>Number(n||0).toLocaleString('vi-VN')+'đ';
+const SLUG=s=>String(s||'').toLowerCase().replace(/đ/g,'d').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,48);
+function downloadText(name,text,type='text/plain'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
+
+let catalog=null,catalogP=null,plugins=[],licenses=[],storeTab='store',storeFrom='home',modalAct=null,genState=null;
+try{licenses=JSON.parse(localStorage.getItem('micron_licenses')||'[]')}catch{}
+const saveLicenses=()=>{try{localStorage.setItem('micron_licenses',JSON.stringify(licenses))}catch{}};
+const licPayload=raw=>{try{return JSON.parse(TD.decode(b64u.dec(String(raw).split('.')[1])))}catch{return null}};
+const ownedVersions=id=>licenses.map(licPayload).filter(p=>p&&p.p===id).map(p=>p.v);
+const latestRel=e=>[...(e.releases||[])].sort((a,b)=>cmpV(a.version,b.version)).pop();
+const recOf=key=>plugins.find(r=>r.key===key);
+const enabledPlugins=()=>plugins.filter(r=>r.enabled);
+
+/* --- định dạng plugin micron-plugin@1 --- */
+function normalizePlugin(o){
+  if(!o||typeof o!=='object'||Array.isArray(o))throw new Error('Plugin phải là một đối tượng JSON');
+  const tasks=Object.keys(KIND_LABEL),str=(v,max=20000)=>(typeof v==='string'?v:v==null?'':String(v)).slice(0,max);
+  const optsOf=v=>v&&typeof v==='object'?JSON.stringify(v):str(v,2000);
+  const p={format:'micron-plugin@1',id:SLUG(o.id||o.name)||('plugin-'+uid()),name:str(o.name,80).trim()||'Plugin không tên',
+    version:/^\d+\.\d+\.\d+$/.test(o.version)?o.version:'1.0.0',author:str(o.author,80),icon:str(o.icon,8)||'🧩',description:str(o.description,600),nodes:[],templates:[],artifacts:[]};
+  for(const a of(Array.isArray(o.artifacts)?o.artifacts:[]).slice(0,20)){if(typeof a?.html!=='string'||!a.html.trim())continue;
+    p.artifacts.push({id:SLUG(a.id||a.title)||('art-'+uid()),title:str(a.title,80)||'Artifact',description:str(a.description,300),height:Math.min(800,Math.max(120,+a.height||320)),html:a.html.slice(0,500000)})}
+  const artIds=new Set(p.artifacts.map(a=>a.id));
+  for(const n of(Array.isArray(o.nodes)?o.nodes:[]).slice(0,60)){if(!n||!n.prompt)continue;
+    p.nodes.push({id:SLUG(n.id||n.title)||('node-'+uid()),title:str(n.title,80)||'Ô AI',task:tasks.includes(n.task)?n.task:'text',prompt:str(n.prompt),opts:optsOf(n.opts),description:str(n.description,300)})}
+  for(const t of(Array.isArray(o.templates)?o.templates:[]).slice(0,20)){if(!Array.isArray(t?.nodes)||!t.nodes.length)continue;
+    const nodes=[],keys=new Set();
+    for(const n of t.nodes.slice(0,40)){if(!n)continue;const key=str(n.key||n.id||('k'+nodes.length),40);if(keys.has(key))continue;
+      const ref=n.ref?p.nodes.find(x=>x.id===SLUG(n.ref)):null;
+      let type=['text','ai','artifact','upload'].includes(n.type)?n.type:n.artifact?'artifact':(n.prompt||ref)?'ai':'text';
+      if(type==='artifact'&&!artIds.has(SLUG(n.artifact)))continue;
+      if(type==='ai'&&!n.prompt&&!ref)continue;
+      keys.add(key);
+      nodes.push({key,type,title:str(n.title||ref?.title||'',80),text:str(n.text),task:tasks.includes(n.task)?n.task:(ref?.task||'text'),prompt:str(n.prompt||ref?.prompt||''),opts:n.opts!=null?optsOf(n.opts):(ref?.opts||''),artifact:type==='artifact'?SLUG(n.artifact):''})}
+    if(!nodes.length)continue;
+    const edges=(Array.isArray(t.edges)?t.edges:[]).map(e=>Array.isArray(e)?e.map(String):[String(e?.from),String(e?.to)])
+      .filter(([a,b])=>a!==b&&keys.has(a)&&keys.has(b)&&['ai','artifact'].includes(nodes.find(n=>n.key===b).type));
+    p.templates.push({id:SLUG(t.id||t.title)||('mau-'+uid()),title:str(t.title,80)||'Mẫu quy trình',description:str(t.description,300),nodes,edges})}
+  if(!p.nodes.length&&!p.templates.length&&!p.artifacts.length)throw new Error('Plugin không có ô AI, mẫu quy trình hay artifact nào dùng được');
+  return p}
+const pluginSummary=p=>[p.templates.length&&`${p.templates.length} mẫu quy trình`,p.nodes.length&&`${p.nodes.length} ô AI`,p.artifacts.length&&`${p.artifacts.length} artifact`].filter(Boolean).join(' · ');
+function parseLooseJson(t){t=String(t||'').trim();const f=/```(?:json)?\s*([\s\S]*?)```/i.exec(t);if(f&&f[1].includes('{'))t=f[1];
+  const a=t.indexOf('{'),b=t.lastIndexOf('}');if(a<0||b<=a)throw new Error('AI không trả về JSON. Hãy thử lại hoặc dùng model mạnh hơn.');
+  try{return JSON.parse(t.slice(a,b+1))}catch(e){throw new Error('JSON do AI trả về bị lỗi ('+e.message+'). Hãy thử lại hoặc dùng model mạnh hơn.')}}
+
+/* --- cửa hàng: catalog, license, cài đặt --- */
+async function loadCatalog(){
+  for(const u of CATALOG_URLS){try{const r=await fetch(u,{cache:'no-store'});if(r.ok){const j=await r.json();if(Array.isArray(j?.plugins)){catalog=j;catalog._src=u;return catalog}}}catch{}}
+  try{catalog=JSON.parse($('#micron-catalog').textContent);catalog._src='embedded'}catch{catalog={store:{},plugins:[]}}
+  catalog.plugins=catalog.plugins||[];return catalog}
+const needCatalog=()=>catalogP||(catalogP=loadCatalog());
+async function verifyLicense(str){
+  const m=/^MCR1\.([A-Za-z0-9_-]+)\.([A-Za-z0-9_-]+)$/.exec(String(str||'').replace(/\s+/g,''));
+  if(!m)throw new Error('Mã license không đúng định dạng (phải bắt đầu bằng MCR1.)');
+  if(!PUBLIC_JWK)throw new Error('Bản Micron này chưa có khoá kiểm tra license.');
+  if(!crypto?.subtle)throw new Error('Trình duyệt không hỗ trợ kiểm tra chữ ký (cần mở bằng https hoặc file trên máy).');
+  const key=await crypto.subtle.importKey('jwk',PUBLIC_JWK,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);
+  let ok=false;try{ok=await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},key,b64u.dec(m[2]),TE.encode(m[1]))}catch{}
+  if(!ok)throw new Error('License không hợp lệ — chữ ký không đúng. Kiểm tra lại bạn đã dán đủ mã chưa.');
+  return{payload:JSON.parse(TD.decode(b64u.dec(m[1]))),raw:`MCR1.${m[1]}.${m[2]}`}}
+async function decryptPackage(enc,k){const key=await crypto.subtle.importKey('raw',b64u.dec(k),'AES-GCM',false,['decrypt']);
+  return JSON.parse(TD.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64u.dec(enc.iv)},key,b64u.dec(enc.ct))))}
+async function installFromRelease(entry,rel,raw,k){let pl;
+  if(rel.enc){if(!k)throw new Error('Cần license để mở gói này');try{pl=await decryptPackage(rel.enc,k)}catch{throw new Error('Không giải mã được gói plugin — license không khớp phiên bản này.')}}
+  else pl=rel.package;
+  const p=normalizePlugin(pl);p.id=entry.id;p.version=rel.version;p.author=p.author||entry.author||'Bravinall';
+  const old=recOf('store:'+entry.id);
+  const rec={key:'store:'+entry.id,source:'store',id:entry.id,version:rel.version,plugin:p,license:raw||null,enabled:old?old.enabled:true,installedAt:Date.now()};
+  await DB.pPut(rec);plugins=plugins.filter(r=>r.key!==rec.key);plugins.push(rec);return rec}
+async function activateLicense(rawIn){await needCatalog();
+  const{payload,raw}=await verifyLicense(rawIn);
+  if(!licenses.includes(raw)){licenses.push(raw);saveLicenses()}
+  const entry=catalog.plugins.find(e=>e.id===payload.p);
+  if(!entry)throw new Error(`License hợp lệ (plugin “${payload.p}” v${payload.v}) nhưng cửa hàng hiện không có plugin này. License đã được lưu lại.`);
+  const rel=(entry.releases||[]).find(r=>r.version===payload.v);
+  if(!rel)throw new Error(`Không tìm thấy gói phiên bản ${payload.v} trong cửa hàng. License đã được lưu lại.`);
+  await installFromRelease(entry,rel,raw,payload.k);return{entry,rel,payload}}
+async function installVersion(entry,v){const rel=(entry.releases||[]).find(r=>r.version===v);if(!rel)throw new Error('Không tìm thấy phiên bản '+v);
+  if(rel.price>0){const raw=licenses.find(l=>{const p=licPayload(l);return p&&p.p===entry.id&&p.v===v});if(!raw)throw new Error('Bạn chưa có license cho phiên bản này');return activateLicense(raw)}
+  return installFromRelease(entry,rel)}
+async function removePlugin(key){await DB.pDel(key);plugins=plugins.filter(r=>r.key!==key)}
+async function saveUserPlugin(p,old,genBy){let key='user:'+p.id;
+  if(old&&old.key!==key)await removePlugin(old.key);
+  else if(!old&&recOf(key)&&!confirm(`Đã có plugin “${recOf(key).plugin.name}” cùng mã “${p.id}”. Ghi đè?`)){p.id=p.id+'-'+uid().slice(0,4);key='user:'+p.id}
+  const rec={key,source:'user',id:p.id,version:p.version,plugin:p,enabled:old?old.enabled:true,installedAt:old?.installedAt||Date.now(),genBy:genBy||old?.genBy||''};
+  await DB.pPut(rec);plugins=plugins.filter(r=>r.key!==key);plugins.push(rec);return rec}
+function orderCode(id,v){let m={};try{m=JSON.parse(localStorage.getItem('micron_orders')||'{}')}catch{}
+  const k=id+'@'+v;if(!m[k]){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',r=crypto.getRandomValues(new Uint8Array(6));m[k]=[...r].map(x=>A[x%A.length]).join('');try{localStorage.setItem('micron_orders',JSON.stringify(m))}catch{}}
+  return m[k]}
+
+/* --- màn hình Extensions & Plugins --- */
+function showStore(tab){if(tab)storeTab=tab;storeFrom=cur?'project':'home';closeMenu();
+  $('#home').classList.add('hidden');ed.classList.add('hidden');$('#store').classList.remove('hidden');
+  $('#homeTools').classList.add('hidden');$('#projTools').classList.add('hidden');$('#storeTools').classList.remove('hidden');
+  $('#btnStoreBack').textContent=storeFrom==='project'?'← Về dự án':'← Dự án';renderStore()}
+function leaveStore(){$('#store').classList.add('hidden');$('#storeTools').classList.add('hidden');
+  if(storeFrom==='project'&&cur){ed.classList.remove('hidden');$('#projTools').classList.remove('hidden');renderAll()}else showHome()}
+async function renderStore(){
+  document.querySelectorAll('#store .tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===storeTab));
+  const bar=$('#storeBar'),grid=$('#pgrid');
+  if(storeTab==='store'){
+    bar.innerHTML=`<button id="btnLic">🔑 Nhập license</button><button id="btnLicExport" ${licenses.length?'':'disabled'}>Sao lưu license (${licenses.length})</button><button id="btnLicImport">Khôi phục license</button><span class="sub">Plugin chính thức của đội ngũ Bravinall · trả 1 lần qua QR · dùng vĩnh viễn đúng phiên bản đã mua.</span>`;
+    if(!catalog)grid.innerHTML='<div class="empty">Đang tải cửa hàng…</div>';
+    await needCatalog();if(storeTab!=='store'||$('#store').classList.contains('hidden'))return;
+    grid.innerHTML=catalog.plugins.length?catalog.plugins.map(storeCard).join(''):'<div class="empty">Cửa hàng chưa có plugin nào.</div>'}
+  else{
+    bar.innerHTML=`<button class="primary" id="btnGen">✨ Tạo plugin bằng AI</button><button id="btnPImport">Nhập file plugin</button><span class="sub">Plugin do AI của bạn tạo — chỉ lưu trên máy này, xuất file để chia sẻ.</span>`;
+    const mine=plugins.filter(r=>r.source==='user').sort((a,b)=>b.installedAt-a.installedAt);
+    grid.innerHTML=mine.length?mine.map(userCard).join(''):`<div class="empty">Chưa có plugin nào.<br><br>Bấm <b>✨ Tạo plugin bằng AI</b> rồi mô tả điều bạn cần — ví dụ “quy trình viết kịch bản unbox điện thoại” hay “artifact tính giá bán có VAT”. AI của bạn sẽ dựng mẫu quy trình, ô AI và artifact cho bạn.</div>`}}
+function previewCounts(pv){return[pv?.templates?.length&&`${pv.templates.length} mẫu quy trình`,pv?.nodes?.length&&`${pv.nodes.length} ô AI`,pv?.artifacts?.length&&`${pv.artifacts.length} artifact`].filter(Boolean).join(' · ')}
+function storeCard(e){const L=latestRel(e);if(!L)return'';const rec=recOf('store:'+e.id),owned=ownedVersions(e.id),free=!(L.price>0),sum=previewCounts(L.preview);
+  const has=v=>(e.releases||[]).some(r=>r.version===v);let acts='',state='';
+  if(rec){state=`<span class="owned">✓ Đã cài v${esc(rec.version)}${rec.enabled?'':' · đang tắt'}</span>`;
+    if(cmpV(L.version,rec.version)>0)acts+=free||owned.includes(L.version)?`<button class="primary" data-sact="install" data-v="${esc(L.version)}">Cập nhật lên v${esc(L.version)}</button>`:`<button class="primary" data-sact="buy" data-v="${esc(L.version)}">Mua v${esc(L.version)} · ${vnd(L.price)}</button>`;
+    acts+=`<button data-sact="toggle">${rec.enabled?'Tắt':'Bật'}</button><button data-sact="detail">Chi tiết</button><button class="danger" data-sact="remove">Gỡ</button>`;
+    const vs=[...new Set(free?(e.releases||[]).map(r=>r.version):owned)].filter(has).sort(cmpV);
+    if(vs.length>1)acts+=`<select data-sact="switch" title="Dùng phiên bản" style="width:auto;padding:3px 6px;font-size:12px">${vs.map(v=>`<option ${v===rec.version?'selected':''}>${esc(v)}</option>`).join('')}</select>`}
+  else{const ov=owned.filter(has).sort(cmpV).pop();
+    if(free)acts+=`<button class="primary" data-sact="install" data-v="${esc(L.version)}">Cài đặt</button>`;
+    else if(ov){state=`<span class="owned">✓ Bạn đã sở hữu v${esc(ov)}</span>`;acts+=`<button class="primary" data-sact="install" data-v="${esc(ov)}">Cài v${esc(ov)}</button>`;if(cmpV(L.version,ov)>0)acts+=`<button data-sact="buy" data-v="${esc(L.version)}">Mua v${esc(L.version)} · ${vnd(L.price)}</button>`}
+    else acts+=`<button class="primary" data-sact="buy" data-v="${esc(L.version)}">Mua · ${vnd(L.price)}</button>`;
+    acts+=`<button data-sact="detail">Chi tiết</button>`}
+  return`<div class="pcard ${rec&&!rec.enabled?'off':''}" data-id="${esc(e.id)}"><div class="ph"><div class="pic">${esc(e.icon||'🧩')}</div><div style="flex:1;min-width:0"><div class="name">${esc(e.name)} <span class="tag">v${esc(L.version)}</span></div><div class="sub">${esc(e.author||'Bravinall')}${sum?' · '+sum:''}</div></div><div class="price ${free?'free':''}">${free?'Miễn phí':vnd(L.price)}</div></div>
+  <p>${esc(e.description||'')}</p>${state?`<div>${state}</div>`:''}${free?'':`<div class="sub">Trả 1 lần qua QR · dùng vĩnh viễn v${esc(L.version)}</div>`}<div class="acts">${acts}</div></div>`}
+function userCard(r){const p=r.plugin;
+  return`<div class="pcard ${r.enabled?'':'off'}" data-key="${esc(r.key)}"><div class="ph"><div class="pic">${esc(p.icon)}</div><div style="flex:1;min-width:0"><div class="name">${esc(p.name)} <span class="tag">v${esc(p.version)}</span></div><div class="sub">${esc(r.genBy||'Plugin của bạn')} · ${pluginSummary(p)}</div></div></div>
+  <p>${esc(p.description)}</p>${r.enabled?'':'<div class="sub">Đang tắt</div>'}
+  <div class="acts"><button data-uact="toggle">${r.enabled?'Tắt':'Bật'}</button><button data-uact="detail">Chi tiết</button><button data-uact="aiedit">✨ Sửa bằng AI</button><button data-uact="json">Sửa JSON</button><button data-uact="export">Xuất</button><button class="danger" data-uact="del">Xoá</button></div></div>`}
+
+$('#store').addEventListener('click',async e=>{
+  const tab=e.target.closest('.tabs button');if(tab){storeTab=tab.dataset.tab;return renderStore()}
+  const b=e.target.closest('button');if(!b)return;
+  if(b.id==='btnLic')return openLicenseDialog();
+  if(b.id==='btnLicExport')return downloadText('micron-license-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({format:'micron-licenses@1',licenses},null,2),'application/json');
+  if(b.id==='btnLicImport')return $('#licFile').click();
+  if(b.id==='btnGen')return openGenDialog();
+  if(b.id==='btnPImport')return $('#pluginFile').click();
+  const card=b.closest('.pcard');if(!card)return;
+  if(b.dataset.sact){const entry=catalog?.plugins.find(x=>x.id===card.dataset.id);if(!entry)return;const a=b.dataset.sact;
+    try{if(a==='install'){b.disabled=true;await installVersion(entry,b.dataset.v);toast(`✅ Đã cài ${entry.name} v${b.dataset.v}`);renderStore()}
+      else if(a==='buy')openBuyDialog(entry,b.dataset.v);
+      else if(a==='toggle'){const r=recOf('store:'+entry.id);r.enabled=!r.enabled;await DB.pPut(r);renderStore()}
+      else if(a==='remove'){if(confirm(`Gỡ “${entry.name}”? License vẫn được giữ, bạn có thể cài lại bất cứ lúc nào.`)){await removePlugin('store:'+entry.id);renderStore()}}
+      else if(a==='detail')openDetail(entry,recOf('store:'+entry.id))}
+    catch(err){toast('❌ '+err.message,6000);b.disabled=false}return}
+  if(b.dataset.uact){const r=recOf(card.dataset.key);if(!r)return;const a=b.dataset.uact;
+    if(a==='toggle'){r.enabled=!r.enabled;await DB.pPut(r);renderStore()}
+    else if(a==='detail')openDetail(null,r);
+    else if(a==='aiedit')openGenDialog(r);
+    else if(a==='json')openJsonDialog(r);
+    else if(a==='export')downloadText(r.plugin.id+'.micron-plugin.json',JSON.stringify(r.plugin,null,2),'application/json');
+    else if(a==='del'&&confirm(`Xoá plugin “${r.plugin.name}”? Không thể hoàn tác (trừ khi bạn đã xuất file).`)){await removePlugin(r.key);renderStore()}}});
+$('#store').addEventListener('change',async e=>{const s=e.target.closest('select[data-sact=switch]');if(!s)return;
+  const entry=catalog.plugins.find(x=>x.id===s.closest('.pcard').dataset.id);
+  try{await installVersion(entry,s.value);toast(`Đã chuyển sang v${s.value}`)}catch(err){toast('❌ '+err.message,6000)}renderStore()});
+$('#licFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const txt=await f.text();let list=[];
+  try{const j=JSON.parse(txt);list=Array.isArray(j)?j:j.licenses||[]}catch{list=txt.split(/\s+/)}
+  list=list.filter(x=>typeof x==='string'&&x.startsWith('MCR1.'));if(!list.length)return toast('Không tìm thấy license nào trong tệp');
+  let ok=0,bad=0;for(const l of list){try{await activateLicense(l);ok++}catch{bad++}}
+  toast(`Đã khôi phục ${ok} license${bad?` · ${bad} license không cài được`:''}`,4500);renderStore()};
+$('#pluginFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{const p=normalizePlugin(JSON.parse(await f.text()));await saveUserPlugin(p,null,'Nhập từ file');storeTab='mine';toast(`Đã thêm plugin “${p.name}”`);renderStore()}
+  catch(err){toast('❌ Không nhập được: '+err.message,6000)}};
+
+/* --- hộp thoại --- */
+function openModal(html,wide){$('#pdlg').innerHTML=html;$('#pdlg').style.width=wide?'min(1000px,100%)':'';$('#pmodal').classList.remove('hidden');modalAct=null}
+function closeModal(){$('#pmodal').classList.add('hidden');$('#pdlg').innerHTML='';modalAct=null;genState=null}
+$('#pmodal').addEventListener('click',e=>{
+  if(e.target.id==='pmodal'||e.target.closest('[data-close]'))return closeModal();
+  const cp=e.target.closest('[data-copy]');if(cp){e.preventDefault();navigator.clipboard.writeText(cp.dataset.copy).then(()=>toast('Đã sao chép'));return}
+  const ac=e.target.closest('[data-activate]');if(ac)return doActivate(ac);
+  if(modalAct)modalAct(e)});
+async function doActivate(btn){const raw=$('#licIn').value;if(!raw.trim())return toast('Hãy dán mã license vào ô trước');
+  btn.disabled=true;btn.textContent='Đang kiểm tra…';
+  try{const r=await activateLicense(raw);closeModal();toast(`✅ Đã kích hoạt ${r.entry.name} v${r.rel.version} — dùng vĩnh viễn`,4500);if(!$('#store').classList.contains('hidden'))renderStore()}
+  catch(err){toast('❌ '+err.message,7000);btn.disabled=false;btn.textContent='Kích hoạt';if(!$('#store').classList.contains('hidden'))renderStore()}}
+function openLicenseDialog(){openModal(`<div class="dhead"><h2>🔑 Nhập license</h2><span class="spacer"></span><button data-close>Đóng</button></div>
+  <p class="sub" style="margin-top:0">Dán mã license đội ngũ Bravinall gửi cho bạn sau khi thanh toán. Mỗi license mở khoá vĩnh viễn đúng một phiên bản plugin.</p>
+  <textarea id="licIn" class="mono" style="min-height:80px" placeholder="MCR1.…"></textarea>
+  <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="primary" data-activate>Kích hoạt</button></div>`)}
+function openBuyDialog(entry,v){const rel=entry.releases.find(r=>r.version===v),s=catalog.store||{},order=orderCode(entry.id,v),content=`MICRON ${entry.code||'PLG'} ${order}`;
+  const ready=!!(s.accountNo&&s.bankId);
+  const qr=ready?`https://img.vietqr.io/image/${encodeURIComponent(s.bankId)}-${encodeURIComponent(s.accountNo)}-compact2.png?amount=${rel.price}&addInfo=${encodeURIComponent(content)}&accountName=${encodeURIComponent(s.accountName||'')}`:'';
+  const contact=s.contact?(/^https?:\/\//.test(s.contactUrl||'')?`<a href="${esc(s.contactUrl)}" target="_blank" rel="noopener">${esc(s.contact)}</a>`:`<b>${esc(s.contact)}</b>`):'đội ngũ Bravinall';
+  openModal(`<div class="dhead"><h2>${esc(entry.icon||'🧩')} Mua ${esc(entry.name)} v${esc(v)}</h2><span class="spacer"></span><button data-close>Đóng</button></div>
+  <div class="buy"><div class="qr">${ready?`<img src="${esc(qr)}" alt="Mã QR chuyển khoản ${vnd(rel.price)}">`:'<div class="noqr">Cửa hàng chưa cấu hình tài khoản nhận tiền.<br>Vui lòng liên hệ đội ngũ Bravinall.</div>'}</div>
+  <div><div class="kv"><span>Số tiền</span><b>${vnd(rel.price)}</b></div>
+  ${ready?`<div class="kv"><span>Ngân hàng</span><b>${esc(s.bankName||s.bankId)}</b></div><div class="kv"><span>Số tài khoản</span><b class="mono">${esc(s.accountNo)}</b><a href="#" data-copy="${esc(s.accountNo)}">Sao chép</a></div><div class="kv"><span>Chủ tài khoản</span><b>${esc(s.accountName||'')}</b></div>`:''}
+  <div class="kv"><span>Nội dung CK</span><b class="mono">${esc(content)}</b><a href="#" data-copy="${esc(content)}">Sao chép</a></div>
+  <ol class="steps"><li>Quét mã QR bằng app ngân hàng — số tiền và nội dung đã điền sẵn.</li><li>Gửi ảnh giao dịch kèm mã đơn <b class="mono">${esc(order)}</b> tới ${contact}.</li><li>Nhận mã license, dán vào ô bên dưới rồi bấm <b>Kích hoạt</b>.</li></ol></div></div>
+  <div class="hint">Mua 1 lần, dùng vĩnh viễn phiên bản <b>${esc(v)}</b>. Bản nâng cấp sau này (nếu có) bán riêng, còn bản bạn đã mua thì luôn dùng được. Sau khi kích hoạt, bấm “Sao lưu license” để giữ license khi đổi máy hoặc xoá dữ liệu trình duyệt.</div>
+  <label>Mã license</label><textarea id="licIn" class="mono" style="min-height:64px" placeholder="MCR1.…"></textarea>
+  <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="primary" data-activate>Kích hoạt</button></div>`)}
+function openDetail(entry,rec){
+  const p=rec?.plugin,canIns=!!cur&&storeFrom==='project',insBtn=v=>canIns?`<button data-ins="${esc(v)}">Chèn vào dự án</button>`:'';
+  let h=`<div class="dhead"><div class="pic">${esc(p?.icon||entry?.icon||'🧩')}</div><div><h2>${esc(p?.name||entry.name)}</h2><div class="sub">v${esc(p?.version||latestRel(entry).version)} · ${esc(p?.author||entry?.author||'')}</div></div><span class="spacer"></span><button data-close>Đóng</button></div><p>${esc(p?.description||entry?.description||'')}</p>`;
+  if(p){
+    if(p.templates.length)h+=`<h3 class="h3">📦 Mẫu quy trình</h3><div class="plist">${p.templates.map(t=>`<div class="it"><div class="n"><b>${esc(t.title)}</b><div class="sub">${t.nodes.length} ô · ${esc(t.description)}</div></div>${insBtn('tpl|'+t.id)}</div>`).join('')}</div>`;
+    if(p.nodes.length)h+=`<h3 class="h3">✨ Ô AI dựng sẵn</h3><div class="plist">${p.nodes.map(n=>`<div class="it"><div class="n"><b>${TASK_ICON[n.task]} ${esc(n.title)}</b><div class="sub">${KIND_LABEL[n.task]}${n.description?' · '+esc(n.description):''}</div></div>${insBtn('pn|'+n.id)}</div>`).join('')}</div>`;
+    if(p.artifacts.length)h+=`<h3 class="h3">🧩 Artifact</h3><div class="plist">${p.artifacts.map(a=>`<div class="it"><div class="n"><b>${esc(a.title)}</b><div class="sub">${esc(a.description)}</div></div><button data-art="${esc(a.id)}">Mở</button><button data-dl="${esc(a.id)}">Tải .html</button>${insBtn('pa|'+a.id)}</div>`).join('')}</div>`;
+    if(!canIns)h+=`<div class="hint">Mở một dự án rồi bấm ＋ trên canvas — các mẫu, ô AI và artifact của plugin này nằm ở mục “Từ plugin”.</div>`}
+  else{const L=latestRel(entry),pv=L.preview||{};
+    for(const[k,label]of[['templates','📦 Mẫu quy trình'],['nodes','✨ Ô AI dựng sẵn'],['artifacts','🧩 Artifact']])if(pv[k]?.length)h+=`<h3 class="h3">${label}</h3><div class="plist">${pv[k].map(x=>`<div class="it"><div class="n"><b>${esc(x.title)}</b>${x.description?`<div class="sub">${esc(x.description)}</div>`:''}</div></div>`).join('')}</div>`;
+    h+=`<div class="sub">Các phiên bản: ${(entry.releases||[]).map(r=>`v${esc(r.version)} (${r.price>0?vnd(r.price):'miễn phí'}${r.date?', '+esc(r.date):''})`).join(' · ')}</div>${L.changelog?`<div class="sub" style="margin-top:4px">Thay đổi v${esc(L.version)}: ${esc(L.changelog)}</div>`:''}`}
+  openModal(h,true);
+  modalAct=e=>{if(!p)return;
+    const art=e.target.closest('[data-art]');if(art){const a=p.artifacts.find(x=>x.id===art.dataset.art);if(a)openArtifactPreview(rec,a);return}
+    const dl=e.target.closest('[data-dl]');if(dl){const a=p.artifacts.find(x=>x.id===dl.dataset.dl);if(a)downloadText(a.id+'.html',withBridge(a.html),'text/html');return}
+    const ins=e.target.closest('[data-ins]');if(ins){const[kind,id]=ins.dataset.ins.split('|');closeModal();leaveStore();addFromPlugin(kind,rec.key,id,null)}}}
+function openArtifactPreview(rec,a){
+  openModal(`<div class="dhead"><h2>🧩 ${esc(a.title)}</h2><span class="sub">${esc(rec.plugin.name)}</span><span class="spacer"></span><button data-dl>Tải .html</button><button data-close>Đóng</button></div>
+  <iframe class="art" id="artPrev" data-fixed="1" sandbox="allow-scripts allow-forms allow-downloads" referrerpolicy="no-referrer" style="height:min(60vh,560px)"></iframe>
+  <details><summary class="sub">Gửi thử dữ liệu vào artifact</summary><textarea id="artIn" placeholder="Nội dung gửi vào — giống kết quả từ một ô nối vào"></textarea><div style="margin-top:6px"><button data-send>Gửi</button></div></details>
+  <div class="out" style="display:none"></div>`,true);
+  $('#artPrev').srcdoc=withBridge(a.html);
+  modalAct=e=>{if(e.target.closest('[data-dl]'))downloadText(a.id+'.html',withBridge(a.html),'text/html');
+    if(e.target.closest('[data-send]'))$('#artPrev').contentWindow.postMessage({type:'micron:input',id:'pv'+uid(),text:$('#artIn').value,files:[]},'*')}}
+function openJsonDialog(rec){
+  openModal(`<div class="dhead"><h2>Sửa JSON — ${esc(rec.plugin.name)}</h2><span class="spacer"></span><button data-close>Đóng</button></div>
+  <textarea id="pjson" class="mono" style="min-height:55vh">${esc(JSON.stringify(rec.plugin,null,2))}</textarea>
+  <div class="hint">Định dạng <code>micron-plugin@1</code> — xem mô tả đầy đủ trong <code>docs/PLUGIN-FORMAT.md</code> của repo Micron.</div>
+  <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="primary" data-savejson>Lưu</button></div>`,true);
+  modalAct=async e=>{if(!e.target.closest('[data-savejson]'))return;
+    try{const p=normalizePlugin(JSON.parse($('#pjson').value));await saveUserPlugin(p,rec);closeModal();toast('Đã lưu plugin');renderStore()}catch(err){toast('❌ '+err.message,6000)}}}
+
+/* --- tạo plugin bằng AI của người dùng --- */
+const GEN_TYPES=['openai','anthropic','gemini','ollama'];
+const GEN_EXAMPLES=['Quy trình review điện thoại: thông số → kịch bản 60 giây → caption TikTok, kèm artifact chấm điểm sản phẩm theo 5 tiêu chí',
+  'Artifact so sánh giá một sản phẩm giữa các sàn TMĐT từ dữ liệu dán vào, chỉ ra nơi rẻ nhất',
+  'Mẫu quy trình làm video unbox: checklist cảnh quay → kịch bản → tiêu đề và mô tả YouTube',
+  'Bộ ô viết kịch bản podcast 2 người dẫn và tách thành lời thoại từng người'];
+const GEN_SPEC=`Bạn là trình tạo plugin cho Micron — ứng dụng canvas trong đó mỗi ô là một bước AI (văn bản, ảnh, âm thanh, video) và các ô nối với nhau bằng dây; kết quả của ô phía trước được chèn vào prompt của ô sau qua {{input}}.
+Nhiệm vụ: tạo plugin theo yêu cầu người dùng. Trả về DUY NHẤT một đối tượng JSON hợp lệ — không giải thích, không markdown.
+
+Định dạng:
+{
+  "format": "micron-plugin@1",
+  "id": "ten-plugin-khong-dau",
+  "name": "Tên ngắn gọn",
+  "version": "1.0.0",
+  "icon": "một emoji",
+  "description": "1–2 câu nói plugin giúp gì",
+  "nodes": [
+    { "id": "ma-o", "title": "Tên ô", "task": "text", "description": "ô này làm gì",
+      "prompt": "Prompt tiếng Việt cụ thể, nói rõ định dạng đầu ra. Dùng {{input}} ở chỗ cần chèn kết quả của ô phía trước." }
+  ],
+  "templates": [
+    { "id": "ma-mau", "title": "Tên mẫu quy trình", "description": "…",
+      "nodes": [
+        { "key": "a", "type": "text", "text": "Ô nhập liệu ban đầu, có sẵn các dòng gợi ý để người dùng điền" },
+        { "key": "b", "type": "ai", "ref": "ma-o" },
+        { "key": "c", "type": "artifact", "artifact": "ma-artifact" }
+      ],
+      "edges": [["a", "b"], ["b", "c"]] }
+  ],
+  "artifacts": [
+    { "id": "ma-artifact", "title": "Tên công cụ", "description": "…", "height": 340,
+      "html": "<!doctype html><html><head>…</head><body>…</body></html>" }
+  ]
+}
+
+Quy tắc:
+- "task" là một trong: text, image, audio, video. Ô image/audio/video có prompt mô tả hình ảnh/âm thanh/video cần tạo.
+- Trong templates: ô "text" là điểm bắt đầu; ô "ai" dùng "ref" trỏ tới id một ô trong "nodes" (hoặc tự ghi "title", "task", "prompt"); "edges" là các cặp [từ, tới], chỉ trỏ tới ô "ai" hoặc "artifact", không tạo vòng lặp.
+- Chỉ thêm phần thật sự cần; mảng không dùng thì để [].
+- Artifact là một trang HTML+CSS+JS tự chứa (không tải thư viện hay font bên ngoài), giao diện tối: nền #12151b, chữ #e6e8ee, màu nhấn #7c5cff, hiển thị tốt khi chỉ rộng 280px. Trang có sẵn đối tượng Micron:
+    Micron.onInput(function (d) { /* d.text: văn bản từ các ô nối vào; d.files: [{kind, value}] */ Micron.send('text', ketQua); });
+    Micron.send(kind, value)   // kind: 'text' | 'image' | 'audio' | 'video'; ảnh/âm thanh/video là data URL
+  Artifact PHẢI gọi Micron.send(...) mỗi lần nhận onInput, kể cả khi đầu vào trống. Không dùng alert, localStorage, cookie, window.open.
+- Toàn bộ chữ hiển thị viết bằng tiếng Việt có dấu.`;
+function openGenDialog(base){
+  const provs=providers.filter(p=>GEN_TYPES.includes(p.type));
+  if(!provs.length){openModal(`<div class="dhead"><h2>✨ Tạo plugin bằng AI</h2><span class="spacer"></span><button data-close>Đóng</button></div>
+    <p>Để AI tạo plugin, bạn cần thêm ít nhất một AI văn bản: Claude, Gemini, Ollama hoặc dịch vụ kiểu OpenAI.</p><button class="primary" data-addprov>⚙ Thêm AI</button>`);
+    modalAct=e=>{if(e.target.closest('[data-addprov]')){closeModal();openProviders(()=>openGenDialog(base))}};return}
+  let last={};try{last=JSON.parse(localStorage.getItem('micron_gen')||'{}')}catch{}
+  const pid=provs.some(p=>p.id===last.provider)?last.provider:provs[0].id;
+  openModal(`<div class="dhead"><h2>✨ ${base?`Sửa “${esc(base.plugin.name)}” bằng AI`:'Tạo plugin bằng AI'}</h2><span class="spacer"></span><button data-close>Đóng</button></div>
+  <div class="row"><div><label>AI dựng plugin</label><select id="genProv">${provs.map(p=>`<option value="${p.id}" ${p.id===pid?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>
+  <div><label>Model</label><input id="genModel" list="genModels"><datalist id="genModels"></datalist></div></div>
+  <label>${base?'Bạn muốn sửa gì?':'Mô tả plugin bạn muốn'}</label>
+  <textarea id="genReq" style="min-height:100px" placeholder="${base?'vd: thêm ô viết mô tả YouTube, đổi kịch bản thành 90 giây…':'vd: Quy trình review tai nghe: thông số → kịch bản 60 giây → caption TikTok, kèm artifact chấm điểm theo 5 tiêu chí'}"></textarea>
+  ${base?'':`<div class="chips">${GEN_EXAMPLES.map(x=>`<button data-ex="${esc(x)}">${esc(x.length>50?x.slice(0,48)+'…':x)}</button>`).join('')}</div>`}
+  <div class="hint">AI sẽ dựng <b>mẫu quy trình</b> (nhiều ô nối sẵn), <b>ô AI</b> có prompt viết sẵn và/hoặc <b>artifact</b> — một ứng dụng nhỏ chạy ngay trong ô. Artifact chạy trong khung cách ly, không đọc được API key hay dự án của bạn. Model càng mạnh, plugin càng tốt.</div>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:12px"><span id="genStatus" class="status" style="margin:0"></span><span class="spacer"></span><button class="primary" data-gen>${base?'Sửa plugin':'Tạo plugin'}</button></div>
+  <div id="genResult"></div>`,true);
+  const fill=()=>{const p=providers.find(x=>x.id===$('#genProv').value),ms=(p?.models||'').split(',').map(s=>s.trim()).filter(Boolean);
+    $('#genModels').innerHTML=ms.map(m=>`<option value="${esc(m)}">`).join('');$('#genModel').value=(last.provider===p?.id&&last.model)||ms[0]||''};
+  fill();$('#genProv').onchange=fill;genState={base,plugin:null};
+  modalAct=async e=>{
+    const ex=e.target.closest('[data-ex]');if(ex){$('#genReq').value=ex.dataset.ex;return}
+    const g=e.target.closest('[data-gen]');if(g)return runGen(g);
+    const pa=e.target.closest('[data-genart]');if(pa&&genState?.plugin){const a=genState.plugin.artifacts.find(x=>x.id===pa.dataset.genart);
+      if(a){$('#genPrev').innerHTML=`<iframe class="art" sandbox="allow-scripts allow-forms allow-downloads" referrerpolicy="no-referrer" style="height:${a.height}px"></iframe><div class="out" style="display:none"></div>`;$('#genPrev iframe').srcdoc=withBridge(a.html)}return}
+    if(e.target.closest('[data-gensave]')){
+      try{const p=normalizePlugin(JSON.parse($('#genJson').value));if(genState.base)p.id=genState.base.plugin.id;
+        const prov=providers.find(x=>x.id===$('#genProv').value);
+        await saveUserPlugin(p,genState.base,`Tạo bởi ${prov?.name||'AI'}${$('#genModel').value?' · '+$('#genModel').value:''}`);
+        closeModal();storeTab='mine';toast(`✅ Đã lưu plugin “${p.name}”`);if(!$('#store').classList.contains('hidden'))renderStore()}
+      catch(err){toast('❌ '+err.message,6000)}}}}
+async function runGen(btn){const req=$('#genReq').value.trim();if(!req)return toast('Hãy mô tả plugin bạn muốn');
+  const p=providers.find(x=>x.id===$('#genProv').value),model=$('#genModel').value.trim();if(!p)return;if(!model)return toast('Hãy nhập tên model');
+  try{localStorage.setItem('micron_gen',JSON.stringify({provider:p.id,model}))}catch{}
+  const st=$('#genStatus');btn.disabled=true;st.className='status run';st.textContent='AI đang dựng plugin… thường mất 30–90 giây';const t0=performance.now();
+  try{const base=genState.base?.plugin;
+    const prompt=GEN_SPEC+(base?`\n\nĐÂY LÀ PLUGIN HIỆN TẠI:\n${JSON.stringify(base)}\n\nHãy sửa plugin theo yêu cầu dưới đây. Giữ nguyên "id", tăng số cuối của "version" (vd 1.0.0 → 1.0.1). Trả về TOÀN BỘ plugin JSON sau khi sửa.\nYÊU CẦU SỬA: ${req}`:`\n\nYÊU CẦU CỦA NGƯỜI DÙNG: ${req}`);
+    const extra=p.type==='anthropic'?{max_tokens:16000}:p.type==='gemini'?{generationConfig:{responseMimeType:'application/json'}}:p.type==='ollama'?{format:'json'}:{};
+    const plugin=normalizePlugin(parseLooseJson(await aiText(p,model,prompt,[],extra)));if(base)plugin.id=base.id;
+    if(!genState)return;genState.plugin=plugin;st.className='status ok';st.textContent=`Xong sau ${Math.round((performance.now()-t0)/1000)} giây — xem lại rồi bấm Lưu`;renderGenResult(plugin)}
+  catch(err){if($('#genStatus')){st.className='status err';st.textContent=friendlyErr(err)}}
+  finally{btn.disabled=false}}
+function renderGenResult(p){
+  $('#genResult').innerHTML=`<div class="pcard" style="margin-top:12px"><div class="ph"><div class="pic">${esc(p.icon)}</div><div style="flex:1;min-width:0"><div class="name">${esc(p.name)} <span class="tag">v${esc(p.version)}</span></div><div class="sub">${pluginSummary(p)}</div></div></div><p>${esc(p.description)}</p>
+  <div class="plist">${p.templates.map(t=>`<div class="it"><div class="n">📦 <b>${esc(t.title)}</b><div class="sub">${t.nodes.length} ô · ${esc(t.description)}</div></div></div>`).join('')}
+  ${p.nodes.map(n=>`<div class="it"><div class="n">${TASK_ICON[n.task]} <b>${esc(n.title)}</b><div class="sub">${KIND_LABEL[n.task]}${n.description?' · '+esc(n.description):''}</div></div></div>`).join('')}
+  ${p.artifacts.map(a=>`<div class="it"><div class="n">🧩 <b>${esc(a.title)}</b><div class="sub">${esc(a.description)}</div></div><button data-genart="${esc(a.id)}">Chạy thử</button></div>`).join('')}</div>
+  <div id="genPrev"></div>
+  <details><summary class="sub">Xem / sửa JSON</summary><textarea id="genJson" class="mono" style="min-height:220px">${esc(JSON.stringify(p,null,2))}</textarea></details>
+  <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="primary" data-gensave>Lưu vào “Do AI của bạn tạo”</button></div></div>`}
+
+/* --- dùng plugin trên canvas --- */
+function autoPick(n){const p=providers.find(p=>capsOf(p).includes(n.data.task));if(p){n.data.provider=p.id;n.data.model=firstModel(p);return true}return false}
+function findArtifact(n){const rec=recOf(n.data.plugin);if(!rec||!rec.enabled)return null;const art=rec.plugin.artifacts.find(a=>a.id===n.data.artifact);return art?{rec,art}:null}
+function artBody(n){const f=findArtifact(n);
+  if(!f)return`<div class="status err">Plugin chứa artifact này chưa được cài hoặc đang tắt. Mở 🧩 Extensions & Plugins để cài / bật lại.</div><div class="res">${resHtml(n)}</div>`;
+  return`<iframe class="art" sandbox="allow-scripts allow-forms allow-downloads" referrerpolicy="no-referrer" style="height:${f.art.height}px" onload="this.dataset.ready=1" srcdoc="${esc(withBridge(f.art.html))}"></iframe>
+  <div class="sub" style="margin-top:4px">${esc(f.rec.plugin.name)} · nối ô vào rồi bấm ▶ Chạy để gửi dữ liệu</div><div class="res">${resHtml(n)}</div>`}
+function pluginMenuItems(withTemplates){const out=[];
+  for(const r of enabledPlugins()){const p=r.plugin;
+    if(withTemplates)for(const t of p.templates)out.push(`<button data-add="tpl:${esc(r.key)}|${esc(t.id)}">📦 ${esc(t.title)}<small>${esc(p.name)} · mẫu ${t.nodes.length} ô</small></button>`);
+    for(const n of p.nodes)out.push(`<button data-add="pn:${esc(r.key)}|${esc(n.id)}">${esc(p.icon)} ${esc(n.title)}<small>${esc(p.name)} · ${KIND_LABEL[n.task]}</small></button>`);
+    for(const a of p.artifacts)out.push(`<button data-add="pa:${esc(r.key)}|${esc(a.id)}">🧩 ${esc(a.title)}<small>${esc(p.name)} · artifact</small></button>`)}
+  return out.length?`<hr><div class="sub mh">Từ plugin</div>${out.join('')}`:''}
+function addFromPlugin(kind,key,id,pd){const r=recOf(key);if(!r||!cur)return;
+  if(kind==='tpl'){const t=r.plugin.templates.find(x=>x.id===id);if(t)insertTemplate(r,t,pd?.pos);return}
+  if(kind==='pn'){const s=r.plugin.nodes.find(x=>x.id===id);if(!s)return;
+    const n=addNode('ai',{task:s.task,provider:'',model:'',prompt:s.prompt,opts:s.opts||'',title:s.title,icon:r.plugin.icon},pd?.pos);if(pd){connect(pd.from,n.id);drawEdges()}
+    if(autoPick(n)){rerenderNode(n);dirty()}
+    else openProviders(pid=>{const q=providers.find(x=>x.id===pid);if(q){if(!capsOf(q).includes(n.data.task))n.data.task=capsOf(q)[0];n.data.provider=pid;n.data.model=firstModel(q)}rerenderNode(n);dirty()});return}
+  if(kind==='pa'){const a=r.plugin.artifacts.find(x=>x.id===id);if(!a)return;const n=addNode('artifact',{plugin:key,artifact:id,title:a.title},pd?.pos);if(pd){connect(pd.from,n.id);drawEdges()}}}
+function insertTemplate(rec,tpl,origin){
+  const r=ed.getBoundingClientRect(),v=cur.view,depth={};tpl.nodes.forEach(n=>depth[n.key]=0);
+  for(let i=0;i<tpl.nodes.length;i++)for(const[a,b]of tpl.edges)if(depth[b]<depth[a]+1)depth[b]=Math.min(depth[a]+1,tpl.nodes.length);
+  const maxD=Math.max(0,...Object.values(depth)),W=NODE_W+90,H=440,rows={};
+  const ox=origin?origin.x:(r.width/2-v.x)/v.z-((maxD+1)*W-90)/2,oy=origin?origin.y:(r.height/2-v.y)/v.z-220;
+  const map={};let missing=0;
+  for(const s of tpl.nodes){const c=depth[s.key],row=rows[c]=(rows[c]??-1)+1;
+    const n={id:uid(),type:s.type,x:Math.round(ox+c*W),y:Math.round(oy+row*H),data:{},output:null};
+    if(s.type==='ai'){n.data={task:s.task,provider:'',model:'',prompt:s.prompt,opts:s.opts||'',title:s.title,icon:rec.plugin.icon};if(!autoPick(n))missing++}
+    else if(s.type==='artifact'){const a=rec.plugin.artifacts.find(x=>x.id===s.artifact);n.data={plugin:rec.key,artifact:s.artifact,title:a?.title||s.title||'Artifact'}}
+    else if(s.type==='upload')n.data={};
+    else{n.type='text';n.data={text:s.text||''}}
+    cur.nodes.push(n);map[s.key]=n.id}
+  for(const[a,b]of tpl.edges){const A=map[a],B=map[b];if(A&&B&&!reaches(B,A)&&!cur.edges.some(e=>e.from===A&&e.to===B))cur.edges.push({id:uid(),from:A,to:B})}
+  renderAll();dirty();
+  toast(`Đã chèn mẫu “${tpl.title}” (${tpl.nodes.length} ô)`+(missing?` · ${missing} ô chưa có AI phù hợp — chọn AI trong từng ô`:''),4500)}
+const artWait=new Map();
+function runArtifact(n,input){return new Promise((res,rej)=>{
+  const fr=elOf(n.id)?.querySelector('iframe.art');if(!fr)return rej(new Error('Artifact chưa sẵn sàng — plugin chưa được cài hoặc đang tắt.'));
+  const id='r'+uid(),t=setTimeout(()=>{artWait.delete(id);rej(new Error('Artifact không trả kết quả sau 20 giây.'))},20000);
+  artWait.set(id,out=>{clearTimeout(t);res(out)});
+  const send=()=>fr.contentWindow.postMessage({type:'micron:input',id,text:input.text,files:input.files},'*');
+  if(fr.dataset.ready)send();else fr.addEventListener('load',send,{once:true})})}
+addEventListener('message',e=>{const d=e.data;if(!d||typeof d!=='object'||typeof d.type!=='string'||!d.type.startsWith('micron:'))return;
+  const fr=[...document.querySelectorAll('iframe.art')].find(f=>f.contentWindow===e.source);if(!fr)return;
+  if(d.type==='micron:resize'){if(!fr.dataset.fixed){const h=Math.min(fr.closest('.node')?640:900,Math.max(80,(+d.height||0)+4));fr.style.height=h+'px'}return}
+  if(d.type!=='micron:output')return;
+  const kind=['text','image','audio','video'].includes(d.kind)?d.kind:'text';let value=typeof d.value==='string'?d.value:JSON.stringify(d.value??'',null,2);
+  if(kind!=='text'&&!/^(data:|https?:)/i.test(value))return;
+  const ne=fr.closest('.node');
+  if(!ne){const o=fr.parentElement.querySelector('.out');if(o){o.style.display='';o.textContent=kind==='text'?value:`[${KIND_LABEL[kind]}] ${value.slice(0,120)}…`}return}
+  const n=nodeById(ne.dataset.id);if(!n)return;const out={kind,value};
+  const w=d.id&&artWait.get(d.id);if(w){artWait.delete(d.id);w(out);return}
+  n.output=out;RS.set(n.id,{msg:'Artifact vừa gửi kết quả',cls:'ok'});refreshRes(n);dirty()});
+$('#btnStoreHome').onclick=()=>showStore();
+$('#btnStore').onclick=()=>showStore();
+$('#btnStoreBack').onclick=leaveStore;
+$('#btnProvStore').onclick=()=>openProviders();
+
 /* khởi động */
-DB.open().then(showHome).catch(e=>{document.body.innerHTML='<p style="padding:24px">Trình duyệt không cho phép lưu dữ liệu (IndexedDB): '+esc(e.message)+'</p>'});
+DB.open().then(async()=>{try{plugins=await DB.pAll()}catch{plugins=[]}needCatalog();return showHome()}).catch(e=>{document.body.innerHTML='<p style="padding:24px">Trình duyệt không cho phép lưu dữ liệu (IndexedDB): '+esc(e.message)+'</p>'});
 </script>
 </body>
 </html>

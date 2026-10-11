@@ -24,6 +24,29 @@ Micron là một không gian làm việc dạng canvas, giống Canva hay TopVie
 - **Các loại ô:** AI Văn bản / Ảnh / Âm thanh / Video, Ô văn bản, Ô tải tệp. Dùng `{{input}}` trong prompt để chèn kết quả của ô phía trước.
 - **Chạy tất cả:** chạy cả chuỗi theo đúng thứ tự nối.
 
+## 🧩 Extensions & Plugins — cho Bravin & Artifact
+
+Bấm **🧩 Extensions & Plugins** ở trang chủ, hoặc **🧩 Plugin** trong dự án. Khu vực này có hai phần:
+
+**① Cửa hàng Bravinall:** plugin do đội ngũ Bravinall làm.
+- Plugin miễn phí: bấm *Cài đặt* là dùng được ngay.
+- Plugin trả phí: bấm *Mua*, quét **mã QR ngân hàng** (số tiền và nội dung đã điền sẵn), gửi ảnh giao dịch kèm mã đơn, rồi nhận **mã license**.
+- **Mua 1 lần, dùng vĩnh viễn đúng phiên bản đã mua.** License có chữ ký số và hoạt động offline, không cần đăng nhập hay máy chủ.
+- Nên *Sao lưu license* để khôi phục khi đổi máy.
+
+**② Do AI của bạn tạo:** mô tả plugin bạn cần, AI của bạn (Claude, Gemini, OpenAI, Ollama…) sẽ dựng **mẫu quy trình**, **ô AI** và **artifact** (ứng dụng nhỏ chạy trong ô). Bạn có thể sửa bằng AI hoặc sửa JSON, xuất file để chia sẻ, nhập file của người khác.
+
+Plugin cài xong sẽ nằm trong menu **＋** ở mục *Từ plugin* (có ô tìm kiếm), và cũng xuất hiện khi bạn kéo dây ra chỗ trống. Artifact chạy trong khung cách ly nên không đọc được API key hay dự án của bạn.
+
+| Plugin có sẵn | Giá | Nội dung |
+| --- | --- | --- |
+| 📱 Review Công Nghệ Pro | 99.000đ | Thông số, ưu/nhược, kịch bản 60s, caption, thumbnail, so sánh A vs B, đồng hồ kịch bản + teleprompter |
+| 🛒 Bravin Bán Hàng | 149.000đ | USP, 3 mẫu quảng cáo, livestream 15 phút, tin nhắn chốt đơn, banner, lịch 7 ngày, máy tính giá bán |
+| ⚡ Khởi đầu nhanh | Miễn phí | Tóm tắt, viết lại, dịch, tiêu đề, bài đăng, đếm ký tự mạng xã hội |
+| 🎵 Nhạc AI — Lời & phong cách | Miễn phí | Lời bài hát có cấu trúc, mô tả phong cách, chuyển sang AI tạo nhạc |
+
+Muốn tự viết plugin? Xem [docs/PLUGIN-FORMAT.md](docs/PLUGIN-FORMAT.md).
+
 ## AI hỗ trợ (bạn tự thêm trong “⚙ AI của tôi”)
 
 | Loại kết nối | Dùng cho | Ví dụ |
@@ -58,6 +81,7 @@ Font chữ: **Space Grotesk** (tiêu đề), **Be Vietnam Pro** (giao diện), *
 
 ## Lộ trình
 
+- [x] Khu vực Extensions & Plugins (cửa hàng + plugin do AI tạo)
 - [ ] Ô ghép video theo timeline
 - [ ] Hỗ trợ API dạng “gửi yêu cầu rồi chờ kết quả” (video)
 - [ ] Bản full-stack: tài khoản, đồng bộ dự án, backend trung gian để tránh lỗi CORS
