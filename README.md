@@ -21,8 +21,8 @@ Micron là một không gian làm việc dạng canvas, giống Canva hay TopVie
 | Nền tảng | Cách có Micron | Ghi chú |
 | --- | --- | --- |
 | 🌐 **Web** (mọi trình duyệt) | `web/`: GitHub Pages hoặc Cloudflare (`npm run deploy`) | Cài được như ứng dụng (PWA), chạy offline |
-| 🪟 **PC Windows** | `Micron-Windows-x64.zip` → giải nén → chạy `Micron.exe` | Gọi thẳng AI trên máy (Ollama, LM Studio, ComfyUI) không cần chỉnh CORS |
-| 🍎 **macOS** | `Micron-macOS-AppleSilicon.zip` (M1–M4) / `Micron-macOS-Intel.zip` → kéo `Micron.app` vào Applications | Lần đầu: chuột phải → *Mở* (app chưa ký Apple) |
+| 🪟 **PC Windows** | **Actions → PC & macOS** → `Micron-Windows` (bộ cài `.exe` hoặc `.zip` giải nén chạy ngay) | Gọi thẳng AI trên máy (Ollama, LM Studio, ComfyUI) không cần chỉnh CORS |
+| 🍎 **macOS** | **Actions → PC & macOS** → `Micron-macOS` (`.dmg` cho chip Apple và Intel) → kéo Micron vào Applications | Lần đầu: chuột phải → *Mở* (app chưa ký Apple) |
 | 🤖 **Android (APK)** | Tab **Actions → Android APK** → tải `Micron-Android-APK` | Cho phép “cài từ nguồn không xác định” khi cài |
 | 📱 **iPad / iPhone** | Safari → Chia sẻ → *Thêm vào Màn hình chính* (dùng ngay) · hoặc **Actions → iPad / iOS** → `.ipa` chưa ký | `.ipa` cần ký bằng Apple ID (Sideloadly/AltStore) hoặc tài khoản Apple Developer |
 

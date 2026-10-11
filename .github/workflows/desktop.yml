@@ -1,0 +1,26 @@
+# Build Micron cho PC Windows (bộ cài .exe + bản giải nén .zip) và macOS (.dmg, chip Apple & Intel).
+# Tải về: Actions → "PC & macOS" → lần chạy mới nhất → mục Artifacts.
+name: PC & macOS
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["web/**", "desktop/**", ".github/workflows/desktop.yml"]
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - { os: windows-latest, script: "dist:win", name: Micron-Windows, files: "desktop/dist/*.exe\ndesktop/dist/*.zip" }
+          - { os: macos-15, script: "dist:mac", name: Micron-macOS, files: "desktop/dist/*.dmg" }
+    runs-on: ${{ matrix.os }}
+    defaults: { run: { working-directory: desktop } }
+    env: { CSC_IDENTITY_AUTO_DISCOVERY: "false" }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+      - run: npm run ${{ matrix.script }} -- --publish never
+      - uses: actions/upload-artifact@v4
+        with: { name: "${{ matrix.name }}", path: "${{ matrix.files }}" }
